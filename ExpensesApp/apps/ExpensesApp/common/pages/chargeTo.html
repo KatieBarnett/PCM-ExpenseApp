@@ -1,0 +1,30 @@
+<script src="js/view/chargeTo.js"></script>
+<div>
+<div data-role="header">
+		<h2>Charge to (Claim)</h2>
+		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="c" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
+	</div>
+	<div data-role="content">
+	<p>Please select an account code to charge your expense to.</p>
+	<ul data-role="listview"  data-id="expenseTypes" data-theme="d" data-inset="true" id="selectExpenseType" class="ui-icon-nodisc ui-icon-alt selectExpenses">
+			<li data-role="list-divider" >Claim options:</li>
+			<li onClick="displayAttachmentOptions();"><a class="chargeTo" data-icon="arrow-r">Select Code</a></li>
+			<li><a class="accountDetails" data-icon="arrow-r">Create New Account Profile</a></li>
+			<li><a class="accountDetails" data-icon="arrow-r">View Existing Account Profile</a></li>
+	</ul>
+	<div class="attachReceipt">
+			
+                <span class="question">Search existing code:</span>
+			   <form action="demo_form.asp">
+                   Client Code: <input type="text" name="ClientCode" value="1WFDS"><br>
+                   <a id="noReceipt" class="" data-role="button" data-theme="a">Search</a>
+                </form>
+			<a onClick="closeAttachmentOptions();" class="" data-role="button" data-theme="b">Cancel</a>
+		</div>
+	
+	
+		
+	
+
+</div>
+</div>

@@ -1,0 +1,102 @@
+<script src="js/view/expenseType.js"></script>
+
+<div>
+	<div data-role="header" data-theme="d">
+		<h2>Expense Type</h2>
+		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="c" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
+	</div>
+	<div data-role="content">
+		<p><img class="receiptThumb" src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">What type of expense is this receipt?</p>
+		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc selectExpenses">
+			<li data-role="list-divider" >Expense Type</li>
+			<li><a data-expType="agencyTransFee" class="chargeTo" data-icon="arrow-r">Agency Transaction Fee</a></li>
+			<li><a data-expType="airTravelExp" class="chargeTo" data-icon="arrow-r">Air Travel (Expensed)</a></li>
+			<li class="expenseTypeLI" data-role="collapsible" data-iconpos="right" data-theme="d">
+					<h2>Other Air Expense</h2>
+					<ul data-role="listview" data-theme="d">
+						<li><a data-expType="addAirlineCosts" class="chargeTo" data-icon="arrow-r">Additional Airline Costs</a></li>
+						<li><a data-expType="addDeptFee" class="chargeTo" data-icon="arrow-r">Additional Airline Departure Fee</a></li>
+						<li><a data-expType="airTravelUnused" class="chargeTo" data-icon="arrow-r">Air Travel (Unused)</a></li>
+					</ul>
+			</li>
+			<li><a data-expType="externalPartyMeal" class="chargeTo" data-icon="arrow-r">External Party Business Meal</a></li>
+			<li><a data-expType="carRent" class="chargeTo" data-icon="arrow-r">Car Rental</a></li>
+			<li><a data-expType="externalPartyEntertain" class="chargeTo" data-icon="arrow-r">External Party Entertainment</a></li>
+			<li><a data-expType="groupEvents" class="chargeTo" data-icon="arrow-r">Group Events</a></li>
+			<li><a data-expType="groupMeal" class="chargeTo" data-icon="arrow-r">Group Meal</a></li>
+			<li><a data-expType="qtrClubGift" class="chargeTo" data-icon="arrow-r">Quarter Century Club - Gift</a></li>
+			<li><a data-expType="qtrClubMeal" class="chargeTo" data-icon="arrow-r">Quarter Century Club - Meal</a></li>
+			<li><a data-expType="retirementGift" class="chargeTo" data-icon="arrow-r">Retirement - Gift</a></li>
+			<li><a data-expType="retirementMeal" class="chargeTo" data-icon="arrow-r">Retirement - Meal</a></li>
+			<li class="expenseTypeLI" data-role="collapsible" data-iconpos="right" data-theme="d">
+					<h2>Emergency Purchases</h2>
+					<ul data-role="listview" data-theme="d">
+						<li><a data-expType="officeSupplies" class="chargeTo" data-icon="arrow-r">Office Supplies</a></li>
+						<li><a data-expType="postage" class="chargeTo" data-icon="arrow-r">Postage</a></li>
+						<li><a data-expType="emergSupplies" class="chargeTo" data-icon="arrow-r">Emergency Supplies</a></li>
+						<li><a data-expType="pcSupplies" class="chargeTo" data-icon="arrow-r">PC Supplies</a></li>
+						<li><a data-expType="printing" class="chargeTo" data-icon="arrow-r">Reproduction and Graphics</a></li>
+					</ul>
+			</li>
+			<li><a data-expType="hotel" class="chargeTo" data-icon="arrow-r">Hotel</a></li>
+			<li><a data-expType="empMeal" class="chargeTo" data-icon="arrow-r">Employee Meal (Non Reimbursable)</a></li>
+			<li><a data-expType="pubTrans" class="chargeTo" data-icon="arrow-r">Public Transportation</a></li>
+			<li class="expenseTypeLI" data-role="collapsible" data-iconpos="right" data-theme="d">
+					<h2>Telecom/Mobile Employee Expenses</h2>
+					<ul data-role="listview" data-theme="d">
+						<li><a data-expType="homeOfficeTelephone" class="chargeTo" data-icon="arrow-r">Home Business Telephone Service and Associated Calls</a></li>
+						<li><a data-expType="cellPhones" class="chargeTo" data-icon="arrow-r">Cellular Phones - Service and Calls</a></li>
+						<li><a data-expType="remAccessDialUp" class="chargeTo" data-icon="arrow-r">Remote Access - Dial Up - Restricted Use</a></li>
+						<li><a data-expType="remAccessWireless" class="chargeTo" data-icon="arrow-r">Remote Access - Wireless PC Datacard Service</a></li>
+						<li><a data-expType="remAccessWiFi" class="chargeTo" data-icon="arrow-r">Remote Access - WIFI Connection Fees</a></li>
+						<li><a data-expType="remAccessDSL" class="chargeTo" data-icon="arrow-r">Remote Access - DSL - Restricted Use</a></li>
+						<li><a data-expType="homeBusPhone" class="chargeTo" data-icon="arrow-r">Home Business Phone - Purchase</a></li>
+						<li><a data-expType="smartphone" class="chargeTo" data-icon="arrow-r">Smartphone Service and Calls</a></li>
+						<li><a data-expType="busCallsCallingCard" class="chargeTo" data-icon="arrow-r">Business Calls- Calling Card (Non Cellular)</a></li>
+						<li><a data-expType="remAccessCable" class="chargeTo" data-icon="arrow-r">Remote Access - Cable - Restricted Use</a></li>
+					</ul>
+			</li>
+			<li class="expenseTypeLI" data-role="collapsible" data-iconpos="right" data-theme="d">
+					<h2>Other Travel Expenses</h2>
+					<ul data-role="listview" data-theme="d">
+						<li><a data-expType="parkingFBT" class="chargeTo" data-icon="arrow-r">Parking - FBT</a></li>
+						<li><a data-expType="parkingNFBT" class="chargeTo" data-icon="arrow-r">Parking - No FBT</a></li>
+						<li><a data-expType="atmFee" class="chargeTo" data-icon="arrow-r">ATM Fees / Commissions</a></li>
+						<li><a data-expType="currencyLoss" class="chargeTo" data-icon="arrow-r">Currency Loss</a></li>
+						<li><a data-expType="laundry" class="chargeTo" data-icon="arrow-r">Laundry</a></li>
+						<li><a data-expType="subLodging" class="chargeTo" data-icon="arrow-r">Substitution of Lodging</a></li>
+						<li><a data-expType="passportFee" class="chargeTo" data-icon="arrow-r">Passport Fees</a></li>
+						<li><a data-expType="noneOfAbove" class="chargeTo" data-icon="arrow-r">None of the above</a></li>
+					</ul>
+			</li>
+			<li class="expenseTypeLI" data-role="collapsible" data-iconpos="right" data-theme="d">
+					<h2>Other Non-Travel Expenses</h2>
+					<ul data-role="listview" data-theme="d">
+						<li><a data-expType="books" class="chargeTo" data-icon="arrow-r">Books and Publications</a></li>
+						<li><a data-expType="corpCardLateFees" class="chargeTo" data-icon="arrow-r">Corporate Card Late Fees</a></li>
+						<li><a data-expType="education" class="chargeTo" data-icon="arrow-r">Education Related Expenses</a></li>
+						<li><a data-expType="profMembership" class="chargeTo" data-icon="arrow-r">Professional Membership</a></li>
+						<li><a data-expType="confFee" class="chargeTo" data-icon="arrow-r">Conference Fee</a></li>
+						<li><a data-expType="pubSubscription" class="chargeTo" data-icon="arrow-r">Publication Subscriptions</a></li>
+						<li><a data-expType="tenderDocs" class="chargeTo" data-icon="arrow-r">Tender Documents</a></li>
+						<li><a data-expType="noneOfAbove" class="chargeTo" data-icon="arrow-r">None of the above</a></li>
+					</ul>
+			</li>
+			<li class="expenseTypeLI" data-role="collapsible" data-iconpos="right" data-theme="d">
+					<h2>Domestic Assignment Expenses</h2>
+					<ul data-role="listview" data-theme="d">
+						<li><a data-expType="domAirTravel" class="chargeTo" data-icon="arrow-r">Air Travel</a></li>
+						<li><a data-expType="domCarRental" class="chargeTo" data-icon="arrow-r">Car Rental</a></li>
+						<li><a data-expType="domGrndTrans" class="chargeTo" data-icon="arrow-r">Ground Transportation</a></li>
+					</ul>
+			</li>
+			<li><a data-expType="extAirTrav" class="chargeTo" data-icon="arrow-r">External Party Air Travel</a></li>
+			<li><a data-expType="extOtherAir" class="chargeTo" data-icon="arrow-r">External Party Other Air Expense</a></li>
+			<li><a data-expType="extHotel" class="chargeTo" data-icon="arrow-r">External Party Hotel</a></li>
+			<li><a data-expType="extCar" class="chargeTo" data-icon="arrow-r">External Party Car Rental / Hire</a></li>
+			<li><a data-expType="extGroundTrans" class="chargeTo" data-icon="arrow-r">External Party Ground Transportation</a></li>
+			<li><a data-expType="extConference" class="chargeTo" data-icon="arrow-r">External Party Conference / Event Fees</a></li>
+		</ul>
+		<a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
+	</div>
+</div>

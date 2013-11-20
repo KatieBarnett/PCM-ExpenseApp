@@ -1,0 +1,122 @@
+/* Reset CSS */
+a, abbr, address, article, aside, audio, b, blockquote, body, canvas, caption, cite, code, dd, del, details, dfn, dialog, div, dl, dt, em, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, p, pre, q, samp, section, small, span, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, ul, var, video {
+	margin: 0;
+	padding: 0;
+}
+body{
+	height:100%;
+	position:relative;
+}
+/* Worklight container div */
+
+/* ----------------------------------------- Index */
+
+#content {
+	height: 460px;
+	margin: 0 auto;
+	width: 320px;
+}
+.homeNav img, .attachReceipt img{
+	display:block;
+	margin:10px auto;
+}
+.homeNav{
+	float:right;
+	margin-top:15px;
+}
+.homeNav li{
+	padding:5%; 
+	height:75px;
+	background:rgba(0,66,102,.7);
+	margin-bottom:10%;
+	text-align:center;
+	font-weight:normal;
+}
+.ui-body-c .ui-link{
+	font-weight:normal;
+}
+.contentHome{
+	background-image:url('../images/melbourne.jpg');
+    background-position:right;
+    position:absolute;
+    right:0;
+    left:0;
+    bottom:0;
+    overflow:hidden;
+    top:42px;
+}
+.contentHome h2{
+	color:#004266;
+	font-weight:normal;
+}
+.attachReceipt{
+	display:none;
+	position:absolute;
+	bottom:-210px;
+	left:0;
+	height:210px;
+	width:90%;
+	padding:5%;
+	background:#FFFFFF;
+	color:#fff;
+}
+.attachReceipt li{
+	padding:5%; 
+	height:50px;
+	background:rgba(0,66,102,1);
+	margin:4% 0%;
+	text-align:center;
+	font-weight:normal;
+	width:35%;
+	float:left;
+}
+.attachReceipt li:first-child{
+	margin-right:10%;
+}
+.attachReceipt img{
+	display:block;
+	margin:auto;
+	padding-bottom:7px;
+}
+.attachReceipt a{
+	clear:left;
+}
+.question{
+	font-weight:bold;
+	color:#656162;
+	display:block;
+}
+.back{
+	border-style:none;
+}
+/* Expense Type Page receipt thumbnail formatting */
+.receiptThumb {
+	float:left;
+	margin:0% 2% 2% 2% ;
+}
+.selectExpenses {
+	clear:both;
+}
+/* Expense Type Selection Collapsible Format */
+.expenseTypeLI {
+	padding: 0px 0px 3px 2px !important;
+}
+
+}
+.selectClaim {
+	clear:both;
+}
+
+.accountForm {
+	display:none;
+	position:absolute;
+	bottom:-210px;
+	left:0;
+	height:210px;
+	width:90%;
+	padding:5%;
+	background:#FFFFFF;
+	color:#fff;
+}
+}
+}
