@@ -23,7 +23,11 @@ var MainPage = (function() {
 			$('#closeAttachmentOptions').on('click',function() {
 				// Close the attachment modal
 				closeAttachmentOptions();
-			});			
+			});		
+			$('#openCamera').on('click',function() {
+				// Close the attachment modal
+				CameraFunctions.openCameraForImageCapture();
+			});	
 			$('#noReceipt').on('click',function() {
 				// Load the new page
 				Utils.loadPageWithAnimation('expenseType', function() {
