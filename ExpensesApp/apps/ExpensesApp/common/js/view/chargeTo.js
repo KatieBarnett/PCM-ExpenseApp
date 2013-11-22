@@ -8,9 +8,7 @@ var ChargeTo = (function() {
 		init : function() {
 			console.log("ChargeTo :: init");
 			$('.back').on('click', function() {
-				Utils.goBackWithAnimation(function() {
-					alert("Gone back");
-				});
+				Utils.goBackWithAnimation();
 			});
 			$('.accountDetails').on('click', function() {
 				Utils.loadPageWithAnimation("accountDetails", function() {
@@ -18,8 +16,6 @@ var ChargeTo = (function() {
 					AccountDetails.init();
 				});
 			});
-			
-			
 		}
 	};
 }());

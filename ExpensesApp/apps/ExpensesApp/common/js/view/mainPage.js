@@ -16,8 +16,14 @@ var MainPage = (function() {
 					ProcessTrips.init();
 				});
 			});
-			
-			// Add handlers
+			$('#addExpense').on('click',function() {
+				// Display the attachment modal
+				displayAttachmentOptions();
+			});
+			$('#closeAttachmentOptions').on('click',function() {
+				// Close the attachment modal
+				closeAttachmentOptions();
+			});			
 			$('#noReceipt').on('click',function() {
 				// Load the new page
 				Utils.loadPageWithAnimation('expenseType', function() {

@@ -10,9 +10,7 @@ var ExpenseType = (function() {
 			
 			// Navigation buttons functionality
 			$('.back').on('click', function() {
-				Utils.goBackWithAnimation(function() {
-					alert("Gone back");
-				});
+				Utils.goBackWithAnimation();
 			});
 			$('.finishLater').on('click',function() {
 				// Add function for requirement of the Finish this later button

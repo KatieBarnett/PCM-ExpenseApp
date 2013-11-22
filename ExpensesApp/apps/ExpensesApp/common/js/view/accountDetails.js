@@ -8,9 +8,7 @@ var AccountDetails = (function() {
 		init : function() {
 			console.log("AccountDetails :: init");
 			$('.back').on('click', function() {
-				Utils.goBackWithAnimation(function() {
-					alert("Gone back");
-				});
+				Utils.goBackWithAnimation();
 			});
 			
 			$('.finishLater').on('click',function() {

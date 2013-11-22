@@ -8,9 +8,7 @@ var ProcessTrips = (function() {
 		init : function() {
 			console.log("ProcessTrips :: init");
 			$('.back').on('click', function() {
-				Utils.goBackWithAnimation(function() {
-					/*alert("Gone back");*/
-				});
+				Utils.goBackWithAnimation();
 			});
 			
 			$('.forward').on('click', function() {

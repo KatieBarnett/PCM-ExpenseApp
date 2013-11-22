@@ -6,7 +6,7 @@
 * disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 */
 
-function wlCommonInit(){
+function wlCommonInit(){ 
 
 	/*
 	 * Application is started in offline mode as defined by a connectOnStartup property in initOptions.js file.
