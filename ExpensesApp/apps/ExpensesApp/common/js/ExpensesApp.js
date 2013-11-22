@@ -68,4 +68,25 @@ function closeAttachmentOptions(){
 	});
 }
 
+ function openCameraForImageCapture(){
+
+	 navigator.camera.getPicture(onPhotoURISuccess, onFail,{ quality: 50, 
+        destinationType: navigator.camera.DestinationType.NATIVE_URI,
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+        correctOrientation: true,
+        targetWidth: 50,
+        targetHeight: 50
+        });
+
+}
+ 
+ function onPhotoURISuccess(imageURI) {
+		console.log(imageURI);
+		
+	}
+ 
+ function onFail(){
+	console.log("Failed to get image uri");
+	}
+
 			
