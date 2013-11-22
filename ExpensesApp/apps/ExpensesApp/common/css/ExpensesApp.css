@@ -21,14 +21,17 @@ body{
 	margin:10px auto;
 }
 .homeNav{
-	float:right;
+	/*float:right;*/
 	margin-top:15px;
 }
 .homeNav li{
-	padding:5%; 
+	padding:4%; 
 	height:75px;
+	width:100px;
+	float:right;
+	clear:right;
 	background:rgba(0,66,102,.7);
-	margin-bottom:10%;
+	margin-bottom:5%;
 	text-align:center;
 	font-weight:normal;
 }
