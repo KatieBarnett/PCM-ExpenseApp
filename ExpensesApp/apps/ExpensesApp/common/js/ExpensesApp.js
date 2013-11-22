@@ -51,7 +51,7 @@ $(document).ready(function() {
 });
 
 /*
- * Try not to have global functions as below. Use closures and each page should have it's own JavaScript file
+ * Try not to have global functions as below. Use closures and each page should have it's own JavaScript file.
  * that will handle the page functionality.
  */
 function displayAttachmentOptions(){
