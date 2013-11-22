@@ -42,7 +42,7 @@ $(document).ready(function() {
 	// TODO: Change this to binding it for Android back button.
 	// Currently emulated ENTER key as the back button.
 	$(document).keypress(function(e) {
-		if (e.which == 13) {
+		if (e.which == 27) {
 			Utils.goBackWithAnimation(null);
 		}
 	});
