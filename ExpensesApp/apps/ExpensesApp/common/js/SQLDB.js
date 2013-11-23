@@ -117,12 +117,13 @@ var DB = (function() {
 					console.log("DB.initDB() success function");
 					if (isEmpty) {
 						console.log("loading DB");
-						// Load ExpenseTypes and ChargeAccount tables with data
+						// Load data into ExpenseTypes and ChargeAccount tables
 						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Public Transportation")');
 						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Air Fare")');
 						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental")');
 						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Hotel")');
 						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Other Travel Expenses")');
+						// TODO add remaining expense types
 						tx.executeSql('INSERT INTO ChargeAccounts VALUES ("Services Project (BMS)")');
 						tx.executeSql('INSERT INTO ChargeAccounts VALUES ("Non-Project International (ICA)")');
 						tx.executeSql('INSERT INTO ChargeAccounts VALUES ("SAP WBSElement")');
@@ -139,7 +140,7 @@ var DB = (function() {
 		 * 
 		 * @return Array of expense types
 		 */
-		getExpenseTypes : function() {
+		getExpenseTypes : function(callback) {
 			return expenseTypes;
 		},
 		
@@ -148,7 +149,7 @@ var DB = (function() {
 		 * 
 		 * @return Array of charge account codes
 		 */
-		getChargeAccountCodes : function() {
+		getChargeAccountCodes : function(callback) {
 			return chargeAccounts;
 		},
 		
@@ -157,140 +158,212 @@ var DB = (function() {
 		 * 
 		 * @return Array of account/project codes
 		 */
-		getAccountProjects : function() {
-
+		getAccountsAndProjects : function(callback) {
+			db.transaction(function(tx) {
+				console.log("Retrieving accounts/projects list");
+				var query = 'SELECT accountProjectCode, accountProjectName FROM AccountProjects';
+				tx.executeSql(query, function(tx, results) {
+					console.log("Rows found: " + results.rows.length);
+					var accountsProjectsList = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						// Setup new object and the unique ID to the account/project
+						var singleAccountProject = {
+								ID : row.id
+						};
+						// Map each value to the single trip
+						$.each(Util.getValues("accountProjectCode, accountProjectName"), function(index, value) { // TODO test
+							singleAccountProject[value] = row[value];
+						});
+						console.log("Account/project: " + singleAccountProject);
+						accountsProjectsList.push(singleAccountProject);
+					}
+					// Run the call function
+					callback(accountsProjectsList);
+				}, errorCB);
+			}, errorCB, successCB('getAccountsAndProjects'));
 		},
 		
 		/**
-		 * Retrieves all unprocessed trips
+		 * Retrieves all unprocessed trips for Process Trips screen
 		 * 
 		 * @return Array of unprocessed trips
 		 */
-		getUnprocessedTrips : function() {	
+		getUnprocessedTrips : function(callback) {	
+			db.transaction(function(tx) {
+				console.log("Retrieving unprocessed trips list");
+				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE processed=false';
+				tx.executeSql(query, function(tx, results) {
+					console.log("Rows found: " + results.rows.length);
+					var unprocessedTripsList = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						// Setup new object and the unique ID to the unprocessed trip
+						var singleUnprocessedTrip = {
+								ID : row.id
+						};
+						// Map each value to the single trip
+						$.each(Util.getValues("tripName, startDate, endDate"), function(index, value) { // TODO test
+							singleUnprocessedTrip[value] = row[value];
+						});
+						console.log("Unprocessed trip: " + singleUnprocessedTrip);
+						unprocessedTripsList.push(singleUnprocessedTrip);
+					}
+					// Run the call function
+					callback(unprocessedTripsList);
+				}, errorCB);
+			}, errorCB, successCB('getUnprocessedTrips'));
 		},
 		
 		/**
-		 * Retrieves all processed trips
+		 * Retrieves all processed trips for History screen
 		 * 
 		 * @return Array of processed trips
 		 */
-		getProcessedTrips : function() {
+		getProcessedTrips : function(callback) {
+			db.transaction(function(tx) {
+				console.log("Retrieving processed trips list");
+				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE processed=true';
+				tx.executeSql(query, function(tx, results) {
+					console.log("Rows found: " + results.rows.length);
+					var processedTripsList = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						// Setup new object and the unique ID to the processed trip
+						var singleProcessedTrip = {
+								ID : row.id
+						};
+						// Map each value to the single trip
+						$.each(Util.getValues("tripName, startDate, endDate"), function(index, value) { // TODO test
+							singleProcessedTrip[value] = row[value];
+						});
+						console.log("Processed trip: " + singleProcessedTrip);
+						processedTripsList.push(singleProcessedTrip);
+					}
+					// Run the call function
+					callback(processedTripsList);
+				}, errorCB);
+			}, errorCB, successCB('getProcessedTrips'));
 		},
 		
 		/**
-		 * Retrieves all logs
+		 * Retrieves all processed trips logs
 		 * 
 		 * @return Array of logs
 		 */
-		getLogs : function() {
+		getLogs : function(callback) {
+			db.transaction(function(tx) {
+				console.log("Retrieving logs list");
+				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE processed=true';
+				tx.executeSql(query, function(tx, results) {
+					console.log("Rows found: " + results.rows.length);
+					var logsList = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						// Setup new object and the unique ID to the log
+						var singleLog = {
+								ID : row.id
+						};
+						// Map each value to the single trip
+						$.each(Util.getValues("tripName, startDate, endDate"), function(index, value) { // TODO test
+							singleLog[value] = row[value];
+						});
+						console.log("Log: " + singleLog);
+						logsList.push(singleLog);
+					}
+					// Run the call function
+					callback(logsList);
+				}, errorCB);
+			}, errorCB, successCB('getLogs'));
 		},				
-
 		
-		// Populate account/projects list
-		tx.executeSql('SELECT accountProjectCode, accountProjectName FROM AccountProjects', [], function(tx, results) {
-			console.log("Populating accountProjects array with " + results.rows.length + " results");
-			for (var i = 0; i < results.rows.length; i++) {
-				accountProjects.push({accountProjectCode: results.rows.item(i)["accountProjectCode"], 
-									  accountProjectName: results.rows.item(i)["accountProjectName"]
-				});
-				console.log(accountProjects);
-			}
-		}, errorCB);			
-		
-		// Populate unprocessed trips
-		tx.executeSql('SELECT tripName, startDate, endDate FROM Trips WHERE processed=false', [], function(tx, results) {
-			console.log("Populating unprocessedTrips array with " + results.rows.length + " results");
-			for (var i = 0; i < results.rows.length; i++) {
-				tripsUnprocessed.push({tripName: results.rows.item(i)["tripName"], 
-									   startDate: results.rows.item(i)["startDate"],
-									   endDate: results.rows.item(i)["endDate"]
-				});
-				console.log(expenseTypes);
-			}
-		}, errorCB);
-		
-		// Populate processed trips
-		tx.executeSql('SELECT tripName, startDate, endDate FROM Trips WHERE processed=true', [], function(tx, results) {
-			console.log("Populating processedTrips array with " + results.rows.length + " results");
-			for (var i = 0; i < results.rows.length; i++) {
-				tripsProcessed.push({tripName: results.rows.item(i)["tripName"], 
-									 startDate: results.rows.item(i)["startDate"],
-									 endDate: results.rows.item(i)["endDate"]
-				});
-				console.log(tripsProcessed);
-			}
-		}, errorCB);
-
-		// Populate trips log
-		tx.executeSql('SELECT tripName, startDate, endDate, email, submitDate FROM Logs INNER JOIN Trips ON Logs.tripID = Trips.tripID WHERE processed=true', [], function(tx, results) {
-			console.log("Populating tripsLog array with " + results.rows.length + " results");
-			for (var i = 0; i < results.rows.length; i++) {
-				tripsLog.push({tripName: results.rows.item(i)["tripName"], 
-							   startDate: results.rows.item(i)["startDate"],
-							   endDate: results.rows.item(i)["endDate"],
-							   email: results.rows.item(i)["email"],
-							   submitDate: results.rows.item(i)["submitDate"]
-				});
-				console.log(tripsLog);
-			}
-		}, errorCB);
-		
-		addClientCode : function(apCode, apName, chargeCode) {
+		/**
+		 * Retrieves all charge codes
+		 * 
+		 * @return Array of charge codes
+		 */
+		getChargeCodes : function(callback) {
+			db.transaction(function(tx) {
+				console.log("Retrieving charge codes list");
+				var query = 'SELECT * FROM ChargeAccounts';
+				tx.executeSql(query, function(tx, results) {
+					console.log("Rows found: " + results.rows.length);
+					var chargeCodesList = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						// Setup new object and the unique ID to the charge code
+						var singleChargeCode = {
+								ID : row.id
+						};
+						console.log("Charge code: " + singleChargeCode);
+						chargeCodesList.push(singleChargeCode);
+					}
+					// Run the call function
+					callback(chargeCodesList);
+				}, errorCB);
+			}, errorCB, successCB('getChargeCodes'));
+		},
+				
+		addClientCode : function(apCode, apName, chargeCode, callback) {
 			db.transaction(function(tx) {
 				console.log("adding client code");
 				tx.executeSql('INSERT INTO AccountProjects VALUES (' + apCode + ',' + apName + ',' + chargeCode + ')');
 			}, errorCB, successCB('addClientCode'));
 		},
 		
-		getClientCode : function(callback) {
-			db.transaction(function(tx) {
-				console.log("getting client code");
-				tx.executeSql('SELECT INTO Logs');
-			});
-		},
-		
-		/** TODO editClientCode - currently not in scope **/
-		/** TODO deleteClientCode - currently not in scope **/
-		
-		addTrip : function(tName, tStart, tEnd) {
+		addTrip : function(tName, tStart, tEnd, callback) {
 			db.transaction(function(tx) {
 				console.log("creating new trip (trip name: " + tName + ", tripStartDate: " + tStart + ", tripEndDate: " + tEnd);
 				tx.executeSql('INSERT INTO Trips (tripName, startDate, endDate) VALUES (' + tName + ',' + tStart + ',' + tEnd + ')');
 			}, errorCB, successCB('addTrip'));						
 		},
 		
-		editTrip : function(tid) {
+		updateTrip : function(tid, callback) {
 			db.transaction(function(tx) {
 				console.log("editting trip: " + tid);
 				tx.executeSql('UPDATE tripName, startDate, endDate FROM Trips WHERE tripID=' + tid); //TODO
 			}, errorCB, successCB('editTrip'));
 		},
 		
-		
-/*		// Populate charge account codes
-		tx.executeSql('SELECT * FROM ChargeAccounts', [], function(tx, results) {
-			console.log("Populating chargeAccounts array with " + results.rows.length + " results");			
-			for (var i = 0; i < results.rows.length; i++) {
-				chargeAccounts.push(results.rows.item(i)["chargeAccountID"]);
-				console.log(chargeAccounts);
-			}
-		}, errorCB);
-		
-		
-		getTrip : function(tid) {
+		/**
+		 * Retrieves details of a single trip
+		 * 
+		 * @param tripID
+		 * 			Unique ID of trip
+		 * 
+		 * @return A trip object
+		 */
+		getTripDetails : function(tid, callback) {
 			db.transaction(function(tx) {
-				console.log("getting details of trip: " + tid);
-				tx.executeSql('SELECT tripName, startDate, endDate, expenseType, accountCode, accountName FROM Trips INNER JOIN Expenses ON Trips.tripID = Expenses.tripID WHERE tripID=' + tid, [], function(tx, results) {
-					console.log("Populating  array with " + results.rows.length + " results");			
+				console.log("Retrieving details of trip: " + tid);
+				var query = 'SELECT tripName, startDate, endDate, expenseType, accountCode, accountName FROM Trips INNER JOIN Expenses ON Trips.tripID = Expenses.tripID WHERE tripID=' + tid;
+				tx.executeSql(query, function(tx, results) {
+					console.log("Rows found: " + results.rows.length);
+					// TODO Revise commented code below
+					/*var tripEmailLogs = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
-						chargeAccounts.push(results.rows.item(i)["chargeAccountID"]);
-						console.log(chargeAccounts);
+						var row = results.rows.item(i);
+						// Setup new object and the unique ID to the log
+						var singleEmailLog = {
+								ID : row.id
+						};
+						// Map each value to the single trip
+						$.each(Util.getValues("email, submitDate"), function(index, value) { //TODO test
+							singleEmailLog[value] = row[value];
+						});
+						console.log("Log: " + singleEmailLog);
+						tripEmailLogs.push(singleEmailLog);
 					}
-				});
-			}, errorCB, successCB('getTrip'));
+					// Run the call function
+					callback(tripEmailLogs); */
+				}, errorCB);
+			}, errorCB, successCB('getTripDetails'));
 		},
-		*/
-		sendTrip : function(tid, emailAddress) {
+
+		/**
+		 * TODO - To be revised
+		 */
+		sendTrip : function(tid, emailAddress, callback) {
 			db.transaction(function(tx) {
 				console.log("set trip as 'processed'");
 				tx.executeSql('UPDATE Trips SET processed=true WHERE tripID=' + tid);
@@ -298,34 +371,103 @@ var DB = (function() {
 			}, errorCB, successCB('sendTrip'));
 		},
 		
-		addExpense : function(eid, apcode, receipt, tid) {
+		/**
+		 * Adds an expense
+		 * 
+		 * @param //TODO
+		 */
+		addExpense : function(eid, apcode, receipt, tid, callback) {
 			db.transaction(function(tx) {
 				console.log("add expense");
 				tx.executeSql('INSERT INTO Expenses (eid, apcode, receipt, tid) VALUES (null, ' + eid + ',' + apcode + ',' + receipt + ',' + tid);
 			}, errorCB, successCB('addExpense'));
 		},
 		
-		getExpense : function(eid) {
+		/**
+		 * Retrieves an expense
+		 * 
+		 * @param eid
+		 * 			The unique ID of an expense
+		 */
+		getExpense : function(eid, callback) {
 			db.transaction(function(tx) {
 				console.log("get expense details");
 				tx.executeSql('SELECT expenseType, accountProjectName SET processed=true WHERE expenseID=' + eid);	 //TODO
 			}, errorCB, successCB('getExpense'));
 		},
 		
-		/** TODO EditExpense **/
+		/**
+		 * Updates an expense
+		 * 
+		 * @param eid
+		 * 			The unique ID of an expense
+		 */
+		updateExpense : function(eid, callback) {
+			// TODO
+		},
  		
-		deleteExpense : function(eid) {
+		/**
+		 * Deletes an expense
+		 * 
+		 * @param eid
+		 * 			The unique ID of an expense
+		 */
+		deleteExpense : function(eid, callback) {
 			db.transaction(function(tx) {
-				console.log("deleting expense");
-				tx.executeSql('DELETE * FROM Expenses WHERE expenseID=' + eid); //TODO
+				console.log("Deleting expense");
+				//TODO
+				tx.executeSql('DELETE * FROM Expenses WHERE expenseID=' + eid); 
 			}, errorCB, successCB('deleteExpense'));
 		},
+				
+		/**
+		 * Retrieves all unassociated expenses
+		 */
+		getUnassociatedExpenses : function(callback) {
+			// TODO
+		},
 		
-		getRecentEmailAddresses : function() {
+		/**
+		 * Retrieves two most recently used email addresses
+		 */
+		getRecentlyUsedEmails : function(callback) {
 			db.transaction(function(tx) {
-				console.log("getting 2 most recent email addresses");
-				tx.executeSql('SELECT DISTINCT email FROM Logs WHERE tripID=' + tid + ' ORDER BY ' + submitDate);
-			}, errorCB, successCB('getRecentEmailAddresses'));
+				console.log("Retrieving recently used email addresses");
+				// TODO
+				//tx.executeSql('SELECT DISTINCT email FROM Logs WHERE tripID=' + tid + ' ORDER BY ' + submitDate);
+			}, errorCB, successCB('getRecentlyUsedEmails'));
+		},
+		
+		/**
+		 * Retrieves email logs for a single trip
+		 * 
+		 * @param tripID
+		 * 			The unique ID of a trip
+		 */
+		getTripEmailLogs : function(tripID, callback) {
+			db.transaction(function(tx) {
+				console.log("Retrieving email logs for specified trip");
+				var query = 'SELECT email, submitDate FROM Logs WHERE tripID=' + tripID; //TODO test
+				tx.executeSql(query, function(tx, results) {
+					console.log("Rows found: " + results.rows.length);
+					var tripEmailLogs = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						// Setup new object and the unique ID to the log
+						var singleEmailLog = {
+								ID : row.id
+						};
+						// Map each value to the single trip
+						$.each(Util.getValues("email, submitDate"), function(index, value) { //TODO test
+							singleEmailLog[value] = row[value];
+						});
+						console.log("Log: " + singleEmailLog);
+						tripEmailLogs.push(singleEmailLog);
+					}
+					// Run the call function
+					callback(tripEmailLogs);
+				}, errorCB);
+			}, errorCB, successCB('getChargeCodes'));
 		}
 	};
 }());
