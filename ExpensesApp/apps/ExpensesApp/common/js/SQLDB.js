@@ -15,37 +15,30 @@ var DB = (function() {
 		console.log("Error processing SQL: " + err.message);
 	}
 	
-	// Success callback function for DB transactions
-	function successCB(funct) {
-		console.log(funct + "() success function");
-	}
-
 	function buildLists(callbackFunction) {
 		expenseTypes.length = 0;
 		chargeAccounts.length = 0;
 		
 		db.transaction(function(tx) {
-			// Populate expense types
 			tx.executeSql('SELECT * FROM ExpenseTypes', [], function(tx, results) {
-				console.log("Populating expenseTypes array with " + results.rows.length + " results");
 				for (var i = 0; i < results.rows.length; i++) {
-					expenseTypes.push(results.rows.item(i)["expenseTypeID"]);
-					console.log(expenseTypes);
+					var row = results.rows.item(i);
+					// Setup new object
+					var singleExpenseType = {};
+					// Map each value to the single charge code
+					$.each(["expenseTypeID", "expenseGroupID"], function(index, value) {
+						singleExpenseType[value] = row[value];
+					});
+					expenseTypes.push(singleExpenseType);
 				}
 			}, errorCB);
-			
-			// Populate charge account codes
+
 			tx.executeSql('SELECT * FROM ChargeAccounts', [], function(tx, results) {
-				console.log("Populating chargeAccounts array with " + results.rows.length + " results");
 				for (var i = 0; i < results.rows.length; i++) {
 					chargeAccounts.push(results.rows.item(i)["chargeAccountID"]);
-					console.log(chargeAccounts);
 				}
-			}, errorCB);			
-		}, errorCB, function() {
-			console.log("buildFilterCriteriaLists() success func: caling callback");
-			callbackFunction();
-		});
+			}, errorCB);
+		}, errorCB, callbackFunction());
 	}
 	
 	return {
@@ -53,33 +46,36 @@ var DB = (function() {
 		 * Initialise the database
 		 */
 		initDB : function(callbackFunction) {
-			console.log("initDB() executed");
 			// Create the database tables
 			db.transaction(function(tx) {
-				console.log("creating expense table");
+				// Code to drop tables
+				//tx.executeSql('DROP TABLE IF EXISTS ExpenseTypes');
+				//tx.executeSql('DROP TABLE IF EXISTS ChargeAccounts');
+				//tx.executeSql('DROP TABLE IF EXISTS AccountProjects');
+				//tx.executeSql('DROP TABLE IF EXISTS Trips');
+				//tx.executeSql('DROP TABLE IF EXISTS Logs');
+				//tx.executeSql('DROP TABLE IF EXISTS Expenses');
+				
 				tx.executeSql('CREATE TABLE IF NOT EXISTS ExpenseTypes(' + 
-									'expenseTypeID varchar(50) NOT NULL PRIMARY KEY' +
+									'expenseTypeID varchar(200) NOT NULL PRIMARY KEY,' +
+									'expenseGroupID integer NOT NULL' +
 									')');
-				console.log("creating chargeAccounts table");
 				tx.executeSql('CREATE TABLE IF NOT EXISTS ChargeAccounts(' + 
-									'chargeAccountID varchar(50) NOT NULL PRIMARY KEY' +
+									'chargeAccountID varchar(100) NOT NULL PRIMARY KEY' +
 									')');						
-				console.log("creating accountProjects table");
 				tx.executeSql('CREATE TABLE IF NOT EXISTS AccountProjects(' + 
 									'accountProjectCode varchar(20) NOT NULL PRIMARY KEY,' +
-									'accountProjectName varchar(100) NOT NULL,' +
-									'chargeAccountID varchar(50),' +
+									'accountProjectName varchar(150),' +
+									'chargeAccountID varchar(100),' +
 									'FOREIGN KEY(chargeAccountID) REFERENCES ChargeAccounts(chargeAccountID)' +
 									')');
-				console.log("creating trips table");
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Trips(' + 
 									'tripID integer NOT NULL PRIMARY KEY AUTOINCREMENT,' +
 									'tripName varchar(100),' +
 									'startDate date,' +
 									'endDate date,' +
-									'processed boolean DEFAULT FALSE' +
+									'processed boolean DEFAULT 0' +
 									')');
-				console.log("creating logs table");
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Logs(' + 
 									'logID integer NOT NULL PRIMARY KEY AUTOINCREMENT,' +
 									'tripID integer,' +
@@ -87,387 +83,396 @@ var DB = (function() {
 									'submitDate date,' +
 									'FOREIGN KEY(tripID) REFERENCES Trips(TripID)' +
 									')');
-				console.log("creating expenses table");
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Expenses(' + 
 									'expenseID integer PRIMARY KEY AUTOINCREMENT,' + 
-									'expenseTypeID varchar(50),' +
+									'expenseTypeID varchar(200),' +
 									'accountProjectCode varchar(20),' +
-									'receipt varchar(150),' +
-									'tripID integer,' +
-									'FOREIGN KEY(expenseTypeID) REFERENCES ExpenseTypes(expenseTypeID),' +
-									'FOREIGN KEY(accountProjectCode) REFERENCES AccountProjects(accountProjectCode),' +
-									'FOREIGN KEY(tripID) REFERENCES Trips(tripID)' +
+									'receipt varchar(200),' +
+									'tripID integer' +
 									')');
-				console.log("ALL TABLES CREATED");
 			}, errorCB, function() {
-				console.log('initDB() success function');
 				var isEmpty = false;
-				// Check if there is data in the DB, if not, load data
+				// Check if there is data in the DB
 				db.transaction(function(tx) {
-					console.log("Check if ExpenseTypes table is empty");
-					tx.executeSql('SELECT COUNT(*) AS numResults FROM ExpenseTypes', [], function(tx, results) {
-						if (results.rows.item(0).numResults == 0) {
-							console.log("DB is empty");
+					tx.executeSql('SELECT * FROM ExpenseTypes', [], function(tx, results) {
+						if (results.rows.length == 0) {
 							isEmpty = true;
-						} else {
-							console.log("DB is not empty");
 						}
 					}, errorCB);
 				}, errorCB, function() {
-					console.log("DB.initDB() success function");
 					if (isEmpty) {
-						console.log("loading DB");
-						// Load data into ExpenseTypes and ChargeAccount tables
-						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Public Transportation")');
-						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Air Fare")');
-						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental")');
-						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Hotel")');
-						tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Other Travel Expenses")');
-						// TODO add remaining expense types
-						tx.executeSql('INSERT INTO ChargeAccounts VALUES ("Services Project (BMS)")');
-						tx.executeSql('INSERT INTO ChargeAccounts VALUES ("Non-Project International (ICA)")');
-						tx.executeSql('INSERT INTO ChargeAccounts VALUES ("SAP WBSElement")');
-					} else {
-						console.log("Building data lists");
-						buildLists(callbackFunction);
+						db.transaction(function(tx) {
+							// Load data into ExpenseTypes table
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Agency Transaction Fee", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Air Travel (Expensed)", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Other Air Expense", 1)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Additional Airline Costs", 1)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Additional Airline Departure Fee", 1)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Air Travel (Unused)", 1)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Business Meal", 2)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental/Hire - Gasoline/Petrol", 2)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Entertainment", 2)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Group Events", 2)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Group Meal", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Quarter Century Club - Gift", 0)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Quarter Century Club - Meal", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Retirement - Gift", 0)');					
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Retirement - Meal", 0)');					
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Emergency Purchases", 3)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Office Supplies", 3)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Postage", 3)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Emergency Supplies", 3)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("PC Supplies", 3)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Reproduction and Graphics", 3)');																			
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Hotel", 0)');													
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Employee Meal (Non Reimbursable Card Expenses)", 0)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Public Transportation", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Telecom/Mobile Employee Expenses", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Home Business Telephone Service & Associated Calls", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Cellular Phones - Service & Calls", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Remote Access - Dial Up - Restricted Use", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Remote Access - Wireless PC Data Card Service", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Remote Access - WIFI Connection Fees", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Remote Access - DSL - Restricted Use", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Home Business Phone - Purchase", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Smartphone Service & Calls (Both voice and data)", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Business Calls - Calling Card (Non Cellular)", 4)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Remote Access - Cable - Restricted Use", 4)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Other Travel Expenses", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Parking - FBT", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Parking - No FBT", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("ATM Fee / Commissions", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Currency Loss", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Laundry", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Substitution of Lodging", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Passport Fees", 5)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("None of the above travel expenses", 5)');											
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Other Non-Travel Expenses", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Books and Publications", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Corporate Card Late Fees", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Education Related Expenses", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Professional Membership", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Conference Fee", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Publication Subscriptions", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Tender Documents", 6)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("None of the above non-travel expenses", 6)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Domestic Assignment Expenses", 7)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Air Travel", 7)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental", 7)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Ground Transportation", 7)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Business Travel - Immigration Services / Visa", 8)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Business Travel - Visa", 8)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Business Travel - Immigration Services", 8)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Air Travel", 0)');								
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Other Air Expense", 0)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Hotel", 0)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Car Rental / Hire", 0)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Ground Transportation", 0)');							
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Conference / Event Fees", 0)');
+	
+							// Load data into ChargeAccounts table
+							tx.executeSql('INSERT INTO ChargeAccounts VALUES ("Special Accounting Charge Codes")');
+							tx.executeSql('INSERT INTO ChargeAccounts VALUES ("Services Project (BMS)")');
+							tx.executeSql('INSERT INTO ChargeAccounts VALUES ("Non-Project International (ICA)")');
+							tx.executeSql('INSERT INTO ChargeAccounts VALUES ("SAP WBSElement")');
+							
+							// Load data into AccountProjects table
+							tx.executeSql('INSERT INTO AccountProjects VALUES ("Default Accounting", null, null)');							
+						}, errorCB);
 					}
-				});
+					buildLists(callbackFunction);	
+				});					
 			});
 		},
 		
 		/**
 		 * Retrieves all expense types
 		 * 
-		 * @return Array of expense types
+		 * @return  Array of expense type objects
 		 */
-		getExpenseTypes : function(callback) {
+		getExpenseTypes : function() {
 			return expenseTypes;
 		},
 		
 		/**
 		 * Retrieves all charge account codes
 		 * 
-		 * @return Array of charge account codes
+		 * @return  Array of charge account code objects
 		 */
-		getChargeAccountCodes : function(callback) {
+		getChargeAccountCodes : function() {
 			return chargeAccounts;
 		},
-		
+				
 		/**
-		 * Retrieves all account/project codes
+		 * Retrieves all client codes
 		 * 
-		 * @return Array of account/project codes
+		 * @return  Array of account/project code objects
 		 */
-		getAccountsAndProjects : function(callback) {
+		getClientCodes : function(callback) {
 			db.transaction(function(tx) {
-				console.log("Retrieving accounts/projects list");
-				var query = 'SELECT accountProjectCode, accountProjectName FROM AccountProjects';
-				tx.executeSql(query, function(tx, results) {
-					console.log("Rows found: " + results.rows.length);
+				var query = 'SELECT accountProjectCode, accountProjectName, chargeAccountID FROM AccountProjects';
+				tx.executeSql(query, [], function(tx, results) {
 					var accountsProjectsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
-						// Setup new object and the unique ID to the account/project
-						var singleAccountProject = {
-								ID : row.id
-						};
+						// Setup new object
+						var singleAccountProject = {};
 						// Map each value to the single trip
-						$.each(Util.getValues("accountProjectCode, accountProjectName"), function(index, value) { // TODO test
+						$.each(["accountProjectCode", "accountProjectName", "chargeAccountID"], function(index, value) {
 							singleAccountProject[value] = row[value];
 						});
-						console.log("Account/project: " + singleAccountProject);
 						accountsProjectsList.push(singleAccountProject);
 					}
 					// Run the call function
 					callback(accountsProjectsList);
 				}, errorCB);
-			}, errorCB, successCB('getAccountsAndProjects'));
+			}, errorCB);
 		},
 		
 		/**
 		 * Retrieves all unprocessed trips for Process Trips screen
 		 * 
-		 * @return Array of unprocessed trips
+		 * @return  Array of unprocessed trip objects ordered by descending order of trip start date
 		 */
 		getUnprocessedTrips : function(callback) {	
 			db.transaction(function(tx) {
-				console.log("Retrieving unprocessed trips list");
-				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE processed=false';
-				tx.executeSql(query, function(tx, results) {
-					console.log("Rows found: " + results.rows.length);
+				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE processed = 0 ORDER BY startDate DESC';
+				tx.executeSql(query, [], function(tx, results) {
 					var unprocessedTripsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
-						// Setup new object and the unique ID to the unprocessed trip
-						var singleUnprocessedTrip = {
-								ID : row.id
-						};
-						// Map each value to the single trip
-						$.each(Util.getValues("tripName, startDate, endDate"), function(index, value) { // TODO test
+						var singleUnprocessedTrip = {};
+						$.each(["tripID", "tripName", "startDate", "endDate"], function(index, value) {
 							singleUnprocessedTrip[value] = row[value];
 						});
-						console.log("Unprocessed trip: " + singleUnprocessedTrip);
 						unprocessedTripsList.push(singleUnprocessedTrip);
 					}
-					// Run the call function
 					callback(unprocessedTripsList);
 				}, errorCB);
-			}, errorCB, successCB('getUnprocessedTrips'));
+			}, errorCB);
 		},
 		
 		/**
 		 * Retrieves all processed trips for History screen
 		 * 
-		 * @return Array of processed trips
+		 * @return  Array of processed trip objects ordered by descending order of trip start date
 		 */
 		getProcessedTrips : function(callback) {
 			db.transaction(function(tx) {
-				console.log("Retrieving processed trips list");
-				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE processed=true';
-				tx.executeSql(query, function(tx, results) {
-					console.log("Rows found: " + results.rows.length);
+				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE processed = 1 ORDER BY startDate DESC';
+				tx.executeSql(query, [], function(tx, results) {
 					var processedTripsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
-						// Setup new object and the unique ID to the processed trip
-						var singleProcessedTrip = {
-								ID : row.id
-						};
-						// Map each value to the single trip
-						$.each(Util.getValues("tripName, startDate, endDate"), function(index, value) { // TODO test
+						var singleProcessedTrip = {};
+						$.each(["tripID", "tripName", "startDate", "endDate"], function(index, value) {
 							singleProcessedTrip[value] = row[value];
 						});
-						console.log("Processed trip: " + singleProcessedTrip);
 						processedTripsList.push(singleProcessedTrip);
 					}
-					// Run the call function
 					callback(processedTripsList);
-				}, errorCB);
-			}, errorCB, successCB('getProcessedTrips'));
-		},
-		
-		/**
-		 * Retrieves all processed trips logs
-		 * 
-		 * @return Array of logs
-		 */
-		getLogs : function(callback) {
-			db.transaction(function(tx) {
-				console.log("Retrieving logs list");
-				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE processed=true';
-				tx.executeSql(query, function(tx, results) {
-					console.log("Rows found: " + results.rows.length);
-					var logsList = new Array();
-					for (var i = 0; i < results.rows.length; i++) {
-						var row = results.rows.item(i);
-						// Setup new object and the unique ID to the log
-						var singleLog = {
-								ID : row.id
-						};
-						// Map each value to the single trip
-						$.each(Util.getValues("tripName, startDate, endDate"), function(index, value) { // TODO test
-							singleLog[value] = row[value];
-						});
-						console.log("Log: " + singleLog);
-						logsList.push(singleLog);
-					}
-					// Run the call function
-					callback(logsList);
-				}, errorCB);
-			}, errorCB, successCB('getLogs'));
-		},				
-		
-		/**
-		 * Retrieves all charge codes
-		 * 
-		 * @return Array of charge codes
-		 */
-		getChargeCodes : function(callback) {
-			db.transaction(function(tx) {
-				console.log("Retrieving charge codes list");
-				var query = 'SELECT * FROM ChargeAccounts';
-				tx.executeSql(query, function(tx, results) {
-					console.log("Rows found: " + results.rows.length);
-					var chargeCodesList = new Array();
-					for (var i = 0; i < results.rows.length; i++) {
-						var row = results.rows.item(i);
-						// Setup new object and the unique ID to the charge code
-						var singleChargeCode = {
-								ID : row.id
-						};
-						console.log("Charge code: " + singleChargeCode);
-						chargeCodesList.push(singleChargeCode);
-					}
-					// Run the call function
-					callback(chargeCodesList);
-				}, errorCB);
-			}, errorCB, successCB('getChargeCodes'));
-		},
-				
-		addClientCode : function(apCode, apName, chargeCode, callback) {
-			db.transaction(function(tx) {
-				console.log("adding client code");
-				tx.executeSql('INSERT INTO AccountProjects VALUES (' + apCode + ',' + apName + ',' + chargeCode + ')');
-			}, errorCB, successCB('addClientCode'));
-		},
-		
-		addTrip : function(tName, tStart, tEnd, callback) {
-			db.transaction(function(tx) {
-				console.log("creating new trip (trip name: " + tName + ", tripStartDate: " + tStart + ", tripEndDate: " + tEnd);
-				tx.executeSql('INSERT INTO Trips (tripName, startDate, endDate) VALUES (' + tName + ',' + tStart + ',' + tEnd + ')');
-			}, errorCB, successCB('addTrip'));						
-		},
-		
-		updateTrip : function(tid, callback) {
-			db.transaction(function(tx) {
-				console.log("editting trip: " + tid);
-				tx.executeSql('UPDATE tripName, startDate, endDate FROM Trips WHERE tripID=' + tid); //TODO
-			}, errorCB, successCB('editTrip'));
-		},
-		
-		/**
-		 * Retrieves details of a single trip
-		 * 
-		 * @param tripID
-		 * 			Unique ID of trip
-		 * 
-		 * @return A trip object
-		 */
-		getTripDetails : function(tid, callback) {
-			db.transaction(function(tx) {
-				console.log("Retrieving details of trip: " + tid);
-				var query = 'SELECT tripName, startDate, endDate, expenseType, accountCode, accountName FROM Trips INNER JOIN Expenses ON Trips.tripID = Expenses.tripID WHERE tripID=' + tid;
-				tx.executeSql(query, function(tx, results) {
-					console.log("Rows found: " + results.rows.length);
-					// TODO Revise commented code below
-					/*var tripEmailLogs = new Array();
-					for (var i = 0; i < results.rows.length; i++) {
-						var row = results.rows.item(i);
-						// Setup new object and the unique ID to the log
-						var singleEmailLog = {
-								ID : row.id
-						};
-						// Map each value to the single trip
-						$.each(Util.getValues("email, submitDate"), function(index, value) { //TODO test
-							singleEmailLog[value] = row[value];
-						});
-						console.log("Log: " + singleEmailLog);
-						tripEmailLogs.push(singleEmailLog);
-					}
-					// Run the call function
-					callback(tripEmailLogs); */
-				}, errorCB);
-			}, errorCB, successCB('getTripDetails'));
-		},
-
-		/**
-		 * TODO - To be revised
-		 */
-		sendTrip : function(tid, emailAddress, callback) {
-			db.transaction(function(tx) {
-				console.log("set trip as 'processed'");
-				tx.executeSql('UPDATE Trips SET processed=true WHERE tripID=' + tid);
-				tx.executeSql('INSERT INTO Logs (logID, tripID, email, submitDate) VALUES (null, ' + tid + ',' + emailAddress + ',' + Util.getDate());
-			}, errorCB, successCB('sendTrip'));
-		},
-		
-		/**
-		 * Adds an expense
-		 * 
-		 * @param //TODO
-		 */
-		addExpense : function(eid, apcode, receipt, tid, callback) {
-			db.transaction(function(tx) {
-				console.log("add expense");
-				tx.executeSql('INSERT INTO Expenses (eid, apcode, receipt, tid) VALUES (null, ' + eid + ',' + apcode + ',' + receipt + ',' + tid);
-			}, errorCB, successCB('addExpense'));
-		},
-		
-		/**
-		 * Retrieves an expense
-		 * 
-		 * @param eid
-		 * 			The unique ID of an expense
-		 */
-		getExpense : function(eid, callback) {
-			db.transaction(function(tx) {
-				console.log("get expense details");
-				tx.executeSql('SELECT expenseType, accountProjectName SET processed=true WHERE expenseID=' + eid);	 //TODO
-			}, errorCB, successCB('getExpense'));
-		},
-		
-		/**
-		 * Updates an expense
-		 * 
-		 * @param eid
-		 * 			The unique ID of an expense
-		 */
-		updateExpense : function(eid, callback) {
-			// TODO
-		},
- 		
-		/**
-		 * Deletes an expense
-		 * 
-		 * @param eid
-		 * 			The unique ID of an expense
-		 */
-		deleteExpense : function(eid, callback) {
-			db.transaction(function(tx) {
-				console.log("Deleting expense");
-				//TODO
-				tx.executeSql('DELETE * FROM Expenses WHERE expenseID=' + eid); 
-			}, errorCB, successCB('deleteExpense'));
-		},
-				
-		/**
-		 * Retrieves all unassociated expenses
-		 */
-		getUnassociatedExpenses : function(callback) {
-			// TODO
-		},
-		
-		/**
-		 * Retrieves two most recently used email addresses
-		 */
-		getRecentlyUsedEmails : function(callback) {
-			db.transaction(function(tx) {
-				console.log("Retrieving recently used email addresses");
-				// TODO
-				//tx.executeSql('SELECT DISTINCT email FROM Logs WHERE tripID=' + tid + ' ORDER BY ' + submitDate);
-			}, errorCB, successCB('getRecentlyUsedEmails'));
+				}, errorCB); 
+			}, errorCB);
 		},
 		
 		/**
 		 * Retrieves email logs for a single trip
 		 * 
-		 * @param tripID
-		 * 			The unique ID of a trip
+		 * @param   tid  Unique trip ID
+		 * @return		 Array of email log objects ordered by descending order of date processed
 		 */
-		getTripEmailLogs : function(tripID, callback) {
+		getEmailLogs : function(tid, callback) {
 			db.transaction(function(tx) {
-				console.log("Retrieving email logs for specified trip");
-				var query = 'SELECT email, submitDate FROM Logs WHERE tripID=' + tripID; //TODO test
-				tx.executeSql(query, function(tx, results) {
-					console.log("Rows found: " + results.rows.length);
-					var tripEmailLogs = new Array();
+				var query = 'SELECT email, submitDate FROM Logs WHERE tripID = ' + tid + ' ORDER BY submitDate DESC';
+				tx.executeSql(query, [], function(tx, results) {
+					var logsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
-						// Setup new object and the unique ID to the log
-						var singleEmailLog = {
-								ID : row.id
-						};
-						// Map each value to the single trip
-						$.each(Util.getValues("email, submitDate"), function(index, value) { //TODO test
-							singleEmailLog[value] = row[value];
+						var singleLog = {};
+						$.each(["email", "submitDate"], function(index, value) {
+							singleLog[value] = row[value];
 						});
-						console.log("Log: " + singleEmailLog);
-						tripEmailLogs.push(singleEmailLog);
+						logsList.push(singleLog);
 					}
-					// Run the call function
-					callback(tripEmailLogs);
+					callback(logsList);
 				}, errorCB);
-			}, errorCB, successCB('getChargeCodes'));
+			}, errorCB);
+		},				
+						
+		/**
+		 * Retrieves all unassociated expenses
+		 * 
+		 * @return	 An array of unassociated expense objects
+		 */
+		getUnassociatedExpenses : function(callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectCode, a.accountProjectName, e.receipt ' +
+								'FROM Expenses AS e ' + 
+								'LEFT JOIN AccountProjects AS a ' + 
+								'ON e.accountProjectCode = a.accountProjectCode ' + 
+								'WHERE e.tripID IS NULL';
+				tx.executeSql(query, [], function(tx, results) {
+					var unassociatedExpensesList = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						var singleUnassociatedExpense = {};
+						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "accountProjectName", "receipt"], function(index, value) {
+							singleUnassociatedExpense[value] = row[value];
+						});
+						unassociatedExpensesList.push(singleUnassociatedExpense);
+					}
+					callback(unassociatedExpensesList);
+				}, errorCB);
+			}, errorCB);
+		},
+				
+		/**
+		 * Retrieves all expenses associated with a trip
+		 * 
+		 * @param   tid  Unique trip ID
+		 * @return		 An array of expense objects
+		 */
+		getTripExpenses : function(tid, callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectCode, a.accountProjectName, e.receipt ' + 
+								'FROM Expenses AS e ' + 
+								'LEFT JOIN AccountProjects AS a ' +
+								'ON e.accountProjectCode = a.accountProjectCode ' + 
+								'WHERE e.tripID = ' + tid;
+				tx.executeSql(query, [], function(tx, results) {
+					var tripExpensesList = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						var row = results.rows.item(i);
+						var singleTripExpense = {};
+						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "accountProjectName", "receipt"], function(index, value) {
+							singleTripExpense[value] = row[value];
+						});
+						tripExpensesList.push(singleTripExpense);
+					}
+					callback(tripExpensesList);
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
+		 * Retrieves two most recently used email addresses
+		 * 
+		 * @return  An array of email addresses ordered by descending order of use date
+		 */
+		getEmailAddresses : function(callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT DISTINCT email FROM Logs ORDER BY submitDate DESC';
+				tx.executeSql(query, [], function(tx, results) {
+					var emailAddressList = new Array();
+					var limit = 2;
+					if (results.rows.length == 1) {
+						limit = 1;
+					}
+					for (var i = 0; i < limit; i++) {
+						var row = results.rows.item(i);
+						var singleEmailAddress = {};
+						$.each(["email"], function(index, value) {
+							singleEmailAddress[value] = row[value];
+						});
+						emailAddressList.push(singleEmailAddress);
+					}
+					callback(emailAddressList);
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
+		 * Adds a client code
+		 * 
+		 * @param  apCode	   Unique account/project ID
+		 * @param  apName	   Name of the account/project
+		 * @param  chargeCode  The charge code
+		 */
+		addClientCode : function(apCode, apName, chargeCode, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('INSERT INTO AccountProjects VALUES ("' + apCode + '", "' + apName + '", "' + chargeCode + '")');
+			}, errorCB, callback());
+		},
+		
+		/**
+		 * Adds an expense
+		 * 
+		 * @param  etid     Unique expense type ID
+		 * @param  apCode  	Unique account/project ID
+		 * @param  receipt  The image file path
+		 * @param  tid	    Unique trip ID
+		 */
+		addExpense : function(etid, apCode, receipt, tid, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('INSERT INTO Expenses VALUES (null, "' + etid + '", "' + apCode + '", "' + receipt + '", ' + tid + ')');
+			}, errorCB, callback());
+		},
+
+		/**
+		 * Adds a new trip
+		 * 
+		 * @param  tName   Name/description of trip
+		 * @param  tStart  Trip start date
+		 * @param  tEnd	   Trip end date
+		 */
+		addTrip : function(tName, tStart, tEnd, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('INSERT INTO Trips VALUES (null, "' + tName + '", "' + tStart + '", "' + tEnd + '", 0)');
+			}, errorCB, callback());
+		},
+					
+		/**
+		 * Updates an expense
+		 * 
+		 * @param  eid      Unique expense ID
+		 * @param  etid		Unique expense type ID
+		 * @param  apCode	Unique account/project ID
+		 * @param  receipt  The image file path
+		 * @param  tid		Unique trip ID
+		 */
+		updateExpense : function(eid, etid, apCode, receipt, tid, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectCode = "' + apCode + '", receipt = "' + receipt + '", tripID = ' + tid);
+			}, errorCB, callback());
+		},
+ 		
+		/**
+		 * Updates details of single trip
+		 * 
+		 * @param  tid     Unique trip ID
+		 * @param  tName   Name/description of trip
+		 * @param  tStart  Trip start date
+		 * @param  tEnd	   Trip end date
+		 */
+		updateTrip : function(tid, tName, tStart, tEnd, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('UPDATE Trips SET tripName = "' + tName + '", startDate = "' + tStart + '", endDate = "' + tEnd + '" WHERE tripID = ' + tid);
+			}, errorCB, callback());
+		},
+
+		/**
+		 * Process a trip
+		 * 
+		 * @param  tid         Unique trip ID
+		 * @param  email 	   Recipient email address
+		 * @param  submitDate  Date trip was processed
+		 */
+		processTrip : function(tid, email, submitDate, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('UPDATE Trips SET processed = 1 WHERE tripID = ' + tid);
+				tx.executeSql('INSERT INTO Logs VALUES (null, '  + tid + ', "' + email + '", "' + submitDate + '")');
+			}, errorCB, callback());
+		},
+		 		
+		/**
+		 * Deletes an expense
+		 * 
+		 * @param  eid  Unique expense ID
+		 */
+		deleteExpense : function(eid, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('DELETE FROM Expenses WHERE expenseID = ' + eid); 
+			}, errorCB, callback());
 		}
 	};
 }());

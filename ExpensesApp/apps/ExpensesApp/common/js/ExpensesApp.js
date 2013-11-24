@@ -33,21 +33,28 @@ function wlCommonInit(){
 }
 
 $(document).ready(function() {
-	// Load the login page
-	Utils.loadPage("mainPage", function() {
-		// Call the init function
-		MainPage.init();
+	// Show the AJAX loading screen while the DB is being initiated
+	$.mobile.loading("show");
+	DB.initDB(function() {
+		// Load the login page
+		Utils.loadPage("mainPage", function() {
+			// Call the init function
+			MainPage.init();
+		});
+		
+		// TODO: Change this to binding it for Android back button.
+		// Currently emulated ENTER key as the back button.
+		$(document).keypress(function(e) {
+			if (e.which == 27) {
+				Utils.goBackWithAnimation(null);
+			}
+		});
+		
+		$('#content-page-2').css('display', 'none');
+		
+		// Hide the AJAX loading
+		$.mobile.loading("hide");
 	});
-	
-	// TODO: Change this to binding it for Android back button.
-	// Currently emulated ENTER key as the back button.
-	$(document).keypress(function(e) {
-		if (e.which == 27) {
-			Utils.goBackWithAnimation(null);
-		}
-	});
-	
-	$('#content-page-2').css('display', 'none');
 });
 
 /*
