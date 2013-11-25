@@ -48,7 +48,7 @@ var DB = (function() {
 		initDB : function(callbackFunction) {
 			// Create the database tables
 			db.transaction(function(tx) {
-				// Code to drop tables
+				// Code to drop tables (left here for testing purposes)
 				//tx.executeSql('DROP TABLE IF EXISTS ExpenseTypes');
 				//tx.executeSql('DROP TABLE IF EXISTS ChargeAccounts');
 				//tx.executeSql('DROP TABLE IF EXISTS AccountProjects');
