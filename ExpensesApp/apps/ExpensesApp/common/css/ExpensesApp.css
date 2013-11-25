@@ -16,6 +16,9 @@ body{
 	margin: 0 auto;
 	width: 320px;
 }
+#content p{
+	font-weight:bold;
+}
 .homeNav img, .attachReceipt img{
 	display:block;
 	margin:10px auto;
@@ -125,4 +128,7 @@ body{
 .hidden {
 	display: none;
 }
+
+.expenseTypeLI li{
+	background:#006093;
 }
