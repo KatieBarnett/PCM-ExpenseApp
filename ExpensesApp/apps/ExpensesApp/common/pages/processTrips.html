@@ -1,17 +1,34 @@
-<!-- Temporary login page to test page loading with page history -->
 <script src="js/view/processTrips.js"></script>
 <div>
-	<h1>page - process trips</h1>
-	<button class="back">Back</button>
-	<button class="forward">Forward</button>
-	<a class="" data-role="button" data-theme="c">Button test</a>
+	<div data-role="header" data-theme="c">
+		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="c" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
+		<h2>Trip</h2>
+	</div>
 	
-<div id="testList">
-	
-	<ul data-role="listview" data-id="outagemenuitems" data-theme="d" id="navigationMenuoutages" class="ui-icon-nodisc ui-icon-alt">
-	<li data-role="list-divider" >Contacts</li>
-	<li><a id="usagelist" href="#">Test</a></li>
-	</ul>
-</div>
-
+	<div data-role="content" data-theme="d">
+		<!-- <p><img class="receiptThumb" src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">What trip is this expense related to?</p> -->
+		<div id="tripDetails">
+			<h3 id="tripName"></h3>
+			<p>Starts: <span id=tripStart></span> Ends: <span id=tripEnd></span></p>
+		</div>
+		
+		
+		<ul id="expenseList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc expenseList">
+			<li data-role="list-divider" >Public Transport</li>
+			<li><a class="tripExpense">ANZ (1DHTA)
+					<img src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">
+				</a>
+			</li>
+			<li><a class="tripExpense">CBA (1DHTY)
+					<img src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">
+				</a>
+			</li>
+			<li data-role="list-divider">Hotel</li>
+			<li><a class="tripExpense">Please complete the expense questions
+					<img src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">
+				</a>
+			</li>
+		</ul>
+		<a class="sendTripDetails" data-role="button" data-theme="a">Send Trip Details</a>
+	</div>
 </div>
