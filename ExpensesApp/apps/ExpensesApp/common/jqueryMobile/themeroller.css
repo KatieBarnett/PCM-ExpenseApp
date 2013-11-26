@@ -966,6 +966,9 @@ a.ui-link-inherit {
 	outline-style: auto;
 }
 
-		
+
+/* custom list divider font */
+.ui-li-divider { padding: .3em 15px; font-size: 12px; font-weight: bold; }
+.ui-fullsize .ui-btn-inner { font-size: 16px; padding: .7em 15px; }
 
 

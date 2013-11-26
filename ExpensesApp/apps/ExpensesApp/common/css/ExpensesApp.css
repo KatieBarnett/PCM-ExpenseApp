@@ -102,7 +102,7 @@ body{
 }
 /* Expense Type Selection Collapsible Format */
 .expenseTypeLI {
-	padding: 0px 0px 3px 2px !important;
+	padding: 0px 0px 0px 0px !important;
 }
 
 }
@@ -121,5 +121,6 @@ body{
 	background:#FFFFFF;
 	color:#fff;
 }
+
 }
 }
