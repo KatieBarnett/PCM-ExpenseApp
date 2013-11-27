@@ -8,6 +8,7 @@ var Utils = (function() {
 	var pageHistory = [];
 	var callbackFunction = "";
 	var objectHistory = [];
+	var receipts = [];
 	return {
 		/**
 		 * Method that will load the desired page with params and callback
@@ -126,6 +127,41 @@ var Utils = (function() {
 		getCurrentPageObject : function() {
 			var previousObject = objectHistory.pop();
 			return previousObject;
+		},
+		
+		getFullImage: function(ref, page) {
+			var imageData = receipts[ref];
+			console.log('loading viewReceipt');
+			//load viewReceiptPage
+			Utils.loadPageWithAnimation('viewReceipt', function() {
+				Utils.saveCurrentPageObject(page); 
+				//change this to dynamically retrieve current page
+				ViewReceipt.init(imageData);
+			});
+		},
+		
+		getReceipt : function(ref){
+			return receipts[ref];
+		},
+		
+		addReceipt : function(receiptUri){
+			receipts.push(receiptUri);
+		},
+			 		
+		getThumbNail : function(ref) {
+			var thumbNail = receipts[ref];
+			var imageObj = new Image();
+ 			if(receipts.length!=0){
+				console.log(thumbNail);
+				imageObj.src = thumbNail;
+ 				var canvas = document.createElement('canvas');
+				var context = canvas.getContext('2d');
+ 				canvas.width = 75;
+ 				canvas.height = 100;
+ 				canvas.id = "newCanvas";
+				context.drawImage(imageObj, 0, 0, 75, 100);
+ 				$(".receiptThumb").replaceWith(canvas);
+ 			}
 		}
 	};
 } ());
