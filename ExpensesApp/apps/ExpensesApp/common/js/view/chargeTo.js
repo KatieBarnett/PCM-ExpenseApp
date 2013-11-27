@@ -19,8 +19,6 @@ var ChargeTo = (function() {
 					processTrips.init();
 				});
 			});
-<<<<<<< Upstream, based on origin/master
-=======
 			
 			// Move to next page after expense type is selected
 			$('.accountDetails').on('click', function() {
@@ -39,7 +37,7 @@ var ChargeTo = (function() {
 					// Save selection here - to be done
 					ChargeTo.init();
 			});
->>>>>>> 575fc8d visual design updates - as per expense type screen
+
 		}
 	};
 	
