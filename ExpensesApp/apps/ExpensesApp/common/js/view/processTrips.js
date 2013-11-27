@@ -20,13 +20,6 @@ var ProcessTrips = (function() {
 			});
 			DB.addTrip("Melbourne ANZ", "01-09-13", "13-09-13", function() {
 			});
-			
-			// Get Unprocessed Trips
-			var data = new Array();
-			data = DB.getUnprocessedTrips(function() {
-				alert("getting Trips");
-				alert(data.length);
-			});
 			*/
 			
 			DB.getUnprocessedTrips(function(data){
