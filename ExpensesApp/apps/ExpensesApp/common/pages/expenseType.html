@@ -6,7 +6,7 @@
 		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
 	</div>
 	<div data-role="content">
-		<p><img class="receiptThumb" src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">What type of expense is this receipt?</p>
+		<p><canvas class="receiptThumb" id="receiptThumb" width="75" height="75"></canvas>What type of expense is this receipt?</p>
 		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc selectExpenses">
 			<li data-role="list-divider" >Expense Type</li>
 			<li><a data-expType="agencyTransFee" class="chargeTo" data-icon="arrow-r">Agency Transaction Fee</a></li>

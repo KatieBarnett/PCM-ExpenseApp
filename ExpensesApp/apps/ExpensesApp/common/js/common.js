@@ -148,20 +148,14 @@ var Utils = (function() {
 			receipts.push(receiptUri);
 		},
 			 		
-		getThumbNail : function(ref) {
-			var thumbNail = receipts[ref];
+		getThumbNail : function(uri, canvas) {
 			var imageObj = new Image();
- 			if(receipts.length!=0){
-				console.log(thumbNail);
-				imageObj.src = thumbNail;
- 				var canvas = document.createElement('canvas');
-				var context = canvas.getContext('2d');
- 				canvas.width = 75;
- 				canvas.height = 100;
- 				canvas.id = "newCanvas";
-				context.drawImage(imageObj, 0, 0, 75, 100);
- 				$(".receiptThumb").replaceWith(canvas);
- 			}
+			imageObj.src = uri;
+			var context = canvas.getContext('2d');
+			
+		    imageObj.onload = function(){
+		        context.drawImage(imageObj, 0, 0, 75, 75);
+		    };
 		}
 	};
 } ());

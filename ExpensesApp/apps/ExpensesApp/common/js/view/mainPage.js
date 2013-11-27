@@ -28,6 +28,10 @@ var MainPage = (function() {
 				// Close the attachment modal
 				CameraFunctions.openCameraForImageCapture();
 			});	
+			$('#openLibrary').on('click',function() {
+				// Close the attachment modal
+				CameraFunctions.getPhotoFromLibrary();
+			});	
 			$('#noReceipt').on('click',function() {
 				// Load the new page
 				Utils.loadPageWithAnimation('expenseType', function() {
@@ -52,24 +56,4 @@ function closeAttachmentOptions(){
 	$('.attachReceipt').animate({bottom:'-210px'}, 500, function() { 
 		$('.attachReceipt').css("display","none");
 	});
-}
-
-function openCameraForImageCapture(){
-
-	 navigator.camera.getPicture(onPhotoURISuccess, onFail,{ quality: 50, 
-	   destinationType: navigator.camera.DestinationType.NATIVE_URI,
-	   sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-	   correctOrientation: true,
-	   targetWidth: 50,
-	   targetHeight: 50
-	   });
-
-}
-
-function onPhotoURISuccess(imageURI) {
-	console.log(imageURI);
-}
-
-function onFail(){
-	console.log("Failed to get image uri");
 }

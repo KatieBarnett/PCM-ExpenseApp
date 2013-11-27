@@ -31,15 +31,12 @@ var CameraFunctions = (function() {
 		onPhotoURISuccess : function(imageURI) {
 			
 				console.log(imageURI);
-				console.log('here');
 				Utils.addReceipt(imageURI);
 				//need to transfer to expenseType page
 				Utils.loadPageWithAnimation('expenseType', function() {
 					Utils.saveCurrentPageObject(MainPage);
 					ExpenseType.init();
-					console.log('here');
 				});
-				console.log('helloworld');
 		},
 		 
 		onFail : function(){
