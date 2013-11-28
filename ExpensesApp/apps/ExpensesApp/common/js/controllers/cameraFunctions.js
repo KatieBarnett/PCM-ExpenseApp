@@ -8,7 +8,7 @@ var CameraFunctions = (function() {
 			
 			 navigator.camera.getPicture(onPhotoURISuccess, onFail,{ quality: 50, 
 		        destinationType: navigator.camera.DestinationType.NATIVE_URI,
-		        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+		        sourceType: Camera.PictureSourceType.CAMERA,
 		        correctOrientation: true,
 		        targetWidth: 50,
 		        targetHeight: 50
