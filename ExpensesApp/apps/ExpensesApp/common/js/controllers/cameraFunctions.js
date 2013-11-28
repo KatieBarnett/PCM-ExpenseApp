@@ -8,7 +8,7 @@ var CameraFunctions = (function() {
 		getPhotoFromLibrary : function(){
 			
 			 navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
-		        destinationType: navigator.camera.DestinationType.NATIVE_URI,
+		        destinationType: navigator.camera.DestinationType.FILE_URI,
 		        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
 		        correctOrientation: true,
 		        targetWidth: 50,
@@ -18,9 +18,9 @@ var CameraFunctions = (function() {
 		
 		openCameraForImageCapture : function(){
 			
-			 navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
-		        destinationType: navigator.camera.DestinationType.NATIVE_URI,
-		        sourceType: Camera.PictureSourceType.CAMERA,
+			navigator.camera.getPicture(onPhotoURISuccess, onFail,{ quality: 50, 
+		        destinationType: navigator.camera.DestinationType.FILE_URI,
+		        sourceType: Camera.PictureSourceType.Camera,
 		        correctOrientation: true,
 		        targetWidth: 50,
 		        targetHeight: 50
