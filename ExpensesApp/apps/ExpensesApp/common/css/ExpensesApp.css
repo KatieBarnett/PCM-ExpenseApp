@@ -21,14 +21,17 @@ body{
 	margin:10px auto;
 }
 .homeNav{
-	float:right;
+	/*float:right;*/
 	margin-top:15px;
 }
 .homeNav li{
-	padding:5%; 
+	padding:4%; 
 	height:75px;
+	width:100px;
+	float:right;
+	clear:right;
 	background:rgba(0,66,102,.7);
-	margin-bottom:10%;
+	margin-bottom:5%;
 	text-align:center;
 	font-weight:normal;
 }
@@ -55,7 +58,7 @@ body{
 	bottom:-210px;
 	left:0;
 	height:210px;
-	width:90%;
+	width:91%;
 	padding:5%;
 	background:#FFFFFF;
 	color:#fff;
@@ -99,7 +102,7 @@ body{
 }
 /* Expense Type Selection Collapsible Format */
 .expenseTypeLI {
-	padding: 0px 0px 3px 2px !important;
+	padding: 0px 0px 0px 0px !important;
 }
 
 }
@@ -118,5 +121,8 @@ body{
 	background:#FFFFFF;
 	color:#fff;
 }
+
+.hidden {
+	display: none;
 }
 }

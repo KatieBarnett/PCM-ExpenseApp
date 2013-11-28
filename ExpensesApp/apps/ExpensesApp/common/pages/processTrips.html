@@ -1,17 +1,14 @@
-<!-- Temporary login page to test page loading with page history -->
 <script src="js/view/processTrips.js"></script>
 <div>
-	<h1>page - process trips</h1>
-	<button class="back">Back</button>
-	<button class="forward">Forward</button>
-	<a class="" data-role="button" data-theme="c">Button test</a>
+	<div data-role="header" data-theme="c">
+		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
+		<h2>Process Trips</h2>
+	</div>
 	
-<div id="testList">
-	
-	<ul data-role="listview" data-id="outagemenuitems" data-theme="d" id="navigationMenuoutages" class="ui-icon-nodisc ui-icon-alt">
-	<li data-role="list-divider" >Contacts</li>
-	<li><a id="usagelist" href="#">Test</a></li>
-	</ul>
-</div>
+	<div data-role="content" data-theme="d">
 
+		<ul id="tripList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc">
+			<li data-role="list-divider" >Trips</li>
+		</ul>
+	</div>
 </div>

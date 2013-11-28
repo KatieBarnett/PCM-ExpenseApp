@@ -33,60 +33,27 @@ function wlCommonInit(){
 }
 
 $(document).ready(function() {
-	// Load the login page
-	Utils.loadPage("mainPage", function() {
-		// Call the init function
-		MainPage.init();
-	});
 	
-	// TODO: Change this to binding it for Android back button.
-	// Currently emulated ENTER key as the back button.
-	$(document).keypress(function(e) {
-		if (e.which == 27) {
-			Utils.goBackWithAnimation(null);
-		}
-	});
+	var BACKBUTTON = 27;
 	
-	$('#content-page-2').css('display', 'none');
-});
-
-/*
- * Try not to have global functions as below. Use closures and each page should have it's own JavaScript file.
- * that will handle the page functionality.
- */
-function displayAttachmentOptions(){
-	$('.attachReceipt').css('display','block');
-	$('.attachReceipt').animate({bottom:'0px'}, 500);
-}
-function closeAttachmentOptions(){
-	$('.needs').animate({paddingTop:'5px'}, 500, function() { 
-		$('.have').css("display","block");
+	// Show the AJAX loading screen while the DB is being initiated
+	$.mobile.loading("show");
+	DB.initDB(function() {
+		// Load the login page
+		Utils.loadPage("mainPage", function() {
+			// Call the init function
+			MainPage.init();
 		});
-	
-	$('.attachReceipt').animate({bottom:'-210px'}, 500, function() { 
-		$('.attachReceipt').css("display","none");
-	});
-}
-
- function openCameraForImageCapture(){
-
-	 navigator.camera.getPicture(onPhotoURISuccess, onFail,{ quality: 50, 
-        destinationType: navigator.camera.DestinationType.NATIVE_URI,
-        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-        correctOrientation: true,
-        targetWidth: 50,
-        targetHeight: 50
-        });
-
-}
- 
- function onPhotoURISuccess(imageURI) {
-		console.log(imageURI);
 		
-	}
- 
- function onFail(){
-	console.log("Failed to get image uri");
-	}
-
-			
+		$(document).keypress(function(e) {
+			if (e.which == BACKBUTTON) {
+				Utils.goBackWithAnimation(null);
+			}
+		});
+		
+		$('#content-page-2').css('display', 'none');
+		
+		// Hide the AJAX loading
+		$.mobile.loading("hide");
+	});
+});			

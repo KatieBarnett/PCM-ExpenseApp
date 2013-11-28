@@ -28,6 +28,10 @@ var MainPage = (function() {
 				// Close the attachment modal
 				CameraFunctions.openCameraForImageCapture();
 			});	
+			$('#openLibrary').on('click',function() {
+				// Close the attachment modal
+				CameraFunctions.getPhotoFromLibrary();
+			});	
 			$('#noReceipt').on('click',function() {
 				// Load the new page
 				Utils.loadPageWithAnimation('expenseType', function() {
@@ -38,3 +42,18 @@ var MainPage = (function() {
 		}
 	};
 }());
+
+function displayAttachmentOptions(){
+	$('.attachReceipt').css('display','block');
+	$('.attachReceipt').animate({bottom:'0px'}, 500);
+}
+
+function closeAttachmentOptions(){
+	$('.needs').animate({paddingTop:'5px'}, 500, function() { 
+		$('.have').css("display","block");
+		});
+	
+	$('.attachReceipt').animate({bottom:'-210px'}, 500, function() { 
+		$('.attachReceipt').css("display","none");
+	});
+}

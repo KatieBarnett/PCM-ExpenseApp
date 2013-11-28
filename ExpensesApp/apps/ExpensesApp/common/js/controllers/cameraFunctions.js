@@ -4,9 +4,21 @@
  */
 var CameraFunctions = (function() {
 	return {
+		
+		getPhotoFromLibrary : function(){
+			
+			 navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
+		        destinationType: navigator.camera.DestinationType.NATIVE_URI,
+		        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+		        correctOrientation: true,
+		        targetWidth: 50,
+		        targetHeight: 50
+		        });
+		},
+		
 		openCameraForImageCapture : function(){
 			
-			 navigator.camera.getPicture(onPhotoURISuccess, onFail,{ quality: 50, 
+			 navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
 		        destinationType: navigator.camera.DestinationType.NATIVE_URI,
 		        sourceType: Camera.PictureSourceType.CAMERA,
 		        correctOrientation: true,
@@ -16,9 +28,15 @@ var CameraFunctions = (function() {
 
 		},
 		 
-		  onPhotoURISuccess : function(imageURI) {
+		onPhotoURISuccess : function(imageURI) {
+			
 				console.log(imageURI);
-				
+				Utils.addReceipt(imageURI);
+				//need to transfer to expenseType page
+				Utils.loadPageWithAnimation('expenseType', function() {
+					Utils.saveCurrentPageObject(MainPage);
+					ExpenseType.init();
+				});
 		},
 		 
 		onFail : function(){

@@ -7,6 +7,13 @@ var ExpenseType = (function() {
 	return {
 		init : function() {
 			console.log("ExpenseType :: init");
+
+			//draw thumbNail with latest receipt
+			Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
+		    
+		    $('#receiptThumb').on('click', function(){
+		    	Utils.getFullImage(0, ExpenseType);
+		    });
 			
 			// Navigation buttons functionality
 			$('.back').on('click', function() {
@@ -27,10 +34,7 @@ var ExpenseType = (function() {
 					// Save selection here - to be done
 					ChargeTo.init();
 				});
-			});
-			
-			
-			
+			});				
 		}
 	};
 }());

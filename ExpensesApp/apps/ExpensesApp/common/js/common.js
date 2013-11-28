@@ -8,6 +8,7 @@ var Utils = (function() {
 	var pageHistory = [];
 	var callbackFunction = "";
 	var objectHistory = [];
+	var receipts = [];
 	return {
 		/**
 		 * Method that will load the desired page with params and callback
@@ -36,8 +37,12 @@ var Utils = (function() {
 			pageHistory.pop();
 			var page = pageHistory[pageHistory.length-1];
 			if(pageHistory.length < 1) {
-				alert("Error: cannot go back any further");
-				return false;
+				if (confirm("Are you sure to exit?")) {
+					if(navigator.app) {
+						navigator.app.exitApp();
+						return false;
+					}
+				}
 			}
 			$(PageChangeHelper.getCurrentContainer()).load('pages/' + page + '.html', function() {
 				// Reload the dynamic CSS from jQuery mobile once the page has been loaded into active page.
@@ -126,6 +131,35 @@ var Utils = (function() {
 		getCurrentPageObject : function() {
 			var previousObject = objectHistory.pop();
 			return previousObject;
+		},
+		
+		getFullImage: function(ref, page) {
+			var imageData = receipts[ref];
+			console.log('loading viewReceipt');
+			//load viewReceiptPage
+			Utils.loadPageWithAnimation('viewReceipt', function() {
+				Utils.saveCurrentPageObject(page); 
+				//change this to dynamically retrieve current page
+				ViewReceipt.init(imageData);
+			});
+		},
+		
+		getReceipt : function(ref){
+			return receipts[ref];
+		},
+		
+		addReceipt : function(receiptUri){
+			receipts.push(receiptUri);
+		},
+			 		
+		getThumbNail : function(uri, canvas) {
+			var imageObj = new Image();
+			imageObj.src = uri;
+			var context = canvas.getContext('2d');
+			
+		    imageObj.onload = function(){
+		        context.drawImage(imageObj, 0, 0, 75, 75);
+		    };
 		}
 	};
 } ());
