@@ -74,13 +74,13 @@ var DB = (function() {
 									'tripName varchar(100),' +
 									'startDate date,' +
 									'endDate date,' +
-									'processed boolean DEFAULT 0' +
+									'originalProcessDate date' +
 									')');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Logs(' + 
 									'logID integer NOT NULL PRIMARY KEY AUTOINCREMENT,' +
 									'tripID integer,' +
 									'email varchar(50),' +
-									'submitDate date,' +
+									'processDate date,' +
 									'FOREIGN KEY(tripID) REFERENCES Trips(TripID)' +
 									')');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Expenses(' + 
@@ -188,7 +188,7 @@ var DB = (function() {
 		/**
 		 * Retrieves all expense types
 		 * 
-		 * @return  Array of expense type objects
+		 * @return  An array of expense type objects
 		 */
 		getExpenseTypes : function() {
 			return expenseTypes;
@@ -197,7 +197,7 @@ var DB = (function() {
 		/**
 		 * Retrieves all charge account codes
 		 * 
-		 * @return  Array of charge account code objects
+		 * @return  An array of charge account code objects
 		 */
 		getChargeAccountCodes : function() {
 			return chargeAccounts;
@@ -206,7 +206,7 @@ var DB = (function() {
 		/**
 		 * Retrieves all client codes
 		 * 
-		 * @return  Array of account/project code objects
+		 * @return  An array of account/project code objects
 		 */
 		getClientCodes : function(callback) {
 			db.transaction(function(tx) {
@@ -223,8 +223,10 @@ var DB = (function() {
 						});
 						accountsProjectsList.push(singleAccountProject);
 					}
-					// Run the call function
-					callback(accountsProjectsList);
+					// Run the call function to return the array
+					if (callback) {
+						callback(accountsProjectsList);						
+					}
 				}, errorCB);
 			}, errorCB);
 		},
@@ -232,11 +234,11 @@ var DB = (function() {
 		/**
 		 * Retrieves all unprocessed trips for Process Trips screen
 		 * 
-		 * @return  Array of unprocessed trip objects ordered by descending order of trip start date
+		 * @return  An array of unprocessed trip objects ordered by descending order of trip start date
 		 */
 		getUnprocessedTrips : function(callback) {	
 			db.transaction(function(tx) {
-				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE processed = 0 ORDER BY startDate DESC';
+				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE originalProcessDate IS NULL ORDER BY startDate, endDate DESC';
 				tx.executeSql(query, [], function(tx, results) {
 					var unprocessedTripsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
@@ -247,7 +249,9 @@ var DB = (function() {
 						});
 						unprocessedTripsList.push(singleUnprocessedTrip);
 					}
-					callback(unprocessedTripsList);
+					if (callback) {
+						callback(unprocessedTripsList);						
+					}
 				}, errorCB);
 			}, errorCB);
 		},
@@ -255,11 +259,11 @@ var DB = (function() {
 		/**
 		 * Retrieves all processed trips for History screen
 		 * 
-		 * @return  Array of processed trip objects ordered by descending order of trip start date
+		 * @return  An array of processed trip objects ordered by descending order of processed date
 		 */
 		getProcessedTrips : function(callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE processed = 1 ORDER BY startDate DESC';
+				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE originalProcessDate IS NOT NULL ORDER BY originalProcessDate DESC';
 				tx.executeSql(query, [], function(tx, results) {
 					var processedTripsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
@@ -270,7 +274,9 @@ var DB = (function() {
 						});
 						processedTripsList.push(singleProcessedTrip);
 					}
-					callback(processedTripsList);
+					if (callback) {
+						callback(processedTripsList);						
+					}
 				}, errorCB); 
 			}, errorCB);
 		},
@@ -279,22 +285,24 @@ var DB = (function() {
 		 * Retrieves email logs for a single trip
 		 * 
 		 * @param   tid  Unique trip ID
-		 * @return		 Array of email log objects ordered by descending order of date processed
+		 * @return       An array of log objects ordered by descending order of processed date
 		 */
 		getEmailLogs : function(tid, callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT email, submitDate FROM Logs WHERE tripID = ' + tid + ' ORDER BY submitDate DESC';
+				var query = 'SELECT email, processDate FROM Logs WHERE tripID = ' + tid + ' ORDER BY processDate DESC';
 				tx.executeSql(query, [], function(tx, results) {
 					var logsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
 						var singleLog = {};
-						$.each(["email", "submitDate"], function(index, value) {
+						$.each(["email", "processDate"], function(index, value) {
 							singleLog[value] = row[value];
 						});
 						logsList.push(singleLog);
 					}
-					callback(logsList);
+					if (callback) {
+						callback(logsList);						
+					}
 				}, errorCB);
 			}, errorCB);
 		},				
@@ -302,7 +310,7 @@ var DB = (function() {
 		/**
 		 * Retrieves all unassociated expenses
 		 * 
-		 * @return	 An array of unassociated expense objects
+		 * @return  An array of unassociated expense objects
 		 */
 		getUnassociatedExpenses : function(callback) {
 			db.transaction(function(tx) {
@@ -321,7 +329,9 @@ var DB = (function() {
 						});
 						unassociatedExpensesList.push(singleUnassociatedExpense);
 					}
-					callback(unassociatedExpensesList);
+					if (callback) {
+						callback(unassociatedExpensesList);						
+					}
 				}, errorCB);
 			}, errorCB);
 		},
@@ -330,7 +340,7 @@ var DB = (function() {
 		 * Retrieves all expenses associated with a trip
 		 * 
 		 * @param   tid  Unique trip ID
-		 * @return		 An array of expense objects
+		 * @return       An array of expense objects
 		 */
 		getTripExpenses : function(tid, callback) {
 			db.transaction(function(tx) {
@@ -349,34 +359,56 @@ var DB = (function() {
 						});
 						tripExpensesList.push(singleTripExpense);
 					}
-					callback(tripExpensesList);
+					if (callback) {
+						callback(tripExpensesList);						
+					}
 				}, errorCB);
 			}, errorCB);
 		},
 		
 		/**
-		 * Retrieves two most recently used email addresses
+		 * Retrieves all previously entered email addresses
 		 * 
 		 * @return  An array of email addresses ordered by descending order of use date
 		 */
 		getEmailAddresses : function(callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT DISTINCT email FROM Logs ORDER BY submitDate DESC';
+				var query = 'SELECT email FROM Logs ORDER BY processDate DESC';
 				tx.executeSql(query, [], function(tx, results) {
 					var emailAddressList = new Array();
-					var limit = 2;
-					if (results.rows.length == 1) {
-						limit = 1;
-					}
-					for (var i = 0; i < limit; i++) {
+					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
 						var singleEmailAddress = {};
 						$.each(["email"], function(index, value) {
 							singleEmailAddress[value] = row[value];
 						});
 						emailAddressList.push(singleEmailAddress);
+					}					
+					if (callback) {
+						callback(emailAddressList);
 					}
-					callback(emailAddressList);
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
+		 * Gets details of a client code
+		 * 
+		 * @param   apCode  Unique account/project ID
+		 * @return          A client code object
+		 */
+		getClientCode : function(apCode, callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT accountProjectName, chargeAccountID FROM AccountProjects WHERE accountProjectCode = "' + apCode + '"';
+				tx.executeSql(query, [], function(tx, results) {
+					var row = results.rows.item(0);
+					var singleClientCode = {};
+					$.each(["accountProjectName", "chargeAccountID"], function(index, value) {
+						singleClientCode[value] = row[value];
+					});					
+					if (callback) {
+						callback(singleClientCode);						
+					}
 				}, errorCB);
 			}, errorCB);
 		},
@@ -384,28 +416,36 @@ var DB = (function() {
 		/**
 		 * Adds a client code
 		 * 
-		 * @param  apCode	   Unique account/project ID
-		 * @param  apName	   Name of the account/project
+		 * @param  apCode      Unique account/project ID
+		 * @param  apName      Name of the account/project
 		 * @param  chargeCode  The charge code
 		 */
 		addClientCode : function(apCode, apName, chargeCode, callback) {
 			db.transaction(function(tx) {
 				tx.executeSql('INSERT INTO AccountProjects VALUES ("' + apCode + '", "' + apName + '", "' + chargeCode + '")');
-			}, errorCB, callback());
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
 		},
 		
 		/**
 		 * Adds an expense
 		 * 
 		 * @param  etid     Unique expense type ID
-		 * @param  apCode  	Unique account/project ID
+		 * @param  apCode   Unique account/project ID
 		 * @param  receipt  The image file path
 		 * @param  tid	    Unique trip ID
 		 */
 		addExpense : function(etid, apCode, receipt, tid, callback) {
 			db.transaction(function(tx) {
 				tx.executeSql('INSERT INTO Expenses VALUES (null, "' + etid + '", "' + apCode + '", "' + receipt + '", ' + tid + ')');
-			}, errorCB, callback());
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
 		},
 
 		/**
@@ -417,27 +457,35 @@ var DB = (function() {
 		 */
 		addTrip : function(tName, tStart, tEnd, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO Trips VALUES (null, "' + tName + '", "' + tStart + '", "' + tEnd + '", 0)');
-			}, errorCB, callback());
+				tx.executeSql('INSERT INTO Trips VALUES (null, "' + tName + '", "' + tStart + '", "' + tEnd + '", null)');
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
 		},
 					
 		/**
 		 * Updates an expense
 		 * 
 		 * @param  eid      Unique expense ID
-		 * @param  etid		Unique expense type ID
-		 * @param  apCode	Unique account/project ID
+		 * @param  etid	    Unique expense type ID
+		 * @param  apCode   Unique account/project ID
 		 * @param  receipt  The image file path
-		 * @param  tid		Unique trip ID
+		 * @param  tid      Unique trip ID
 		 */
 		updateExpense : function(eid, etid, apCode, receipt, tid, callback) {
 			db.transaction(function(tx) {
 				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectCode = "' + apCode + '", receipt = "' + receipt + '", tripID = ' + tid);
-			}, errorCB, callback());
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
 		},
  		
 		/**
-		 * Updates details of single trip
+		 * Updates details of a single trip
 		 * 
 		 * @param  tid     Unique trip ID
 		 * @param  tName   Name/description of trip
@@ -447,23 +495,61 @@ var DB = (function() {
 		updateTrip : function(tid, tName, tStart, tEnd, callback) {
 			db.transaction(function(tx) {
 				tx.executeSql('UPDATE Trips SET tripName = "' + tName + '", startDate = "' + tStart + '", endDate = "' + tEnd + '" WHERE tripID = ' + tid);
-			}, errorCB, callback());
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
 		},
 
 		/**
-		 * Process a trip
+		 * Sets a trip as "processed"
 		 * 
-		 * @param  tid         Unique trip ID
-		 * @param  email 	   Recipient email address
-		 * @param  submitDate  Date trip was processed
+		 * @param  tid   Unique trip ID
+		 * @param  date  Trip processing date
 		 */
-		processTrip : function(tid, email, submitDate, callback) {
+		processTrip : function(tid, date, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('UPDATE Trips SET processed = 1 WHERE tripID = ' + tid);
-				tx.executeSql('INSERT INTO Logs VALUES (null, '  + tid + ', "' + email + '", "' + submitDate + '")');
-			}, errorCB, callback());
+				tx.executeSql('UPDATE Trips SET originalProcessDate = "' + date + '" WHERE tripID = ' + tid);
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
 		},
-		 		
+		
+		/**
+		 * Logs a trip
+		 * 
+		 * @param  tid          Unique trip ID
+		 * @param  email        Recipient email address
+		 * @param  processDate  Date trip was processed
+		 */
+		logTrip : function(tid, email, processDate, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('INSERT INTO Logs VALUES (null, '  + tid + ', "' + email + '", "' + processDate + '")');
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
+		},
+		
+		/**
+		 * Deletes a client code
+		 * 
+		 * @param  apCode  Unique account/project ID
+		 */
+		deleteClientCode : function(apCode, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('DELETE FROM AccountProjects WHERE accountProjectCode = "' + apCode + '"'); 
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
+		},
+		
 		/**
 		 * Deletes an expense
 		 * 
@@ -472,7 +558,28 @@ var DB = (function() {
 		deleteExpense : function(eid, callback) {
 			db.transaction(function(tx) {
 				tx.executeSql('DELETE FROM Expenses WHERE expenseID = ' + eid); 
-			}, errorCB, callback());
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
+		},
+		
+		/**
+		 * Deletes a trip and all its associated expenses and logs
+		 * 
+		 * @param  tid  Unique trip ID
+		 */
+		deleteTrip : function(tid, callback) {
+			db.transaction(function(tx) {
+				tx.executeSql('DELETE FROM Expenses WHERE tripID = ' + tid); 
+				tx.executeSql('DELETE FROM Logs WHERE tripID = ' + tid); 
+				tx.executeSql('DELETE FROM Trips WHERE tripID = ' + tid); 
+			}, errorCB, function() {
+				if (callback) {
+					callback();
+				};
+			});
 		}
 	};
 }());
