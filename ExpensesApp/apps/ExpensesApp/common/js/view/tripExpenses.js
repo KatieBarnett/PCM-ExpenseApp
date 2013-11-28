@@ -13,8 +13,17 @@ var TripExpenses = (function() {
 			var tripStart = null;
 			var tripEnd = null;
 			var headingPublished = false;
-			
-			
+			/*
+			DB.updateExpense("7", "Public Transportation", "1DHTA", "images//receipt-placeholder.gif", 4, function(){
+				
+			});
+			DB.updateExpense("8", "Public Transportation", "1DHTY", "images//receipt-placeholder1.gif", 4, function(){
+				
+			});
+			DB.updateExpense("9", "Hotel", null, null, 4, function(){
+	
+			});
+			*/
 			// Retrieve and publish trip details
 			DB.getUnprocessedTrips(function(data){
 			
@@ -51,7 +60,7 @@ var TripExpenses = (function() {
 								expenseList.appendChild(expenseLI);
 								headingPublished = true;
 							}
-							console.log(data[j]);
+							
 							expenseLI = document.createElement("li");
 							expenseLI.setAttribute("data-expense", data[j]["expenseID"]);
 							expenseLI.setAttribute("class", "expenseItem");
@@ -64,7 +73,16 @@ var TripExpenses = (function() {
 									expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
 								}
 							}
+							receiptThumbnail = document.createElement("img");
+							if (data[j]["receipt"] == "null"){
+								receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
+							} else {
+								receiptThumbnail.setAttribute("src", data[j]["receipt"]);
+							}
+							expenseAnchor.appendChild(receiptThumbnail);
 							expenseLI.appendChild(expenseAnchor);
+							
+							
 							expenseList.appendChild(expenseLI);
 							
 							// 
