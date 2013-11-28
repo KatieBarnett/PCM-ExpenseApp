@@ -37,8 +37,12 @@ var Utils = (function() {
 			pageHistory.pop();
 			var page = pageHistory[pageHistory.length-1];
 			if(pageHistory.length < 1) {
-				alert("Error: cannot go back any further");
-				return false;
+				if (confirm("Are you sure to exit?")) {
+					if(navigator.app) {
+						navigator.app.exitApp();
+						return false;
+					}
+				}
 			}
 			$(PageChangeHelper.getCurrentContainer()).load('pages/' + page + '.html', function() {
 				// Reload the dynamic CSS from jQuery mobile once the page has been loaded into active page.
