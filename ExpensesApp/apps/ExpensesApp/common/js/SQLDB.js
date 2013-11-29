@@ -476,7 +476,7 @@ var DB = (function() {
 		 */
 		updateExpense : function(eid, etid, apCode, receipt, tid, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectCode = "' + apCode + '", receipt = "' + receipt + '", tripID = ' + tid);
+				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectCode = "' + apCode + '", receipt = "' + receipt + '", tripID = "' + tid + '" WHERE expenseID = ' + eid);
 			}, errorCB, function() {
 				if (callback) {
 					callback();

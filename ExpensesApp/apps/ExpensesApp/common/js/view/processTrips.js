@@ -20,23 +20,13 @@ var ProcessTrips = (function() {
 			});
 			DB.addTrip("Melbourne ANZ", "01-09-13", "13-09-13", function() {
 			});
-			
-			DB.deleteExpense("4", function() {
-				console.log("deleted expense");
-			});
-			DB.deleteExpense("5", function() {
-				console.log("deleted expense");
-			});
-			DB.deleteExpense("6", function() {
-				console.log("deleted expense");
-			});
-			DB.addExpense("Public Transportation", "1DHTA", "images\receipt-placeholder.gif", 4, function() {
+			DB.addExpense("Public Transportation", "1DHTA", "images\\receipt-placeholder.gif", 4, function() {
 				console.log("added expense");
 			});
-			DB.addExpense("Public Transportation", "1DHTY", "images\receipt-placeholder1.gif", 4, function() {
+			DB.addExpense("Public Transportation", "1DHTY", "images\\receipt-placeholder1.gif", 4, function() {
 				console.log("added expense");
 			});
-			DB.addExpense("Hotel", null, "images\receipt-placeholder2.gif", 4, function() {
+			DB.addExpense("Hotel", null, "images\\no-receipt.gif", 4, function() {
 				console.log("added expense");
 			});		
 			
