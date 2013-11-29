@@ -109,9 +109,9 @@ var DB = (function() {
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Additional Airline Costs", 1)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Additional Airline Departure Fee", 1)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Air Travel (Unused)", 1)');							
-							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Business Meal", 2)');
-							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental/Hire - Gasoline/Petrol", 2)');
-							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Entertainment", 2)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Business Meal", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental/Hire - Gasoline/Petrol", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Entertainment", 0)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Group Events", 2)');							
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Group Meal", 0)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Quarter Century Club - Gift", 0)');							

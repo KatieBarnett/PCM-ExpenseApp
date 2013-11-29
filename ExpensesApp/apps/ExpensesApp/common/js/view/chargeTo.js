@@ -5,7 +5,8 @@
 
 var ChargeTo = (function() {
 	return {
-		init : function() {
+		// expenseTypeID is passed in from previous screen
+		init : function(expenseTypeID) {
 			console.log("ChargeTo :: init");
 			
 			// Navigation buttons functionality
