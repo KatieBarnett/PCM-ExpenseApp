@@ -13,17 +13,7 @@ var TripExpenses = (function() {
 			var tripStart = null;
 			var tripEnd = null;
 			var headingPublished = false;
-			/*
-			DB.updateExpense("7", "Public Transportation", "1DHTA", "images//receipt-placeholder.gif", 4, function(){
-				
-			});
-			DB.updateExpense("8", "Public Transportation", "1DHTY", "images//receipt-placeholder1.gif", 4, function(){
-				
-			});
-			DB.updateExpense("9", "Hotel", null, null, 4, function(){
-	
-			});
-			*/
+
 			// Retrieve and publish trip details
 			DB.getUnprocessedTrips(function(data){
 			
@@ -93,7 +83,15 @@ var TripExpenses = (function() {
 				}
 				$('#expenseList').listview('refresh');
 				
-				console.log(data);
+				// Move to next page after expense type is selected, pass expenseTypeID
+				$('.expenseItem').on('click', function() {
+					var expenseID = $(this).attr("data-expense");
+					Utils.loadPageWithAnimation("editExpense", function() {
+						Utils.saveCurrentPageObject(TripExpenses);
+						EditExpense.init(expenseID);
+					});
+				});	
+				
 			});
 			
 			$('.back').on('click', function() {

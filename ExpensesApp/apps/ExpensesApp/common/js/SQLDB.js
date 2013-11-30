@@ -367,6 +367,28 @@ var DB = (function() {
 		},
 		
 		/**
+		 * Retrieves details of a single expense
+		 * 
+		 * @param   eid  Unique expense ID
+		 * @return       A single expense object
+		 */
+		getExpense : function(eid, callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt FROM Expenses WHERE expenseID = "' + eid + '"';
+				tx.executeSql(query, [], function(tx, results) {
+					var row = results.rows.item(0);
+					var singleExpense = {};
+					$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt"], function(index, value) {
+						singleExpense[value] = row[value];
+					});					
+					if (callback) {
+						callback(singleExpense);						
+					}
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
 		 * Retrieves all previously entered email addresses
 		 * 
 		 * @return  An array of email addresses ordered by descending order of use date
