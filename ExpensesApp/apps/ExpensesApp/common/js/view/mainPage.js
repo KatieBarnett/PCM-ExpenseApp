@@ -16,6 +16,13 @@ var MainPage = (function() {
 					ProcessTrips.init();
 				});
 			});
+			$('#history').on('click',function() {
+				// Load the new page
+				Utils.loadPageWithAnimation('history', function() {
+					Utils.saveCurrentPageObject(MainPage);
+					History.init();
+				});
+			});
 			$('#addExpense').on('click',function() {
 				// Display the attachment modal
 				displayAttachmentOptions();
