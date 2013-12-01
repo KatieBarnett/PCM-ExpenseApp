@@ -3,17 +3,22 @@
  * @author Katie Barnett and Michael Bunn
  */
 
-var ExpenseType = (function() {
+var EditExpense = (function() {
 	return {
-		init : function() {
-			console.log("ExpenseType :: init");
+		init : function(expenseID) {
+			console.log("EditExpense :: init");
 
-			//draw thumbNail with latest receipt
-			Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
-		    
-		    $('#receiptThumb').on('click', function(){
-		    	Utils.getFullImage(0, ExpenseType);
-		    });
+			DB.getExpense(expenseID, function(expense) {
+				
+				console.log(expense);
+				//draw thumbNail with receipt
+				Utils.getThumbNail(expense["receipt"], document.getElementById('receiptThumb'));
+			    
+			    $('#receiptThumb').on('click', function(){
+			    	Utils.getFullImage(0, ExpenseType);
+			    });
+			});
+			
 			
 		    // Populate list of expenses
 		    var group = 0;

@@ -109,9 +109,9 @@ var DB = (function() {
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Additional Airline Costs", 1)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Additional Airline Departure Fee", 1)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Air Travel (Unused)", 1)');							
-							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Business Meal", 2)');
-							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental/Hire - Gasoline/Petrol", 2)');
-							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Entertainment", 2)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Business Meal", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Car Rental/Hire - Gasoline/Petrol", 0)');
+							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("External Party Entertainment", 0)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Group Events", 2)');							
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Group Meal", 0)');
 							tx.executeSql('INSERT INTO ExpenseTypes VALUES ("Quarter Century Club - Gift", 0)');							
@@ -367,6 +367,28 @@ var DB = (function() {
 		},
 		
 		/**
+		 * Retrieves details of a single expense
+		 * 
+		 * @param   eid  Unique expense ID
+		 * @return       A single expense object
+		 */
+		getExpense : function(eid, callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt FROM Expenses WHERE expenseID = "' + eid + '"';
+				tx.executeSql(query, [], function(tx, results) {
+					var row = results.rows.item(0);
+					var singleExpense = {};
+					$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt"], function(index, value) {
+						singleExpense[value] = row[value];
+					});					
+					if (callback) {
+						callback(singleExpense);						
+					}
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
 		 * Retrieves all previously entered email addresses
 		 * 
 		 * @return  An array of email addresses ordered by descending order of use date
@@ -476,7 +498,7 @@ var DB = (function() {
 		 */
 		updateExpense : function(eid, etid, apCode, receipt, tid, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectCode = "' + apCode + '", receipt = "' + receipt + '", tripID = ' + tid);
+				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectCode = "' + apCode + '", receipt = "' + receipt + '", tripID = "' + tid + '" WHERE expenseID = ' + eid);
 			}, errorCB, function() {
 				if (callback) {
 					callback();

@@ -1,3 +1,4 @@
+
 /**
  * This is the JavaScript controller for charge to
  * @author Katie Barnett and Shasha Pendit
@@ -6,7 +7,7 @@
 var ChargeTo = (function() {
 	return {
 		// expenseTypeID is passed in from previous screen
-		init : function(expenseTypeID) {
+		init : function(expenseID) {
 			console.log("ChargeTo :: init");
 			
 			// Navigation buttons functionality
@@ -46,6 +47,11 @@ var ChargeTo = (function() {
 }());
 			
 
+
+
+
+
+			
 
 
 

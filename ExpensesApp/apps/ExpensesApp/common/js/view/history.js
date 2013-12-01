@@ -3,10 +3,10 @@
  * @author Andrew Lee
  */
 
-var ProcessTrips = (function() {
+var History = (function() {
 	return {
 		init : function() {
-			console.log("ProcessTrips :: init");
+			console.log("History :: init");
 			// Load sample data
 			/*DB.addTrip("Melbourne ANZ", "01-10-13", "03-10-13", function() {
 				});
@@ -41,10 +41,12 @@ var ProcessTrips = (function() {
 			});
 			*/
 			
-			DB.getUnprocessedTrips(function(data){
+			
+/* Review below for history screen */			
+			DB.getProcessedTrips(function(data){
 				
 				//Populate trip list
-				var tripUL=document.getElementById("tripList");
+				var tripUL=document.getElementById("historyList");
 				
 				for(var i=0; i<data.length; i++){
 					tripLI = document.createElement("li");
@@ -65,7 +67,7 @@ var ProcessTrips = (function() {
 					
 					
 				}
-				$('#tripList').listview('refresh');
+				$('#historyList').listview('refresh');
 				
 				// On Selection of trip, move to next screen
 				$('.tripSelected').on('click', function() {
