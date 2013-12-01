@@ -21,18 +21,19 @@ var ChargeTo = (function() {
 			});
 			
 			// Move to next page after expense type is selected
-			$('.accountDetails').on('click', function() {
-				Utils.loadPageWithAnimation("accountDetails", function() {
+			$('.tripExpenses').on('click', function() {
+				Utils.loadPageWithAnimation("tripExpenses", function() {
 					Utils.saveCurrentPageObject(ChargeTo);
 					// Save selection here - to be done
-					accountDetails.init();
+					tripExpenses.init();
 				});
 			});
 			
 			// trigger add client code modal
-			$('.btnShowModal').on('click', function() 
-					{
-				$('.dialog-confirm').dialog();
+			$('.btnShowModal').on('click', function() {
+				console.log("Function called");
+				/**$('.dialog-confirm').dialog("unhide");*/
+				(".dialog-confirm").popup("open");
 					Utils.saveCurrentPageObject(ChargeTo);
 					// Save selection here - to be done
 					ChargeTo.init();
