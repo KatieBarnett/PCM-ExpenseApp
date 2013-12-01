@@ -3,18 +3,19 @@
 	<div data-role="header" data-theme="c">
 		<h2>Charge To:</h2>
 		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
-	    <button class="btnShowModal" data-role="button" data-theme="e" data-icon="ui-icon-plus" data-iconpos="notext" value="Show Modal"></button>
+	    <button class="ui-icon-nodisc ui-icon-alt btnShowModal" data-role="button" data-theme="e" data-icon="plus" data-iconpos="notext"></button>
 	</div>
 	<div data-role="content">
 		<p><img class="receiptThumb" src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">Where should this expense be charged?</p>
 		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc selectExpenses">
-			<li data-role="list-divider" >Charge To:</li>
-			<li><a class="accountDetails" data-icon="arrow-r">Default Accounting</a></li>
-			<li><a class="accountDetails" data-icon="arrow-r">ANZ (1DHTA)</a></li>
-		    <li><a class="accountDetails" data-icon="arrow-r">NCVER (1DHTH)</a></li>
-			<li><a class="accountDetails" data-icon="arrow-r">CBA (1DHTY)</a></li>
+			<li data-role="list-divider">
+			Charge To:<button class="btnEditAcc" data-role="button" data-theme="e" data-icon="ui-icon-plus" data-iconpos="notext"></button></li>
+			<li><a class="tripExpenses" data-icon="arrow-r">Default Accounting</a></li>
+			<li><a class="tripExpenses" data-icon="arrow-r">ANZ (1DHTA)</a></li>
+		    <li><a class="tripExpenses" data-icon="arrow-r">NCVER (1DHTH)</a></li>
+			<li><a class="tripExpenses" data-icon="arrow-r">CBA (1DHTY)</a></li>
 		</ul>
-		<div class="dialog-confirm" style="display:none;">
+		<div data-role="popup" class="dialog-confirm" style="display:none;">
 			<span class="question">Add client code:</span>
 			<a id="noReceipt" class="" data-role="button" data-theme="a">Submit</a>
 			<a id="closeAttachmentOptions" class="" data-role="button" data-theme="b">Cancel</a>
