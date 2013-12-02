@@ -23,7 +23,7 @@ var ChargeTo = (function() {
 			});
 			$('.finishLater').on('click',function() {
 				// Add function for requirement of the Finish this later button
-				Utils.loadPageWithAnimation('selectTrip', function() {
+				Utils.loadPageWithAnimation('processTrips', function() {
 					Utils.saveCurrentPageObject(ChargeTo);
 					processTrips.init();
 				});
