@@ -34,7 +34,7 @@ var ChargeTo = (function() {
 				Utils.loadPageWithAnimation("selectTrip", function() {
 					Utils.saveCurrentPageObject(ChargeTo);
 					// Save selection here - to be done
-					tripExpenses.init();
+					SelectTrip.init();
 				});
 			});
 			
