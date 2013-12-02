@@ -70,14 +70,14 @@ var DB = (function() {
 									'FOREIGN KEY(chargeAccountID) REFERENCES ChargeAccounts(chargeAccountID)' +
 									')');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Trips(' + 
-									'tripID integer NOT NULL PRIMARY KEY AUTOINCREMENT,' +
+									'tripID integer PRIMARY KEY AUTOINCREMENT,' +
 									'tripName varchar(100),' +
 									'startDate date,' +
 									'endDate date,' +
 									'originalProcessDate date' +
 									')');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Logs(' + 
-									'logID integer NOT NULL PRIMARY KEY AUTOINCREMENT,' +
+									'logID integer PRIMARY KEY AUTOINCREMENT,' +
 									'tripID integer,' +
 									'email varchar(50),' +
 									'processDate date,' +
@@ -447,7 +447,7 @@ var DB = (function() {
 				tx.executeSql('INSERT INTO AccountProjects VALUES ("' + apCode + '", "' + apName + '", "' + chargeCode + '")');
 			}, errorCB, function() {
 				if (callback) {
-					callback();
+					callback(apCode);
 				};
 			});
 		},
@@ -463,11 +463,18 @@ var DB = (function() {
 		addExpense : function(etid, apCode, receipt, tid, callback) {
 			db.transaction(function(tx) {
 				tx.executeSql('INSERT INTO Expenses VALUES (null, "' + etid + '", "' + apCode + '", "' + receipt + '", ' + tid + ')');
-			}, errorCB, function() {
-				if (callback) {
-					callback();
-				};
-			});
+				var query = 'SELECT seq FROM sqlite_sequence WHERE name="Expenses"';
+				tx.executeSql(query, [], function(tx, results) {
+					var row = results.rows.item(0);
+					var rowid = {};
+					$.each(["seq"], function(index, value) {
+						rowid[value] = row[value];
+					});
+					if (callback) {
+						callback(rowid);
+					}
+				}, errorCB);				
+			}, errorCB);
 		},
 
 		/**
@@ -480,11 +487,18 @@ var DB = (function() {
 		addTrip : function(tName, tStart, tEnd, callback) {
 			db.transaction(function(tx) {
 				tx.executeSql('INSERT INTO Trips VALUES (null, "' + tName + '", "' + tStart + '", "' + tEnd + '", null)');
-			}, errorCB, function() {
-				if (callback) {
-					callback();
-				};
-			});
+				var query = 'SELECT seq FROM sqlite_sequence WHERE name="Trips"';
+				tx.executeSql(query, [], function(tx, results) {
+					var row = results.rows.item(0);
+					var rowid = {};
+					$.each(["seq"], function(index, value) {
+						rowid[value] = row[value];
+					});
+					if (callback) {
+						callback(rowid);
+					}
+				}, errorCB);
+			}, errorCB);
 		},
 					
 		/**
