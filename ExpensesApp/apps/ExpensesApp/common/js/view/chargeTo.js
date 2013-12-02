@@ -10,6 +10,13 @@ var ChargeTo = (function() {
 		init : function(expenseID) {
 			console.log("ChargeTo :: init");
 			
+			//draw thumbNail with latest receipt
+			Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
+		    
+		    $('#receiptThumb').on('click', function(){
+		    	Utils.getFullImage(0, ChargeTo);
+		    });
+			
 			// Navigation buttons functionality
 			$('.back').on('click', function() {
 				Utils.goBackWithAnimation();
