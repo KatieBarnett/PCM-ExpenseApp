@@ -5,7 +5,7 @@
 
 var ExpenseType = (function() {
 	return {
-		init : function() {
+		init : function(expenseID) {
 			console.log("ExpenseType :: init");
 
 			//draw thumbNail with latest receipt
@@ -84,13 +84,30 @@ var ExpenseType = (function() {
 				});
 			});
 			
-			// Move to next page after expense type is selected, pass expenseTypeID
+			// After expense type is selected, create or update expense record and pass id to next screen
 			$('.chargeTo').on('click', function() {
 				var selectedType = $(this).attr("data-expense");
-				Utils.loadPageWithAnimation("chargeTo", function() {
-					Utils.saveCurrentPageObject(ExpenseType);
-					ChargeTo.init(selectedType);
-				});
+				if (expenseID == null) {
+					DB.addExpense(selectedType, null, Utils.getReceipt(0), null, function() {
+							Utils.loadPageWithAnimation("chargeTo", function() {
+							Utils.saveCurrentPageObject(ExpenseType);
+							ChargeTo.init(selectedType);
+						});	
+						
+					});	
+				} else {
+					DB.getExpense(expenseID, function(expense){
+						DB.updateExpense(expense["expenseID"], selectedType, expense["accountProjectCode"], 
+								expense["receipt"], expense["tripID"], function () {
+								Utils.loadPageWithAnimation("chargeTo", function() {
+								Utils.saveCurrentPageObject(ExpenseType);
+								ChargeTo.init(selectedType);
+							});	
+						});
+						
+					});
+				}
+				 
 			});				
 		}
 	};
