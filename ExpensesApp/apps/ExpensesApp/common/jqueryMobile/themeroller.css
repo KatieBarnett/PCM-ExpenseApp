@@ -893,7 +893,9 @@ a.ui-link-inherit {
 }
 .ui-icon-home {
 	background-position: 	-575px -1px;
+	
 }
+
 /* search */
 .ui-icon-search,
 .ui-icon-searchfield:after {
@@ -914,10 +916,12 @@ a.ui-link-inherit {
 }
 /* menu edit */
 .ui-icon-bars {
-	background-position: 	-788px -1px;
+	background-position:   -788px -1px;
 }
 .ui-icon-edit {
-	background-position: 	-824px -1px;
+	background-position:   -780px -1px;
+	
+	/*-824px -1px;*/
 }
 /* HD/"retina" sprite
 -----------------------------------------------------------------------------------------------------------*/
