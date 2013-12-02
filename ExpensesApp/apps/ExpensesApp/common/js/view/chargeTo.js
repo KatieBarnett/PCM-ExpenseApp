@@ -23,8 +23,8 @@ var ChargeTo = (function() {
 			});
 			
 			// Move to next page after expense type is selected
-			$('.tripExpenses').on('click', function() {
-				Utils.loadPageWithAnimation("tripExpenses", function() {
+			$('.selectTrip').on('click', function() {
+				Utils.loadPageWithAnimation("selectTrip", function() {
 					Utils.saveCurrentPageObject(ChargeTo);
 					// Save selection here - to be done
 					tripExpenses.init();
