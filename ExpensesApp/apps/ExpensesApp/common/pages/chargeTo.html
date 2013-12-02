@@ -9,11 +9,19 @@
 		<p><img class="receiptThumb" src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">Where should this expense be charged?</p>
 		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc selectExpenses">
 			<li data-role="list-divider">
-			Charge To:<button class="btnEditAcc" data-role="button" data-theme="e" data-icon="ui-icon-plus" data-iconpos="notext"></button></li>
+			Charge To:<button class="ui-icon-nodisc ui-icon-alt btnEditAcc" data-role="button" data-theme="e" data-icon="edit" data-iconpos="notext"></button></li>
 			<li><a class="selectTrip" data-icon="arrow-r">Default Accounting</a></li>
 			<li><a class="selectTrip" data-icon="arrow-r">ANZ (1DHTA)</a></li>
 		    <li><a class="selectTrip" data-icon="arrow-r">NCVER (1DHTH)</a></li>
 			<li><a class="selectTrip" data-icon="arrow-r">CBA (1DHTY)</a></li>
+		</ul>
+		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc selectExpenses" style="display:none;">
+			<li data-role="list-divider">
+			Charge To:<button class="btnEditAcc" data-role="button" data-theme="d">done</button></li>
+			<li><a class="ShowEditCode" data-icon="radio-off">Default Accounting</a></li>
+			<li><a class="ShowEditCode" data-icon="radio-off">ANZ (1DHTA)</a></li>
+		    <li><a class="ShowEditCode" data-icon="radio-off">NCVER (1DHTH)</a></li>
+			<li><a class="ShowEditCode" data-icon="radio-off">CBA (1DHTY)</a></li>
 		</ul>
 		<div data-role="popup" class="dialog-confirm" style="display:none;">
 			<span class="question">Add client code:</span>
