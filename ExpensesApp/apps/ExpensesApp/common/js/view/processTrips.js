@@ -40,7 +40,50 @@ var ProcessTrips = (function() {
 				console.log("added expense");
 			});
 			*/
-			
+			DB.getUnassociatedExpenses(function(expenseData){
+				for (var i=0; i<expenseData.length; i++){
+
+					expenseLI = document.createElement("li");
+					expenseLI.setAttribute("data-expense", expenseData[i]["expenseID"]);
+					expenseLI.setAttribute("class", "expenseItem");
+					expenseAnchor = document.createElement("a");
+
+					if (expenseData[i]["expenseTypeID"] == null){
+						expenseAnchor.appendChild(document.createTextNode("Please complete the expense questions"));
+					} else {
+						expenseAnchor.appendChild(document.createTextNode(expenseData[i]["expenseTypeID"]));
+						if (expenseData[i]["accountProjectName"] != null){
+							expenseAnchor.appendChild(document.createTextNode(expenseData[i]["accountProjectName"]));
+							if (expenseData[j]["accountProjectCode"] != null){
+								expenseAnchor.appendChild(document.createTextNode("(" + expenseData[i]["accountProjectCode"]+ ")" ));
+							};
+						};
+					}
+
+					receiptThumbnail = document.createElement("img");
+					if (expenseData[i]["receipt"] == "null"){
+						receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
+					} else {
+						receiptThumbnail.setAttribute("src", expenseData[i]["receipt"]);
+					}
+					expenseAnchor.appendChild(receiptThumbnail);
+					expenseLI.appendChild(expenseAnchor);
+					expenseList.appendChild(expenseLI);
+				};
+				$('#expenseList').listview('refresh');
+
+				// Move to next page after expense type is selected, pass expenseTypeID
+				$('.expenseItem').on('click', function() {
+					var expenseID = $(this).attr("data-expense");
+					Utils.loadPageWithAnimation("editExpense", function() {
+						Utils.saveCurrentPageObject(ProcessTrips);
+						EditExpense.init(expenseID);
+					});
+				});
+			});
+
+
+
 			DB.getUnprocessedTrips(function(data){
 				
 				//Populate trip list

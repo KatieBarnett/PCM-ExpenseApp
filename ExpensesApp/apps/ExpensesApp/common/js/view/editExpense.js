@@ -84,13 +84,14 @@ var EditExpense = (function() {
 				Utils.goBackWithAnimation();
 			});
 			$('.deleteExpense').on('click',function() {
-				// Add function for requirement of the Finish this later button
-				Utils.loadPageWithAnimation('mainPage', function() {
-					Utils.saveCurrentPageObject(EditExpense);
-					MainPage.init();
+				DB.deleteExpense(expenseID, function() {
+					Utils.loadPageWithAnimation('mainPage', function() {
+						Utils.saveCurrentPageObject(EditExpense);
+						MainPage.init();
+					});
 				});
 			});
-			
+
 			
 			
 		}

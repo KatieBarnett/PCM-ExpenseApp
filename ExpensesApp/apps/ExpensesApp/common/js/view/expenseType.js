@@ -76,15 +76,16 @@ var ExpenseType = (function() {
 			$('.back').on('click', function() {
 				Utils.goBackWithAnimation();
 			});
+			
 			$('.finishLater').on('click',function() {
 				// If expense has not previously been saved, save it then return to main page
 				if (expenseID == null) {
 					DB.addExpense(null, null, Utils.getReceipt(0), null, function(expenseID) {
+						console.log("finish later");
 						Utils.loadPageWithAnimation("mainPage", function() {
 							Utils.saveCurrentPageObject(ExpenseType);
 							MainPage.init();
 						});	
-
 					});	
 				} else {
 					Utils.saveCurrentPageObject(ExpenseType);
@@ -96,15 +97,15 @@ var ExpenseType = (function() {
 			$('.chargeTo').on('click', function() {
 				var selectedType = $(this).attr("data-expense");
 				if (expenseID == null) {
-					DB.addExpense(selectedType, null, Utils.getReceipt(0), null, function(expenseID) {
+					DB.addExpense(selectedType, null, Utils.getReceipt(0), null, function(newExpenseID) {
 						Utils.loadPageWithAnimation("chargeTo", function() {
-							console.log(expenseID);
 							Utils.saveCurrentPageObject(ExpenseType);
-							ChargeTo.init(expenseID);
+							ChargeTo.init(newExpenseID);
 						});	
 
 					});	
 				} else {
+					console.log("expense ID is not null");
 					DB.getExpense(expenseID, function(expense){
 						DB.updateExpense(expense["expenseID"], selectedType, expense["accountProjectCode"], 
 								expense["receipt"], expense["tripID"], function () {
