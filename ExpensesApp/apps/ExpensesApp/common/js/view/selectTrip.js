@@ -79,7 +79,6 @@ var SelectTrip = (function() {
 				// Navigation buttons functionality
 				$('.back').on('click', function() {
 					Utils.goBackWithAnimation(function() {
-						alert("Gone back");
 					});
 				});
 

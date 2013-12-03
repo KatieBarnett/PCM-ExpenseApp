@@ -153,13 +153,14 @@ var Utils = (function() {
 		},
 			 		
 		getThumbNail : function(uri, canvas) {
-			var imageObj = new Image();
-			imageObj.src = uri;
-			var context = canvas.getContext('2d');
-			
-		    imageObj.onload = function(){
-		        context.drawImage(imageObj, 0, 0, 75, 75);
-		    };
+			if(uri) {
+				var imageObj = new Image();
+				imageObj.src = uri;
+				var context = canvas.getContext('2d');
+			    imageObj.onload = function(){
+			        context.drawImage(imageObj, 0, 0, 75, 75);
+			    };
+			}
 		}
 	};
 } ());
