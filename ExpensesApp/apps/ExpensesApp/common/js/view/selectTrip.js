@@ -5,66 +5,103 @@
 
 var SelectTrip = (function() {
 	return {
-		init : function() {
+		init : function(expenseID) {
 			console.log("selectTrip :: init");
-			
-			//Test data
-			data = new Array("Melbourne ANZ (01-10-13/03-10-13)",
-					"ANZ Pitt St Meeting (25-09-13)",
-					"NCEVER Adelaide Go Live Meeting (27-09-13)",
-					"Canberra DoD RFD (10-09-13)",
-					"Melbourne ANZ (07-09-13/13-09-13)",
-					"Melbourne ANZ (01-09-13/13-09-13)");
-			
-			//Populate trip list
-			var tripUL=document.getElementById("tripList");
-			
-			for(var i=0; i<data.length; i++){
-				tripLI = document.createElement("li");
-				tripLI.setAttribute("data-trip", data[i]);
-				tripLI.setAttribute("class", "tripSelect");
-				tripAnchor = document.createElement("a");
-				tripAnchor.appendChild(document.createTextNode(data[i]));
-				tripLI.appendChild(tripAnchor);
-				tripUL.appendChild(tripLI);
+			// For testing purposes
+			if (!expenseID) {
+				expenseID = 13;
 			}
-			
-			$('#tripList').listview('refresh');
-			
-			// Navigation buttons functionality
-			$('.back').on('click', function() {
-				Utils.goBackWithAnimation(function() {
-					alert("Gone back");
+			//draw thumbNail with latest receipt or saved receipt if it exists
+			DB.getExpense(expenseID, function(expense){
+
+				if ((expense["receipt"] == null) || (expense["receipt"] == undefined)){
+					console.log("Receipt not saved");
+					receipt = Utils.getReceipt(0);
+				} else {
+					receipt = expense["receipt"];
+				}
+
+				Utils.getThumbNail(receipt, document.getElementById('receiptThumb'));
+
+				$('#receiptThumb').on('click', function(){
+					Utils.getFullImage(0, ExpenseType);
 				});
-			});
-			
-			$('.newTrip').on('click',function() {
-				// Add create new trip function
-				Utils.loadPageWithAnimation('chargeTo', function() {
-					Utils.saveCurrentPageObject(SelectTrip);
-					ChargeTo.init();
+
+
+				DB.getUnprocessedTrips(function(data){
+
+					//Populate trip list
+					var tripUL=document.getElementById("tripList");
+
+					for(var i=0; i<data.length; i++){
+						tripLI = document.createElement("li");
+
+						tripAnchor = document.createElement("a");
+						tripAnchor.appendChild(document.createTextNode(data[i]["tripName"]));
+						tripLI.setAttribute("class", "tripSelected");
+						tripLI.setAttribute("data-trip", data[i]["tripID"]);
+						tripLI.appendChild(tripAnchor);
+						tripDates = document.createElement("p");
+						tripDates.appendChild(document.createTextNode(data[i]["startDate"]));
+						tripDates.appendChild(document.createTextNode("/"));
+						tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
+						tripLI.appendChild(tripDates);
+						tripUL.appendChild(tripLI);
+					}
+
+					$('#tripList').listview('refresh');
+
+					// On Selection of trip, move to next screen
+					$('.tripSelected').on('click', function() {
+						var selectedTrip = $(this).attr("data-trip");
+						if (expenseID != null) {
+							DB.getExpense(expenseID, function(expense){
+								DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
+										expense["receipt"], selectedTrip, function () {
+									Utils.loadPageWithAnimation("mainPage", function() {
+										Utils.saveCurrentPageObject(SelectTrip);
+										MainPage.init();
+									});
+								});
+							});	
+						} else {
+							// This should not be required after completion of ChargeTo screen
+							Utils.loadPageWithAnimation("mainPage", function() {
+								Utils.saveCurrentPageObject(SelectTrip);
+								MainPage.init();
+							});
+						}
+					});
 				});
-			});
-			
-			$('.finishLater').on('click',function() {
-				// Add function for requirement of the Finish this later button
-				Utils.loadPageWithAnimation('mainPage', function() {
-					Utils.saveCurrentPageObject(SelectTrip);
-					MainPage.init();
+
+				$('#tripList').listview('refresh');
+
+				// Navigation buttons functionality
+				$('.back').on('click', function() {
+					Utils.goBackWithAnimation(function() {
+						alert("Gone back");
+					});
 				});
-			});
-			
-			// Move to home screen after trip is selected
-			$('.tripSelect').on('click', function() {
-				Utils.loadPageWithAnimation("mainPage", function() {
-					Utils.saveCurrentPageObject(SelectTrip);
-					// Save selection here - to be done
-					MainPage.init();
+
+				$('.newTrip').on('click',function() {
+					// Add create new trip function
+					Utils.loadPageWithAnimation('chargeTo', function() {
+						Utils.saveCurrentPageObject(SelectTrip);
+						ChargeTo.init();
+					});
 				});
+
+				$('.finishLater').on('click',function() {
+					Utils.loadPageWithAnimation('mainPage', function() {
+						Utils.saveCurrentPageObject(SelectTrip);
+						MainPage.init();
+					});
+				});
+
+
 			});
-			
-			
-			
+
+
 		}
 	};
 }());
