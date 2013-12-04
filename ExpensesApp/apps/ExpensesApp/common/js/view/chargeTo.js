@@ -9,6 +9,7 @@ var ChargeTo = (function() {
 		// expenseTypeID is passed in from previous screen
 		init : function(expenseID) {
 			console.log("ChargeTo :: init");
+			console.log("expenseID");
 			
 			//draw thumbNail with latest receipt
 			Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
@@ -47,7 +48,7 @@ var ChargeTo = (function() {
 			$('.btnShowModal').on('click', function() {
 				console.log("Function called");
 				/**$('.dialog-confirm').dialog("unhide");*/
-				$(".dialog-confirm").popup("unhide");
+				$(".dialog-confirm").popup("uhide");
 					Utils.saveCurrentPageObject(ChargeTo);
 					// Save selection here - to be done
 					ChargeTo.init();
