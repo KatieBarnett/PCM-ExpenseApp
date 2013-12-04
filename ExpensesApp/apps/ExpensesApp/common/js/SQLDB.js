@@ -389,6 +389,28 @@ var DB = (function() {
 		},
 		
 		/**
+		 * Retrieves the name of a trip
+		 * 
+		 * @param   tid  Unique trip ID
+		 * @return       The name of the specified trip
+		 */
+		getTripName : function(tid, callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT tripName FROM Trips WHERE tripID = ' + tid;
+				tx.executeSql(query, [], function(tx, results) {
+					var row = results.rows.item(0);
+					var trip = {};
+					$.each(["tripName"], function(index, value) {
+						trip[value] = row[value];
+					});					
+					if (callback) {
+						callback(trip);						
+					}
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
 		 * Retrieves all previously entered email addresses
 		 * 
 		 * @return  An array of email addresses ordered by descending order of use date
