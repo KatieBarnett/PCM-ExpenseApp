@@ -132,6 +132,9 @@ body{
 .expenseTypeLI li{
 	background:#006093;
 }
+.deleteExpense{
+	margin-top:20px;
+}
 
 /*---------------------------combobox-------------*/
 

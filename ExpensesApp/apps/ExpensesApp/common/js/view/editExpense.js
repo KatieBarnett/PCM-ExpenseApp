@@ -22,7 +22,11 @@ var EditExpense = (function() {
 			    expenseLI = document.createElement("li");
 			    expenseLI.setAttribute("class", "expenseType");
 			    expenseA = document.createElement("a");
+			    if (expense["expenseTypeID"]== "null" || expense["expenseTypeID"]==null){
+			    	expenseA.appendChild(document.createTextNode("Unknown"));
+			    } else {
 			    expenseA.appendChild(document.createTextNode(expense["expenseTypeID"]));
+			}
 			    expenseLI.appendChild(expenseA);
 			    expenseUL.appendChild(expenseLI);
 			    
@@ -35,7 +39,11 @@ var EditExpense = (function() {
 			    expenseLI = document.createElement("li");
 			    expenseLI.setAttribute("class", "expenseCharge");
 			    expenseA = document.createElement("a");
+			    if (expense["accountProjectCode"] == "null" || expense["accountProjectCode"] == null ){
+			    	expenseA.appendChild(document.createTextNode("Unknown"));
+			    } else {
 			    expenseA.appendChild(document.createTextNode(expense["accountProjectCode"]));
+			    }
 			    expenseLI.appendChild(expenseA);
 			    expenseUL.appendChild(expenseLI);
 			    
@@ -48,7 +56,11 @@ var EditExpense = (function() {
 			    expenseLI = document.createElement("li");
 			    expenseLI.setAttribute("class", "expenseTrip");
 			    expenseA = document.createElement("a");
+			    if (expense["tripID"]== "null" || expense["tripID"]==null){
+			    	expenseA.appendChild(document.createTextNode("Unknown"));
+			    } else {
 			    expenseA.appendChild(document.createTextNode(expense["tripID"]));
+			    }
 			    expenseLI.appendChild(expenseA);
 			    expenseUL.appendChild(expenseLI);
 			    
