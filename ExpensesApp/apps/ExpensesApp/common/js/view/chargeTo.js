@@ -195,7 +195,12 @@ var ChargeTo = (function() {
     });
   });
 
-
+  function closeAttachmentOptions(){
+		$('.needs').animate({paddingTop:'5px'}, 500, function() { 
+			$('.have').css("display","block");
+			});
+		
+  }
 
 
 			
