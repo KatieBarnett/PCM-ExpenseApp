@@ -105,38 +105,7 @@ var TripExpenses = (function() {
 				});
 			});
 			
-			$('#plusButton').on('click', function() {
-				console.log("Function called");
-				$('#descriptionErrorMsg').addClass('hidden');  
-				$("#addTripModal").popup("open");
-				
-				
-				$('#submitAddTrip').on('click', function() {
-					if ($('#tripDescription').val().length > 1) {
-						console.log("Submit button clicked");
-						var tripDescription = $('#tripDescription').val();
-						var	startDate = $('#startDate').val();
-						var	endDate = $('#endDate').val();
-							
-						var callback = function() {
-							$("#addTripModal").popup("close");
-						};
-	
-						DB.addTrip(tripDescription, startDate, endDate, callback);
-						
-					} else {
-						console.log("empty text box detected");
-						$('#descriptionErrorMsg').removeClass('hidden');  
-					}
-				});
-				
-				
-				$('#cancelAddTrip').on('click', function(){
-				    console.log("close modal");
-				    $("#addTripModal").popup("close");
-				});
-			
-			});
+
 		}
 	};
 }());

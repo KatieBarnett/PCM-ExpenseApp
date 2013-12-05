@@ -4,7 +4,7 @@
 	<div data-role="header" data-theme="c">
 		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
 		<h2>Trip</h2>
-		<button class="ui-icon-nodisc ui-icon-alt newTrip" data-role="button" data-theme="e" data-icon="plus" data-iconpos="notext" data-direction="forward"></button>
+		<button class="ui-icon-nodisc ui-icon-alt newTrip" id="newTrip" data-role="button" data-theme="e" data-icon="plus" data-iconpos="notext" data-direction="forward"></button>
 	</div>
 	<div data-role="content">
 		<p><canvas class="receiptThumb" id="receiptThumb" width="75" height="75"></canvas>What trip is this expense related to?</p>
@@ -12,5 +12,16 @@
 			<li data-role="list-divider" >Trips</li>
 		</ul>
 		<a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
+	</div>
+	
+	<div data-role="popup" id="addTripModal">
+		<p>Add Trip<p>
+		<div class="hidden" id="descriptionErrorMsg">Mandatory field missing!
+		</div>
+		<input type="text" class="field" id="tripDescription" required placeholder="Description of trip" />	
+		<input id="startDate" type="date"/>
+		<input id="endDate" type="date" />
+		<button id="cancelAddTrip" data-theme="b">Cancel</button>
+		<button id="submitAddTrip" data-theme="a">Submit</button>
 	</div>
 </div>
