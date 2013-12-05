@@ -64,7 +64,7 @@ var TripExpenses = (function() {
 								}
 							}
 							receiptThumbnail = document.createElement("img");
-							if (data[j]["receipt"] == "null"){
+							if (data[j]["receipt"]){
 								receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
 							} else {
 								receiptThumbnail.setAttribute("src", data[j]["receipt"]);
