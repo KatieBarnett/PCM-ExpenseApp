@@ -75,7 +75,7 @@ var ProcessTrips = (function() {
 				// Move to next page after expense type is selected, pass expenseTypeID
 				$('.expenseItem').on('click', function() {
 					var expenseID = $(this).attr("data-expense");
-					Utils.loadPageWithAnimation("editExpense", function() {
+					Utils.loadPageWithAnimation("editExpense", null, function() {
 						Utils.saveCurrentPageObject(ProcessTrips);
 						EditExpense.init(expenseID);
 					});
@@ -113,7 +113,7 @@ var ProcessTrips = (function() {
 				// On Selection of trip, move to next screen
 				$('.tripSelected').on('click', function() {
 					var selectedTrip = $(this).attr("data-trip");
-					Utils.loadPageWithAnimation("tripExpenses", function() {
+					Utils.loadPageWithAnimation("tripExpenses", null, function() {
 						Utils.saveCurrentPageObject(ProcessTrips);						
 						// Pass selected 
 						TripExpenses.init(selectedTrip);
@@ -127,7 +127,7 @@ var ProcessTrips = (function() {
 			});
 			
 			$('.forward').on('click', function() {
-				Utils.loadPageWithAnimation("tripExpenses", function() {
+				Utils.loadPageWithAnimation("tripExpenses", null, function() {
 					Utils.saveCurrentPageObject(ProcessTrips);
 					Test.init();
 				});

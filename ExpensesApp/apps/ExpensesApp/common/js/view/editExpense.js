@@ -69,21 +69,21 @@ var EditExpense = (function() {
 			    
 			    // Move to selected screen
 				$('.expenseType').on('click', function() {
-					Utils.loadPageWithAnimation("expenseType", function() {
+					Utils.loadPageWithAnimation("expenseType", expenseID, function() {
 						Utils.saveCurrentPageObject(EditExpense);
 						ExpenseType.init(expenseID);
 					});
 				});
 				
 				$('.expenseCharge').on('click', function() {
-					Utils.loadPageWithAnimation("chargeTo", function() {
+					Utils.loadPageWithAnimation("chargeTo", expenseID, function() {
 						Utils.saveCurrentPageObject(EditExpense);
 						ChargeTo.init(expenseID);
 					});
 				});
 				
 				$('.expenseTrip').on('click', function() {
-					Utils.loadPageWithAnimation("selectTrip", function() {
+					Utils.loadPageWithAnimation("selectTrip", expenseID, function() {
 						Utils.saveCurrentPageObject(EditExpense);
 						SelectTrip.init(expenseID);
 					});
@@ -97,7 +97,7 @@ var EditExpense = (function() {
 			});
 			$('.deleteExpense').on('click',function() {
 				DB.deleteExpense(expenseID, function() {
-					Utils.loadPageWithAnimation('mainPage', function() {
+					Utils.loadPageWithAnimation('mainPage', null, function() {
 						Utils.saveCurrentPageObject(EditExpense);
 						MainPage.init();
 					});

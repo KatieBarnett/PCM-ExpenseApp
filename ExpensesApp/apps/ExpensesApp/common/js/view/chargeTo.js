@@ -29,7 +29,7 @@ var ChargeTo = (function() {
 			});
 			$('.finishLater').on('click',function() {
 				// Add function for requirement of the Finish this later button
-				Utils.loadPageWithAnimation('processTrips', function() {
+				Utils.loadPageWithAnimation('processTrips', expenseID, function() {
 					Utils.saveCurrentPageObject(ChargeTo);
 					processTrips.init();
 				});
@@ -37,10 +37,10 @@ var ChargeTo = (function() {
 			
 			// Move to next page after expense type is selected
 			$('.selectTrip').on('click', function() {
-				Utils.loadPageWithAnimation("selectTrip", function() {
+				Utils.loadPageWithAnimation("selectTrip", expenseID, function() {
 					Utils.saveCurrentPageObject(ChargeTo);
 					// Save selection here - to be done
-					SelectTrip.init();
+					SelectTrip.init(expenseID);
 				});
 			});
 			

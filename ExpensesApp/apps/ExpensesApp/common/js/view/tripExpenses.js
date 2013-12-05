@@ -69,7 +69,7 @@ var TripExpenses = (function() {
 				// Move to next page after expense type is selected, pass expenseTypeID
 				$('.expenseItem').on('click', function() {
 					var expenseID = $(this).attr("data-expense");
-					Utils.loadPageWithAnimation("editExpense", function() {
+					Utils.loadPageWithAnimation("editExpense", selectedTrip, function() {
 						Utils.saveCurrentPageObject(TripExpenses);
 						EditExpense.init(expenseID);
 					});

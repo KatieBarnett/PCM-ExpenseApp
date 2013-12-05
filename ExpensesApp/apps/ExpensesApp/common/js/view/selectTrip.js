@@ -58,7 +58,7 @@ var SelectTrip = (function() {
 							DB.getExpense(expenseID, function(expense){
 								DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
 										expense["receipt"], selectedTrip, function () {
-									Utils.loadPageWithAnimation("mainPage", function() {
+									Utils.loadPageWithAnimation("mainPage", expenseID, function() {
 										Utils.saveCurrentPageObject(SelectTrip);
 										MainPage.init();
 									});
@@ -66,7 +66,7 @@ var SelectTrip = (function() {
 							});	
 						} else {
 							// This should not be required after completion of ChargeTo screen
-							Utils.loadPageWithAnimation("mainPage", function() {
+							Utils.loadPageWithAnimation("mainPage", expenseID, function() {
 								Utils.saveCurrentPageObject(SelectTrip);
 								MainPage.init();
 							});
@@ -116,7 +116,7 @@ var SelectTrip = (function() {
 				});
 
 				$('.finishLater').on('click',function() {
-					Utils.loadPageWithAnimation('mainPage', function() {
+					Utils.loadPageWithAnimation('mainPage', expenseID, function() {
 						Utils.saveCurrentPageObject(SelectTrip);
 						MainPage.init();
 					});

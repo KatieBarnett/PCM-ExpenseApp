@@ -72,7 +72,7 @@ var History = (function() {
 				// On Selection of trip, move to next screen
 				$('.tripSelected').on('click', function() {
 					var selectedTrip = $(this).attr("data-trip");
-					Utils.loadPageWithAnimation("tripExpenses", function() {
+					Utils.loadPageWithAnimation("tripExpenses", null, function() {
 						Utils.saveCurrentPageObject(ProcessTrips);						
 						// Pass selected 
 						TripExpenses.init(selectedTrip);
@@ -83,13 +83,6 @@ var History = (function() {
 			
 			$('.back').on('click', function() {
 				Utils.goBackWithAnimation();
-			});
-			
-			$('.forward').on('click', function() {
-				Utils.loadPageWithAnimation("tripExpenses", function() {
-					Utils.saveCurrentPageObject(ProcessTrips);
-					Test.init();
-				});
 			});
 		}
 	};
