@@ -257,6 +257,25 @@ var DB = (function() {
 		},
 		
 		/**
+		 * Retrieves one entry from the DB with the specified trip ID.
+		 * @param selectedTrip, the trip ID that needs to be fetched.
+		 * 
+		 * @return A single entry in the Trips table
+		 */
+		getUnprocessedTrip : function(selectedTrip, callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE tripID = ' + selectedTrip;
+				tx.executeSql(query, [], function(tx, results) {
+					var row = results.rows.item(0);
+					
+					if (callback) {
+						callback(row);
+					}
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
 		 * Retrieves all processed trips for History screen
 		 * 
 		 * @return  An array of processed trip objects ordered by descending order of processed date

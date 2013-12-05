@@ -3,7 +3,7 @@
 	<div data-role="header" data-theme="c">
 		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
 		<h2>Trip</h2>
-		
+		<button class="ui-icon-nodisc ui-icon-alt" data-role="button" data-theme="e" data-icon="gear" data-iconpos="notext" id="editTrip"></button>
 	</div>
 	
 	<div data-role="content" data-theme="d">
@@ -33,6 +33,16 @@
 			 -->
 		</ul>
 		<a class="sendTripDetails" data-role="button" data-theme="a">Send Trip Details</a>
+	</div>
+	
+	<div data-role="popup" id="editTripModal" data-overlay-theme="a" class="tripModal">
+		<p>Edit Trip<p>
+		<div class="hidden errorMessage">Mandatory field missing!</div>
+		<input type="text" class="field" id="editTripDescription" required placeholder="Description of trip" />	
+		<input id="editStartDate" type="date"/>
+		<input id="editEndDate" type="date" />
+		<button id="cancelEditTrip" data-theme="b">Cancel</button>
+		<button id="submitEditTrip" data-theme="a">Submit</button>
 	</div>
 	
 </div>

@@ -9,29 +9,12 @@ var TripExpenses = (function() {
 			console.log("TripExpenses :: init");
 			console.log(selectedTrip);
 			
-			var tripName = null;
-			var tripStart = null;
-			var tripEnd = null;
 			var headingPublished = false;
-
-			// Retrieve and publish trip details
-			DB.getUnprocessedTrips(function(data){
 			
-				for(var i=0; i<data.length; i++){
-					if (data[i]["tripID"]==selectedTrip){
-						tripName = data[i]["tripName"];
-						tripStart = data[i]["startDate"];
-						tripEnd = data[i]["endDate"];
-					}
-				}
+			// Get the selected trip from the DB with the details
+			TripExpenses._getTrip(selectedTrip, function(tripName, tripStart, tripEnd) {
 				// Publish trip details
-				var tripDetailsField = document.getElementById("tripName");
-				tripDetailsField.appendChild(document.createTextNode(tripName));
-				tripDetailsField = document.getElementById("tripStart");
-				tripDetailsField.appendChild(document.createTextNode(tripStart));
-				tripDetailsField = document.getElementById("tripEnd");
-				tripDetailsField.appendChild(document.createTextNode(tripEnd));
-				
+				TripExpenses._fillTitles(tripName, tripStart, tripEnd);
 			});
 			
 			DB.getTripExpenses(selectedTrip, function(data) {
@@ -98,14 +81,93 @@ var TripExpenses = (function() {
 				Utils.goBackWithAnimation();
 			});
 			
-			$('.forward').on('click', function() {
-				Utils.loadPageWithAnimation("test", function() {
-					Utils.saveCurrentPageObject(TripExpenses);
-					Test.init();
+			// Attach modal handler to the screen.
+			TripExpenses._modalHandler(selectedTrip);
+		},
+		
+		/**
+		 * Function that will attach all the handlers required by the modal. It will also
+		 * grab refreshed data from the database to display to the user.
+		 * @param selectedTrip the Trip ID.
+		 */
+		_modalHandler : function(selectedTrip) {
+			$('#editTrip').on('click', function() {
+				// Get the new information from the data base and then populate the fields in the modal.
+				TripExpenses._getTrip(selectedTrip, function(tripName, tripStart, tripEnd) {
+					// Prefil the details on the modal
+					$('#editTripDescription').val(tripName);
+					$('#editStartDate').val(tripStart);
+					$('#editEndDate').val(tripEnd);
+					
+					// Bring up the modal
+					$('#editTripModal').popup("open");
+				});
+		
+				// Handler to close the popup
+				$('#cancelEditTrip').on('click', function() {
+					$('#editTripModal').popup("close");
+				});
+				
+				// Handler for when the submit button is pressed
+				$('#submitEditTrip').on('click', function() {
+					var tripDescription = $('#editTripDescription').val();
+					var tripStartDate = $('#editStartDate').val();
+					var tripEndDate = $('#editEndDate').val();
+					
+					// Submit the update to the DB
+					DB.updateTrip(selectedTrip, tripDescription, tripStartDate, tripEndDate, function() {
+						// Close the modal
+						$('#editTripModal').popup("close");
+						
+						// Clear the current title
+						TripExpenses._removeTitles();
+						
+						// Reload the current page
+						TripExpenses._fillTitles(tripDescription, tripStartDate, tripEndDate);
+					});
 				});
 			});
-			
-
+		},
+		
+		/**
+		 * Function that will clear the trip name, start and end dates on screen
+		 * @param none
+		 */
+		_removeTitles : function() {
+			$('#tripName').empty();
+			$('#tripStart').empty();
+			$('#tripEnd').empty();
+		},
+		
+		/**
+		 * Function that will populate the title
+		 * @param tripName the title of the trip
+		 * @param tripStart the start date of the trip
+		 * @param tripEnd the end date of the trip
+		 */
+		_fillTitles : function(tripName, tripStart, tripEnd) {
+			$('#tripName').html(tripName);
+			$('#tripStart').html(tripStart);
+			$('#tripEnd').html(tripEnd);
+		},
+		
+		/**
+		 * Function that will get the data from the DB and then will complete
+		 * the call back function as specified.
+		 * @param selectedTrip the trip ID
+		 * @param callback the callback function
+		 */
+		_getTrip : function(selectedTrip, callback) {
+			console.log(selectedTrip);
+			DB.getUnprocessedTrip(selectedTrip, function(data) {
+				var tripName = data.tripName;
+				var tripStart = data.startDate;
+				var tripEnd = data.endDate;
+				
+				if (callback) {
+					callback(tripName, tripStart, tripEnd);
+				}
+			});
 		}
 	};
 }());
