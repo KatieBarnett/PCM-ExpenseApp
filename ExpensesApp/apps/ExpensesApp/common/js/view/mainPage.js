@@ -11,14 +11,14 @@ var MainPage = (function() {
 			// Add handlers
 			$('#processTrip').on('click',function() {
 				// Load the new page
-				Utils.loadPageWithAnimation('processTrips', function() {
+				Utils.loadPageWithAnimation('processTrips', null, function() {
 					Utils.saveCurrentPageObject(MainPage);
 					ProcessTrips.init();
 				});
 			});
 			$('#history').on('click',function() {
 				// Load the new page
-				Utils.loadPageWithAnimation('history', function() {
+				Utils.loadPageWithAnimation('history', null, function() {
 					Utils.saveCurrentPageObject(MainPage);
 					History.init();
 				});
@@ -41,7 +41,7 @@ var MainPage = (function() {
 			});	
 			$('#noReceipt').on('click',function() {
 				// Load the new page
-				Utils.loadPageWithAnimation('expenseType', function() {
+				Utils.loadPageWithAnimation('expenseType', null, function() {
 					Utils.saveCurrentPageObject(MainPage);
 					ExpenseType.init();
 				});

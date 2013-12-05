@@ -7,7 +7,7 @@ var ExpenseType = (function() {
 	return {
 		init : function(expenseID) {
 			console.log("ExpenseType :: init");
-
+		
 			//draw thumbNail with latest receipt
 			Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
 		    
@@ -82,7 +82,7 @@ var ExpenseType = (function() {
 				if (expenseID == null) {
 					DB.addExpense(null, null, Utils.getReceipt(0), null, function(expenseID) {
 						console.log("finish later");
-						Utils.loadPageWithAnimation("mainPage", function() {
+						Utils.loadPageWithAnimation("mainPage", expenseID, function() {
 							Utils.saveCurrentPageObject(ExpenseType);
 							MainPage.init();
 						});	
@@ -98,7 +98,7 @@ var ExpenseType = (function() {
 				var selectedType = $(this).attr("data-expense");
 				if (expenseID == null) {
 					DB.addExpense(selectedType, null, Utils.getReceipt(0), null, function(newExpenseID) {
-						Utils.loadPageWithAnimation("chargeTo", function() {
+						Utils.loadPageWithAnimation("chargeTo", newExpenseID, function() {
 							Utils.saveCurrentPageObject(ExpenseType);
 							ChargeTo.init(newExpenseID);
 						});	
@@ -109,7 +109,7 @@ var ExpenseType = (function() {
 					DB.getExpense(expenseID, function(expense){
 						DB.updateExpense(expense["expenseID"], selectedType, expense["accountProjectCode"], 
 								expense["receipt"], expense["tripID"], function () {
-							Utils.loadPageWithAnimation("chargeTo", function() {
+							Utils.loadPageWithAnimation("chargeTo", expense["expenseID"], function() {
 								Utils.saveCurrentPageObject(ExpenseType);
 								ChargeTo.init(expense["expenseID"]);
 							});	

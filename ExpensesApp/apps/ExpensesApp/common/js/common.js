@@ -9,6 +9,7 @@ var Utils = (function() {
 	var callbackFunction = "";
 	var objectHistory = [];
 	var receipts = [];
+	var expenseIDHistory = [];
 	return {
 		/**
 		 * Method that will load the desired page with params and callback
@@ -20,6 +21,7 @@ var Utils = (function() {
 			if (typeof pageToLoad === "string") {
 				// Add the loaded page to the history so going back can be performed
 				pageHistory.push(pageToLoad);
+				console.log(pageHistory);
 				$(PageChangeHelper.getCurrentContainer()).load('pages/' + pageToLoad + '.html', function() {
 					// Reload the dynamic CSS from jQuery mobile once the page has loaded into active page.
 					$.mobile.activePage.trigger('pagecreate');
@@ -34,9 +36,10 @@ var Utils = (function() {
 		 * Method that will load the previous page
 		 */
 		goBack : function(callback) {
-			pageHistory.pop();
+			var currentPage = pageHistory.pop();
 			var page = pageHistory[pageHistory.length-1];
-			if(pageHistory.length < 1) {
+			console.log(expenseIDHistory);
+			if(currentPage == "mainPage") {
 				if (confirm("Are you sure to exit?")) {
 					if(navigator.app) {
 						navigator.app.exitApp();
@@ -48,8 +51,14 @@ var Utils = (function() {
 				// Reload the dynamic CSS from jQuery mobile once the page has been loaded into active page.
 				$.mobile.activePage.trigger('pagecreate');
 				
-				var test = Utils.getCurrentPageObject();
-				test.init();
+				var currentObject = Utils.getCurrentPageObject();
+				var currentExpenseId = Utils.getCurrentExpenseId();
+				
+				if (currentExpenseId) {
+					currentObject.init(currentExpenseId);
+				} else {
+					currentObject.init();
+				}
 				callback();
 			});
 		},
@@ -60,9 +69,13 @@ var Utils = (function() {
 		 * @param pageToLoad the page to be loaded
 		 * @param callback the call back functionality once the page has loaded.
 		 */
-		loadPageWithAnimation : function (pageToLoad, callback) {
+		loadPageWithAnimation : function (pageToLoad, expenseId, callback) {
 			// Do the animation of moving the content pane off screen.
 			console.log("Utils :: loadPageWithAnimation");
+			
+			var intExpenseId = expenseId && expenseId.seq ? expenseId.seq : expenseId;
+			expenseIDHistory.push(intExpenseId);
+			
 			callbackFunction = callback;
 			// Toggle the current container to the other one so the movement can be completed.
 			PageChangeHelper.toggleCurrentContainer();
@@ -124,10 +137,18 @@ var Utils = (function() {
 			});
 		},
 		
+		/**
+		 * Saves the current page object so it can return when the back button is pressed.
+		 * @param obj, the return object to be initiated.
+		 */
 		saveCurrentPageObject : function(obj) {
 			objectHistory.push(obj);
 		},
 		
+		/**
+		 * Gets the last page object from the list
+		 * @return object, the last object
+		 */
 		getCurrentPageObject : function() {
 			var previousObject = objectHistory.pop();
 			return previousObject;
@@ -161,6 +182,14 @@ var Utils = (function() {
 			        context.drawImage(imageObj, 0, 0, 75, 75);
 			    };
 			}
+		},
+		
+		/**
+		 * Function that will return the last expense ID that was saved.
+		 * @return the last expense ID
+		 */
+		getCurrentExpenseId : function() {
+			return expenseIDHistory.pop();
 		}
 	};
 } ());
