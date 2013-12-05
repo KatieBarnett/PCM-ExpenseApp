@@ -61,7 +61,7 @@ var ProcessTrips = (function() {
 					}
 
 					receiptThumbnail = document.createElement("img");
-					if (expenseData[i]["receipt"] == "null"){
+					if (expenseData[i]["receipt"]){
 						receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
 					} else {
 						receiptThumbnail.setAttribute("src", expenseData[i]["receipt"]);
