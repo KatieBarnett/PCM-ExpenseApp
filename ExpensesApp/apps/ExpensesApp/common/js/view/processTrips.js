@@ -46,6 +46,7 @@ var ProcessTrips = (function() {
 					expenseLI = document.createElement("li");
 					expenseLI.setAttribute("data-expense", expenseData[i]["expenseID"]);
 					expenseLI.setAttribute("class", "expenseItem");
+					expenseLI.setAttribute("data-icon", "none");
 					expenseAnchor = document.createElement("a");
 
 					if (expenseData[i]["expenseTypeID"] == null){
@@ -73,11 +74,40 @@ var ProcessTrips = (function() {
 				$('#expenseList').listview('refresh');
 
 				// Move to next page after expense type is selected, pass expenseTypeID
-				$('.expenseItem').on('click', function() {
+				$('.tripSelected').on('click', function() {
 					var expenseID = $(this).attr("data-expense");
 					Utils.loadPageWithAnimation("editExpense", null, function() {
 						Utils.saveCurrentPageObject(ProcessTrips);
 						EditExpense.init(expenseID);
+					});
+				});
+				
+				// Handler for when the user clicks on the unassociated item.
+				$('.expenseItem').on('click', function() {
+					var expenseID = parseInt($(this).attr("data-expense"));
+					
+					// Get the expense entry from the DB from the selected item
+					DB.getExpense(expenseID, function(singleExpense) {
+						console.log(singleExpense.expenseTypeID);
+						if (singleExpense.expenseTypeID == "null") {
+							// Move the user to the beginning of the process flow
+							Utils.loadPageWithAnimation("expenseType", function() {
+								Utils.saveCurrentPageObject(ProcessTrips);
+								ExpenseType.init(expenseID);
+							});
+						} else if (singleExpense.accountProjectCode == "null") {
+							// Move the user to select the charge to code
+							Utils.loadPageWithAnimation("chargeTo", function() {
+								Utils.saveCurrentPageObject(ProcessTrips);
+								ChargeTo.init(expenseID);
+							});
+						} else if (singleExpense.tripID) {
+							// Move the user to select a trip to associate the expense to
+							Utils.loadPageWithAnimation("selectTrip", function() {
+								Utils.saveCurrentPageObject(ProcessTrips);
+								SelectTrip.init(expenseID);
+							});
+						}
 					});
 				});
 			});

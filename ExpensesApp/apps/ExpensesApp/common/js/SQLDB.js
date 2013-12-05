@@ -392,8 +392,10 @@ var DB = (function() {
 		 * @return       A single expense object
 		 */
 		getExpense : function(eid, callback) {
+			// Convert either the id object into an int or take just the int value
+			var expenseID = eid && eid.seq ? eid.sql : eid;
 			db.transaction(function(tx) {
-				var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + eid.seq;
+				var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
 				tx.executeSql(query, [], function(tx, results) {
 					var row = results.rows.item(0);
 					console.log(row);
