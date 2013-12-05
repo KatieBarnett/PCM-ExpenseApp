@@ -67,6 +67,7 @@ var Utils = (function() {
 		 * This method will load the desired page similar to loadPage, but will
 		 * also animate the page loading process.
 		 * @param pageToLoad the page to be loaded
+		 * @param expenseId the current expense Id on the page
 		 * @param callback the call back functionality once the page has loaded.
 		 */
 		loadPageWithAnimation : function (pageToLoad, expenseId, callback) {
