@@ -49,12 +49,12 @@ var DB = (function() {
 			// Create the database tables
 			db.transaction(function(tx) {
 				// Code to drop tables (left here for testing purposes)
-				//tx.executeSql('DROP TABLE IF EXISTS ExpenseTypes');
-				//tx.executeSql('DROP TABLE IF EXISTS ChargeAccounts');
-				//tx.executeSql('DROP TABLE IF EXISTS AccountProjects');
-				//tx.executeSql('DROP TABLE IF EXISTS Trips');
-				//tx.executeSql('DROP TABLE IF EXISTS Logs');
-				//tx.executeSql('DROP TABLE IF EXISTS Expenses');
+//				tx.executeSql('DROP TABLE IF EXISTS ExpenseTypes');
+//				tx.executeSql('DROP TABLE IF EXISTS ChargeAccounts');
+//				tx.executeSql('DROP TABLE IF EXISTS AccountProjects');
+//				tx.executeSql('DROP TABLE IF EXISTS Trips');
+//				tx.executeSql('DROP TABLE IF EXISTS Logs');
+//				tx.executeSql('DROP TABLE IF EXISTS Expenses');
 				
 				tx.executeSql('CREATE TABLE IF NOT EXISTS ExpenseTypes(' + 
 									'expenseTypeID varchar(200) NOT NULL PRIMARY KEY,' +
@@ -262,7 +262,9 @@ var DB = (function() {
 		 * 
 		 * @return A single entry in the Trips table
 		 */
-		getUnprocessedTrip : function(selectedTrip, callback) {
+		getUnprocessedTrip : function(selectedTripInput, callback) {
+			// Convert the input into an int if not already an int
+			var selectedTrip = selectedTripInput && selectedTripInput.seq ? selectedTripInput.seq : selectedTripInput;
 			db.transaction(function(tx) {
 				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE tripID = ' + selectedTrip;
 				tx.executeSql(query, [], function(tx, results) {

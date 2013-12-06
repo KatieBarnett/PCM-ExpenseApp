@@ -8,13 +8,11 @@
 	</div>
 	<div data-role="content">
 		<p><canvas class="receiptThumb" id="receiptThumb" width="75" height="75"></canvas>What trip is this expense related to?</p>
-		<ul id="tripList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc">
-			<li data-role="list-divider" >Trips</li>
-		</ul>
+		<ul id="tripList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc"></ul>
 		<a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
 	</div>
 	
-	<div data-role="popup" id="addTripModal">
+	<div data-role="popup" id="addTripModal" data-history="false">
 		<p>Add Trip<p>
 		<div class="hidden" id="descriptionErrorMsg">Mandatory field missing!
 		</div>

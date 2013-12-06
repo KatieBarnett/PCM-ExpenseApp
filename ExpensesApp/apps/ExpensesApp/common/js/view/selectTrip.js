@@ -29,30 +29,11 @@ var SelectTrip = (function() {
 
 
 				DB.getUnprocessedTrips(function(data){
-
-					//Populate trip list
-					var tripUL=document.getElementById("tripList");
-
-					for(var i=0; i<data.length; i++){
-						tripLI = document.createElement("li");
-
-						tripAnchor = document.createElement("a");
-						tripAnchor.appendChild(document.createTextNode(data[i]["tripName"]));
-						tripLI.setAttribute("class", "tripSelected");
-						tripLI.setAttribute("data-trip", data[i]["tripID"]);
-						tripLI.appendChild(tripAnchor);
-						tripDates = document.createElement("p");
-						tripDates.appendChild(document.createTextNode(data[i]["startDate"]));
-						tripDates.appendChild(document.createTextNode("/"));
-						tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
-						tripLI.appendChild(tripDates);
-						tripUL.appendChild(tripLI);
-					}
-
-					$('#tripList').listview('refresh');
-
+					// Build the list
+					SelectTrip._buildList(data);
+					
 					// On Selection of trip, move to next screen
-					$('.tripSelected').on('click', function() {
+					$('#tripList').on('click', '.tripSelected', function() {
 						var selectedTrip = $(this).attr("data-trip");
 						if (expenseID != null) {
 							DB.getExpense(expenseID, function(expense){
@@ -82,37 +63,52 @@ var SelectTrip = (function() {
 					});
 				});
 
+				// Handler for when the new trip button is clicked
 				$('#newTrip').on('click', function() {
-					console.log("Function called");
-					$('#descriptionErrorMsg').addClass('hidden');  
+					$('#descriptionErrorMsg').addClass('hidden');
+					// Clear any value in the inputs
+					$('#tripDescription').val("");
+					$('#startDate').val("");
+					$('#endDate').val("");
+					
 					$("#addTripModal").popup("open");
-					
-					
-					$('#submitAddTrip').on('click', function() {
-						if ($('#tripDescription').val().length > 1) {
-							console.log("Submit button clicked");
-							var tripDescription = $('#tripDescription').val();
-							var	startDate = $('#startDate').val();
-							var	endDate = $('#endDate').val();
-								
-							var callback = function() {
-								$("#addTripModal").popup("close");
-							};
-		
-							DB.addTrip(tripDescription, startDate, endDate, callback);
-							
-						} else {
-							console.log("empty text box detected");
-							$('#descriptionErrorMsg').removeClass('hidden');  
-						}
-					});
-					
-					
-					$('#cancelAddTrip').on('click', function(){
-					    console.log("close modal");
-					    $("#addTripModal").popup("close");
-					});
+				});
 				
+				// Handler for when the cancel button is clicked on the modal
+				$('#cancelAddTrip').on('click', function(){
+				    console.log("close modal");
+				    $("#addTripModal").popup("close");
+				});
+				
+				// Handler for when the submit button is clicked on the modal
+				$('#submitAddTrip').on('click', function() {
+					if ($('#tripDescription').val().length > 1) {
+						var tripDescription = $('#tripDescription').val();
+						var	startDate = $('#startDate').val();
+						var	endDate = $('#endDate').val();
+							
+						var callback = function(newTripID) {
+							// Clear the list so the list can be repopulated on screen
+							SelectTrip._removeList();
+							
+							// Query the DB for the information to rebuild the list
+							DB.getUnprocessedTrips(function(data) {
+								// Build the list
+								SelectTrip._buildList(data);
+								
+								// Refresh the page so the scrolling will still work on the page.
+								$.mobile.activePage.trigger('pagecreate');
+								
+								// Close the modal once completed
+								$('#addTripModal').popup("close");
+							});
+						};
+	
+						DB.addTrip(tripDescription, startDate, endDate, callback);
+					} else {
+						console.log("empty text box detected");
+						$('#descriptionErrorMsg').removeClass('hidden');  
+					}
 				});
 
 				$('.finishLater').on('click',function() {
@@ -121,11 +117,46 @@ var SelectTrip = (function() {
 						MainPage.init();
 					});
 				});
-
-
 			});
+		},
+		
+		/**
+		 * Function to build the list of trips into the list DOM
+		 * @param data the returned data from the DB
+		 */
+		_buildList : function(data) {
+			//Populate trip list
+			var tripUL=document.getElementById("tripList");
+			
+			// Build the list divider
+			$('<li>', {"data-role":"list-divider", text: "Trips"}).appendTo("#tripList");
 
+			for(var i=0; i<data.length; i++){
+				tripLI = document.createElement("li");
 
+				tripAnchor = document.createElement("a");
+				tripAnchor.appendChild(document.createTextNode(data[i]["tripName"]));
+				tripLI.setAttribute("class", "tripSelected");
+				tripLI.setAttribute("data-trip", data[i]["tripID"]);
+				tripLI.appendChild(tripAnchor);
+				tripDates = document.createElement("p");
+				tripDates.appendChild(document.createTextNode(data[i]["startDate"]));
+				tripDates.appendChild(document.createTextNode("/"));
+				tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
+				tripLI.appendChild(tripDates);
+				tripUL.appendChild(tripLI);
+			}
+			
+			// Refresh the list view
+			$('#tripList').listview('refresh');
+		},
+		
+		/**
+		 * Function to clear the list DOM to prepare for new list to be generated.
+		 * @param none
+		 */
+		_removeList : function() {
+			$('#tripList').empty();
 		}
 	};
 }());
