@@ -3,7 +3,7 @@
 	<div data-role="header" data-theme="c">
 		<h2>Charge To:</h2>
 		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
-	    <a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-icon-nodisc ui-icon-alt btnShowModal" data-role="button" data-theme="e" data-icon="plus" data-iconpos="notext"></a>
+	    <a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-icon-nodisc btnShowModal" data-role="button" data-theme="e" data-icon="plus" data-iconpos="notext"></a>
 	</div>
 	<div data-role="content">
 	   <p><canvas class="receiptThumb" id="receiptThumb" width="75" height="75"></canvas>Where should this expense be charged?</p>
@@ -18,11 +18,12 @@
 		</ul>
 		
 	<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
-          <span class="question">Add Client Code</span>
+          
        <form>
        <div data-role="main" class="ui-content">
+       <span class="question">Add Client Code</span>
           <input type="text" class="field" id="accDescription" required placeholder="Description of Account" />
-          <select id="combobox">
+          <select id="combobox" data-theme="c" data-icon="ui-icon-alt">
             <option value="">To be charged to</option>
             <option value="codeid">1DMPR</option>
             <option value="codeid">1DMN5</option>
