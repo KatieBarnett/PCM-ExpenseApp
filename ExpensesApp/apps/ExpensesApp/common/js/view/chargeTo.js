@@ -46,6 +46,7 @@ var ChargeTo = (function() {
 			
 			// trigger add client code modal
 			$('.btnShowModal').on('click', function() {
+				$( ".ui-select div" ).addClass( "ui-icon-alt" ); /*change the icon colour of the select*/
 				console.log("Function called");
 				/**$('.dialog-confirm').dialog("unhide");*/
 				$(".dialog-confirm").popup("uhide");
@@ -205,8 +206,6 @@ var ChargeTo = (function() {
 	
 }());
 			
-
-
 
 			
 
