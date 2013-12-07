@@ -5,9 +5,9 @@
 
 var TripExpenses = (function() {
 	return {
+		_expenseData : [],
 		init : function(selectedTrip) {
 			console.log("TripExpenses :: init");
-			console.log(selectedTrip);
 			
 			var headingPublished = false;
 			
@@ -18,6 +18,8 @@ var TripExpenses = (function() {
 			});
 			
 			DB.getTripExpenses(selectedTrip, function(data) {
+				// Save the expense object internally
+				TripExpenses._expenseData = data;
 				
 				var expenseTypes = DB.getExpenseTypes();
 				var expenseList = document.getElementById("expenseList");
@@ -73,8 +75,7 @@ var TripExpenses = (function() {
 						Utils.saveCurrentPageObject(TripExpenses);
 						EditExpense.init(expenseID);
 					});
-				});	
-				
+				});
 			});
 			
 			$('.back').on('click', function() {
@@ -83,6 +84,26 @@ var TripExpenses = (function() {
 			
 			// Attach modal handler to the screen.
 			TripExpenses._modalHandler(selectedTrip);
+			
+			// Handler for when the send details button is clicked
+			$('#sendTripDetailsBtn').on('click', function() {
+				$('.sendDetailsContainer').css('display','block');
+				$('.sendDetailsContainer').animate({bottom:'0px'}, 500);
+				
+				// Handler for when the cancel button is clicked
+				$('#cancelSendDetailsBtn').on('click', function() {
+					$('.sendDetailsContainer').animate({bottom:'-284px'}, 500, function() { 
+						$('.sendDetailsContainer').css("display","none");
+					});
+				});
+				
+				// Handler for when the submit button is clicked
+				$('#submitTripDetailsBtn').on('click', function() {
+					TripExpenses._sendTrip(selectedTrip);
+				});
+			});
+			
+			
 		},
 		
 		/**
@@ -168,6 +189,47 @@ var TripExpenses = (function() {
 					callback(tripName, tripStart, tripEnd);
 				}
 			});
+		},
+		
+		/**
+		 * Function that will take the expense data, format it into a prefilled email for the user
+		 * to send it to desired email address entered.
+		 * @param selectedTrip
+		 */
+		_sendTrip : function(selectedTrip) {
+			// Check if the email was sent properly
+			var onComplete = function(returnValue) {
+				// Have the alert confirm if the email was sent?
+				if (returnValue > 0 && returnValue <= 3) {
+					alert("Email sent");
+				}
+			};
+			
+			// Get the trip name that is being emailed.
+			var emailSubject = "Expenses for " + $('#tripName').html();
+			
+			// Build the body of the email
+			var emailBody = "Need to build the body";
+			
+			var emailAddress = $('#sendTripEmailAddress').val();
+			if (emailAddress.length > 1) {
+				/*
+				 * To use the email composer plugin, the following arguments are as follows:
+				 * showEmailComposerWithCallback(callback, subject, body, to, cc, bcc, boolean HTML, attachments)
+				 */
+				window.plugins.emailComposer.showEmailComposerWithCallback(
+						onComplete,
+						emailSubject, 
+						emailBody, 
+						[emailAddress],
+						[],
+						[],
+						true,
+						[]);
+			}
+			
+			
+			
 		}
 	};
 }());

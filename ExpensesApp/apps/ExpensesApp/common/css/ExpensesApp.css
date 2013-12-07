@@ -139,24 +139,36 @@ body{
 /*---------------------------combobox-------------*/
 
 .custom-combobox {
-    position: relative;
-    display: inline-block;
-  }
-  .custom-combobox-toggle {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    margin-left: -1px;
-    padding: 0;
-    /* support: IE7 */
-    *height: 1.7em;
-    *top: 0.1em;
-  }
-  .custom-combobox-input {
-    margin: 0;
-    padding: 0.3em;
-  }
-  .ui-btn-up-c{
-  font-weight:normal;
-  }
-  
+   position: relative;
+   display: inline-block;
+ }
+ .custom-combobox-toggle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin-left: -1px;
+	padding: 0;
+	/* support: IE7 */
+	*height: 1.7em;
+	*top: 0.1em;
+ }
+ .custom-combobox-input {
+	margin: 0;
+	padding: 0.3em;
+}
+.ui-btn-up-c{
+	font-weight:normal;
+}
+
+/*---------------------------send details------------*/
+.sendDetailsContainer {
+	display:none;
+	height: 284px;
+	position: absolute;
+	bottom: -284px;
+	left:0;
+	width:91%;
+	padding:5%;
+	background:#FFFFFF;
+	z-index:1;
+}

@@ -32,7 +32,17 @@
 			</li>
 			 -->
 		</ul>
-		<a class="sendTripDetails" data-role="button" data-theme="a">Send Trip Details</a>
+		<button id="sendTripDetailsBtn" data-theme="a">Send Trip Details</button>
+		<div class="sendDetailsContainer">
+			<form id="emailForm">
+				<span>Where would you like to send this trip?</span>
+				<input type="text" id="sendTripEmailAddress" required placeholder="Email address" />
+			</form>
+			<div class="sendDetailsBtns">
+				<button id="cancelSendDetailsBtn" data-theme="b">Cancel</button>
+				<button id="submitTripDetailsBtn" data-theme="a">Send Trip Details</button>
+			</div>
+		</div>
 	</div>
 	
 	<div data-role="popup" id="editTripModal" data-overlay-theme="a" class="tripModal">
