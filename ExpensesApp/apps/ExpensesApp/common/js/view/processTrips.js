@@ -91,19 +91,19 @@ var ProcessTrips = (function() {
 						console.log(singleExpense.expenseTypeID);
 						if (singleExpense.expenseTypeID == "null") {
 							// Move the user to the beginning of the process flow
-							Utils.loadPageWithAnimation("expenseType", function() {
+							Utils.loadPageWithAnimation("expenseType", null, function() {
 								Utils.saveCurrentPageObject(ProcessTrips);
 								ExpenseType.init(expenseID);
 							});
 						} else if (singleExpense.accountProjectCode == "null") {
 							// Move the user to select the charge to code
-							Utils.loadPageWithAnimation("chargeTo", function() {
+							Utils.loadPageWithAnimation("chargeTo", null, function() {
 								Utils.saveCurrentPageObject(ProcessTrips);
 								ChargeTo.init(expenseID);
 							});
 						} else if (singleExpense.tripID) {
 							// Move the user to select a trip to associate the expense to
-							Utils.loadPageWithAnimation("selectTrip", function() {
+							Utils.loadPageWithAnimation("selectTrip", null, function() {
 								Utils.saveCurrentPageObject(ProcessTrips);
 								SelectTrip.init(expenseID);
 							});
