@@ -159,7 +159,7 @@ var Utils = (function() {
 			var imageData = receipts[ref];
 			console.log('loading viewReceipt');
 			//load viewReceiptPage
-			Utils.loadPageWithAnimation('viewReceipt', function() {
+			Utils.loadPageWithAnimation('viewReceipt',null, function() {
 				Utils.saveCurrentPageObject(page); 
 				//change this to dynamically retrieve current page
 				ViewReceipt.init(imageData);

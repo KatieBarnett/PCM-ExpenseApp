@@ -33,7 +33,7 @@ var CameraFunctions = (function() {
 				console.log(imageURI);
 				Utils.addReceipt(imageURI);
 				//need to transfer to expenseType page
-				Utils.loadPageWithAnimation('expenseType', function() {
+				Utils.loadPageWithAnimation('expenseType', null, function() {
 					Utils.saveCurrentPageObject(MainPage);
 					ExpenseType.init();
 				});
