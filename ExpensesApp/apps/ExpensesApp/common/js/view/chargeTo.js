@@ -9,7 +9,7 @@ var ChargeTo = (function() {
 		// expenseTypeID is passed in from previous screen
 		init : function(expenseID) {
 			console.log("ChargeTo :: init");
-			console.log("expenseID");
+			console.log("expenseID is "+expenseID);
 			
 			//draw thumbNail with latest receipt
 			Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
@@ -29,9 +29,9 @@ var ChargeTo = (function() {
 			});
 			$('.finishLater').on('click',function() {
 				// Add function for requirement of the Finish this later button
-				Utils.loadPageWithAnimation('processTrips', expenseID, function() {
+				Utils.loadPageWithAnimation("processTrips", expenseID, function() {
 					Utils.saveCurrentPageObject(ChargeTo);
-					processTrips.init();
+					ProcessTrips.init();
 				});
 			});
 			
