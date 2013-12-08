@@ -48,7 +48,25 @@ var ProcessTrips = (function() {
 					expenseLI.setAttribute("class", "expenseItem");
 					expenseLI.setAttribute("data-icon", "none");
 					expenseAnchor = document.createElement("a");
-
+					
+					receiptThumbnail = document.createElement("canvas");
+					receiptThumbnail.height = '75';
+					receiptThumbnail.width = '75';
+					var imageObj = new Image();
+					if (expenseData[i]["receipt"]){
+						imageObj.src = expenseData[i]["receipt"];
+						var context = receiptThumbnail.getContext('2d');
+					    imageObj.onload = function(){
+					        context.drawImage(imageObj, 0, 0, 75, 75);
+					    };
+					} else {
+						imageObj.src = "images//no-receipt.gif";
+						var context = receiptThumbnail.getContext('2d');
+					    imageObj.onload = function(){
+					        context.drawImage(imageObj, 0, 0, 75, 75);
+					    };
+					}
+					
 					if (expenseData[i]["expenseTypeID"] == null){
 						expenseAnchor.appendChild(document.createTextNode("Please complete the expense questions"));
 					} else {
@@ -61,12 +79,6 @@ var ProcessTrips = (function() {
 						};
 					}
 
-					receiptThumbnail = document.createElement("img");
-					if (expenseData[i]["receipt"]){
-						receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
-					} else {
-						receiptThumbnail.setAttribute("src", expenseData[i]["receipt"]);
-					}
 					expenseAnchor.appendChild(receiptThumbnail);
 					expenseLI.appendChild(expenseAnchor);
 					expenseList.appendChild(expenseLI);
