@@ -38,6 +38,12 @@ body{
 	text-align:center;
 	font-weight:normal;
 }
+
+.clear {
+	clear:both;
+}
+
+
 .ui-body-c .ui-link{
 	font-weight:normal;
 }
@@ -100,9 +106,7 @@ body{
 	float:left;
 	margin:0% 2% 2% 2% ;
 }
-.clear {
-	clear:both;
-}
+
 /* Expense Type Selection Collapsible Format */
 .expenseTypeLI {
 	padding: 0px 0px 0px 0px !important;
