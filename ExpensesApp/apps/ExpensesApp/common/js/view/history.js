@@ -34,9 +34,9 @@ var History = (function() {
 				$('.tripSelected').on('click', function() {
 					var selectedTrip = $(this).attr("data-trip");
 					Utils.loadPageWithAnimation("tripExpenses", null, function() {
-						Utils.saveCurrentPageObject(ProcessTrips);						
+						Utils.saveCurrentPageObject(History);						
 						// Pass selected 
-						TripExpenses.init(selectedTrip);
+						TripExpenses.init(selectedTrip, true);
 					});
 				});	
 			});
