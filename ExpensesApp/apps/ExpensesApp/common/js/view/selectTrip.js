@@ -8,15 +8,16 @@ var SelectTrip = (function() {
 		init : function(expenseID) {
 			console.log("selectTrip :: init");
 			// For testing purposes
+			/*
 			if (!expenseID) {
 				expenseID = 13;
-			}
-			
+			}			
 			//testing data
 			DB.addTrip("Melbourne ANZ", "01-10-13", "03-10-13", function() {
 			});
 			DB.addTrip("ANZ Pitt St Meeting", "25-09-13", "25-09-13", function() {
 			});
+			*/
 			
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
