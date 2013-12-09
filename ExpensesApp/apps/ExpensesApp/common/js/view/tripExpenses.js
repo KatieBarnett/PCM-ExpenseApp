@@ -95,8 +95,26 @@ var TripExpenses = (function() {
 			
 			// Handler for when the send details button is clicked
 			$('#sendTripDetailsBtn').on('click', function() {
-				$('.sendDetailsContainer').css('display','block');
-				$('.sendDetailsContainer').animate({bottom:'0px'}, 500);
+				// Unhide the recent email if there is one
+				DB.getLastEmail(function(emailAddress) {
+					if (emailAddress && emailAddress.email) {
+						$('#recentEmailArea').removeClass("hidden");
+						
+						// Add the email address to a button
+						$('<a>', { href:"#", text: emailAddress.email, "data-icon":"false"}).appendTo(
+								$('<li>', {"class" : "recentEmail", "data-email" : emailAddress.email}).appendTo('#recentEmailList'));
+						// Refresh the list view for the CSS
+						$('#recentEmailList').listview('refresh');
+						
+						// Attach handler to the recent email address
+						$('.recentEmail').on('click',function() {
+							// Fill the input field with the text
+							$('#sendTripEmailAddress').val($(this).attr("data-email"));
+						});
+					}
+					$('.sendDetailsContainer').css('display','block');
+					$('.sendDetailsContainer').animate({bottom:'0px'}, 500);
+				});
 				
 				// Handler for when the cancel button is clicked
 				$('#cancelSendDetailsBtn').on('click', function() {
@@ -252,7 +270,6 @@ var TripExpenses = (function() {
 							[],
 							true,
 							[]);
-		
 				};
 				
 				// Save the email address to the DB

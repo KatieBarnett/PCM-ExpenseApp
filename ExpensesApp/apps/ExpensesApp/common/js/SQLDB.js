@@ -345,7 +345,28 @@ var DB = (function() {
 					}
 				}, errorCB);
 			}, errorCB);
-		},				
+		},
+		
+		/**
+		 * Retrieves the latest email from the logs table
+		 * 
+		 * @return		A single object containing the email address
+		 */
+		getLastEmail : function(callback) {
+			db.transaction(function(tx) {
+				var query = 'SELECT email FROM Logs ORDER BY logID DESC';
+				tx.executeSql(query, [], function(tx, results) {
+					var row = null;
+					if (results.rows.length > 0) {
+						row = results.rows.item(0);
+					}
+					
+					if (callback) {
+						callback(row);						
+					}
+				}, errorCB);
+			}, errorCB);
+		},
 						
 		/**
 		 * Retrieves all unassociated expenses

@@ -184,3 +184,11 @@ body{
 	bottom: 0px;
 	width: 91%;
 }
+
+#recentEmailArea {
+	width: 100%;
+}
+
+#recentEmailArea .ui-listview {
+	margin: 0 -15px;
+}

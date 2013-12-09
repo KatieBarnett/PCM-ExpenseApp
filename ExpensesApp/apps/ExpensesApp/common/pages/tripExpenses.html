@@ -26,12 +26,18 @@
 				<span>Where would you like to send this trip?</span>
 				<input type="text" id="sendTripEmailAddress" required placeholder="Email address" />
 			</form>
+			<div id="recentEmailArea" class="hidden">
+				<ul data-role="listview" id="recentEmailList" class="ui-icon-nodisc" data-icon="false" data-theme="c">
+					<li data-role="list-divider">Recent</li>
+				</ul>
+			</div>
 			<div class="sendDetailsBtns">
 				<button id="cancelSendDetailsBtn" data-theme="b">Cancel</button>
 				<button id="submitTripDetailsBtn" data-theme="a">Send Trip Details</button>
 			</div>
 		</div>
 	</div>
+	
 	<div data-role="popup" id="editTripModal" data-history="false" class="tripModal">
 		<div data-role="main" class="ui-content">
 			<span class="question">Edit Trip</span>
