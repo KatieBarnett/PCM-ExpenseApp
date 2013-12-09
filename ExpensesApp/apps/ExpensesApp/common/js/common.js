@@ -14,11 +14,23 @@ var Utils = (function() {
 		/**
 		 * Method that will load the desired page with params and callback
 		 * @param pageToLoad the page to be loaded.
-		 * @param params The parameters to the load the page with.
 		 * @param callback The function to callback to once the page has finished loading.
+		 * @param expenseId optional argument if there is no animation
 		 */
-		loadPage : function(pageToLoad, callback) {
+		loadPage : function(pageToLoad, callback, expenseId) {
 			if (typeof pageToLoad === "string") {
+				if (pageToLoad == "mainPage") {
+					// Reset the page history and expense history if at the main page
+					pageHistory.length = 0;
+					objectHistory.length = 0;
+					expenseIDHistory.length = 0;
+				} else if (expenseId) { // Save the expenseId if it exists
+					var intExpenseId = expenseId && expenseId.seq ? expenseId.seq : expenseId;
+					expenseIDHistory.push(intExpenseId);
+				}
+				
+				console.log(expenseIDHistory);
+				
 				// Add the loaded page to the history so going back can be performed
 				pageHistory.push(pageToLoad);
 				console.log(pageHistory);
@@ -191,6 +203,26 @@ var Utils = (function() {
 		 */
 		getCurrentExpenseId : function() {
 			return expenseIDHistory.pop();
+		},
+		
+		/**
+		 * Function that will return today's date in the format of yyyy/mm/dd
+		 */
+		getTodaysDate : function() {
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1; // As the month starts from 0
+			var yyyy = today.getFullYear();
+			
+			if (dd<10) {
+				dd = '0' + dd;
+			}
+			
+			if (mm<10) {
+				mm = '0' + mm;
+			}
+			
+			return yyyy + '-' + mm  + '-' + dd;
 		}
 	};
 } ());

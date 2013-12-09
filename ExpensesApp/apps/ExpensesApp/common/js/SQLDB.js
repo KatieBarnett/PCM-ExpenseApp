@@ -303,6 +303,25 @@ var DB = (function() {
 		},
 		
 		/**
+		 * Retrieves the processed date from the selected trip
+		 * 
+		 * @return a string of the processed date
+		 */
+		getProcessedDate : function(selectedTripInput, callback) {
+			// Convert the input into an int if not already an int
+			var selectedTrip = selectedTripInput && selectedTripInput.seq ? selectedTripInput.seq : selectedTripInput;
+			db.transaction(function(tx) {
+				var query = 'SELECT originalProcessDate FROM Trips WHERE tripID=' + selectedTrip;
+				tx.executeSql(query,[], function(tx, results) {
+					var row = results.rows.item(0);
+					if (callback) {
+						callback(row);
+					}
+				}, errorCB);
+			}, errorCB);
+		},
+		
+		/**
 		 * Retrieves email logs for a single trip
 		 * 
 		 * @param   tid  Unique trip ID

@@ -11,28 +11,16 @@
 		<div id="tripDetails">
 			<h3 id="tripName"></h3>
 			<p>Starts: <span id=tripStart></span> Ends: <span id=tripEnd></span></p>
+			<div id="processedDate"></div>
 		</div>
 		
 		
-		<ul id="expenseList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc expenseList">
-			<!-- 
-			<li data-role="list-divider" >Public Transport</li>
-			<li><a class="tripExpense">ANZ (1DHTA)
-					<img src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">
-				</a>
-			</li>
-			<li><a class="tripExpense">CBA (1DHTY)
-					<img src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">
-				</a>
-			</li>
-			<li data-role="list-divider">Hotel</li>
-			<li><a class="tripExpense">Please complete the expense questions
-					<img src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">
-				</a>
-			</li>
-			 -->
-		</ul>
-		<button id="sendTripDetailsBtn" data-theme="a">Send Trip Details</button>
+		<ul id="expenseList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc expenseList"></ul>
+		<div class="tripDetailsBtnArea">
+			<span id="emailLogBtnArea" class="hidden"><button id="emailLogBtn" data-theme="b">Email Log</button></span>
+			<button id="sendTripDetailsBtn" data-theme="a">Send Trip Details</button>
+		</div>
+		
 		<div class="sendDetailsContainer">
 			<form id="emailForm">
 				<span>Where would you like to send this trip?</span>

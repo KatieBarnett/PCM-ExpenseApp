@@ -6,7 +6,7 @@
 var TripExpenses = (function() {
 	return {		
 		_expenseData : [],
-		init : function(selectedTrip) {
+		init : function(selectedTrip, fromHistory) {
 			console.log("TripExpenses :: init");
 			
 			var emailAttachments = new Array();
@@ -111,7 +111,10 @@ var TripExpenses = (function() {
 				});
 			});
 			
-			
+			// If the previous page was from the history list, call function
+			if (fromHistory) {
+				TripExpenses._changeToHistory(selectedTrip);
+			}
 		},
 		
 		/**
@@ -205,14 +208,6 @@ var TripExpenses = (function() {
 		 * @param selectedTrip
 		 */
 		_sendTrip : function(selectedTrip, expenseBody, emailAttachments) {
-			// Check if the email was sent properly
-			var onComplete = function(returnValue) {
-				// Have the alert confirm if the email was sent?
-				if (returnValue > 0 && returnValue <= 3) {
-					alert("Email sent");
-				}
-			};
-			
 			// Get the trip name that is being emailed.
 			var emailSubject = "Expenses for " + $('#tripName').html();
 			
@@ -224,25 +219,68 @@ var TripExpenses = (function() {
 
 			emailBody = emailBody  + expenseBody + "</tbody></table></html>" + emailAttachments;
 			
+			// Get the entered in email address
 			var emailAddress = $('#sendTripEmailAddress').val();
 			if (emailAddress.length > 1) {
-				/*
-				 * To use the email composer plugin, the following arguments are as follows:
-				 * showEmailComposerWithCallback(callback, subject, body, to, cc, bcc, boolean HTML, attachments)
-				 */
-				window.plugins.emailComposer.showEmailComposerWithCallback(
-						onComplete,
-						emailSubject, 
-						emailBody, 
-						[emailAddress],
-						[],
-						[],
-						true,
-						emailAttachments);
+				var callback = function() {
+					// Check if the email was sent properly
+					var onComplete = function(returnValue) {
+						// Have the alert confirm if the email was sent?
+						if (returnValue > 0 && returnValue <= 3) {
+							alert("Email sent");
+							
+							// Update the trip to be processed
+							DB.processTrip(selectedTrip, Utils.getTodaysDate(), function() {
+								// Go to the main page after trip has been processed
+								Utils.loadPage("mainPage", function() {
+									MainPage.init();
+								});
+							});
+						}
+					};
+					
+					/*
+					 * To use the email composer plugin, the following arguments are as follows:
+					 * showEmailComposerWithCallback(callback, subject, body, to, cc, bcc, boolean HTML, attachments)
+					 */
+					window.plugins.emailComposer.showEmailComposerWithCallback(
+							onComplete,
+							emailSubject, 
+							emailBody, 
+							[emailAddress],
+							[],
+							[],
+							true,
+							[]);
+		
+				};
+				
+				// Save the email address to the DB
+				DB.logTrip(selectedTrip, emailAddress, Utils.getTodaysDate(), callback);
 			}
+		},
+		
+		/**
+		 * Function that will change certain elements to match the trip details when arriving from the
+		 * history list page.
+		 * @param none
+		 */
+		_changeToHistory : function(selectedTrip) {
+			// Display the hidden email log button
+			$('#emailLogBtnArea').removeClass("hidden");
 			
+			// Change the text in the send email button
+			$('#sendTripDetailsBtn').text("Resend Trip Details").button('refresh');
 			
+			// Find the processed date of the trip and print it to screen
+			DB.getProcessedDate(selectedTrip, function(trip) {
+				$('#processedDate').html("Originally submitted: " + trip.originalProcessDate);
+			});
 			
+			// Attach handler for when email log is clicked
+			$('#emailLogBtn').on('clicked', function() {
+				alert("Email log clicked, not yet implemented!");
+			});
 		}
 	};
 }());
