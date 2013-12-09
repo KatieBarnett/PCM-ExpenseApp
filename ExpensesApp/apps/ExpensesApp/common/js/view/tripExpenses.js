@@ -4,10 +4,14 @@
  */
 
 var TripExpenses = (function() {
-	return {
+	return {		
 		_expenseData : [],
 		init : function(selectedTrip) {
 			console.log("TripExpenses :: init");
+			
+			var emailAttachments = new Array();
+			var expenseBody = "";
+			
 			
 			var headingPublished = false;
 			
@@ -24,6 +28,7 @@ var TripExpenses = (function() {
 				var expenseTypes = DB.getExpenseTypes();
 				var expenseList = document.getElementById("expenseList");
 				
+				var count = 1;
 				for (var i=0; i<expenseTypes.length; i++){
 					for (var j=0; j<data.length; j++){
 						if (expenseTypes[i]["expenseTypeID"] == data[j]["expenseTypeID"]){
@@ -35,7 +40,6 @@ var TripExpenses = (function() {
 								expenseList.appendChild(expenseLI);
 								headingPublished = true;
 							}
-							
 							expenseLI = document.createElement("li");
 							expenseLI.setAttribute("data-expense", data[j]["expenseID"]);
 							expenseLI.setAttribute("class", "expenseItem");
@@ -49,18 +53,22 @@ var TripExpenses = (function() {
 								}
 							}
 							receiptThumbnail = document.createElement("img");
-							if (data[j]["receipt"]){
+							if (data[j]["receipt"] == "undefined"){
 								receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
 							} else {
 								receiptThumbnail.setAttribute("src", data[j]["receipt"]);
+								// Add the image to the array of attachments
+								emailAttachments[count - 1] = data[j]["receipt"];
 							}
 							expenseAnchor.appendChild(receiptThumbnail);
 							expenseLI.appendChild(expenseAnchor);
-							
-							
 							expenseList.appendChild(expenseLI);
 							
-							// 
+							// Build the email body while we are here
+							expenseBody = expenseBody + "<tr><td>" + count + "</td><td>" + expenseTypes[i]["expenseTypeID"] + "</td>" +
+							"<td>" + data[j]["accountProjectName"] + " - " + data[j]["accountProjectCode"] + "</td>" +
+							"<td>" + data[j]["receipt"] + "</td></tr>";	
+							count++;
 						}
 					}
 					headingPublished = false;
@@ -99,7 +107,7 @@ var TripExpenses = (function() {
 				
 				// Handler for when the submit button is clicked
 				$('#submitTripDetailsBtn').on('click', function() {
-					TripExpenses._sendTrip(selectedTrip);
+					TripExpenses._sendTrip(selectedTrip, expenseBody, emailAttachments);
 				});
 			});
 			
@@ -196,7 +204,7 @@ var TripExpenses = (function() {
 		 * to send it to desired email address entered.
 		 * @param selectedTrip
 		 */
-		_sendTrip : function(selectedTrip) {
+		_sendTrip : function(selectedTrip, expenseBody, emailAttachments) {
 			// Check if the email was sent properly
 			var onComplete = function(returnValue) {
 				// Have the alert confirm if the email was sent?
@@ -209,7 +217,12 @@ var TripExpenses = (function() {
 			var emailSubject = "Expenses for " + $('#tripName').html();
 			
 			// Build the body of the email
-			var emailBody = "Need to build the body";
+			
+			var emailBody = "<html><head></head>Please find attached the expense receipts for the trip <span>" + $('#tripName').html() + "</span> for the period <span>" + $('#tripStart').html() + "</span> to <span>" + $('#tripEnd').html() + "</span>." + 
+			"<br/><br/>" +
+			"<table><thead><tr><th>Type</th><th>Charge To</th><th>Receipt</th></tr></thead><tbody>";
+
+			emailBody = emailBody  + expenseBody + "</tbody></table></html>" + emailAttachments;
 			
 			var emailAddress = $('#sendTripEmailAddress').val();
 			if (emailAddress.length > 1) {
@@ -225,7 +238,7 @@ var TripExpenses = (function() {
 						[],
 						[],
 						true,
-						[]);
+						emailAttachments);
 			}
 			
 			
