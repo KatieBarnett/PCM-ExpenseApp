@@ -44,15 +44,15 @@
 			</div>
 		</div>
 	</div>
-	
-	<div data-role="popup" id="editTripModal" data-overlay-theme="a" class="tripModal">
-		<p>Edit Trip<p>
-		<div class="hidden errorMessage">Mandatory field missing!</div>
-		<input type="text" class="field" id="editTripDescription" required placeholder="Description of trip" />	
-		<input id="editStartDate" type="date"/>
-		<input id="editEndDate" type="date" />
-		<button id="cancelEditTrip" data-theme="b">Cancel</button>
-		<button id="submitEditTrip" data-theme="a">Submit</button>
+	<div data-role="popup" id="editTripModal" data-history="false" class="tripModal">
+		<div data-role="main" class="ui-content">
+			<span class="question">Edit Trip</span>
+			<div class="hidden" id="descriptionErrorMsg">Mandatory field missing!</div>
+			<input type="text" class="field" id="editTripDescription" required placeholder="Description of trip" />	
+			<input id="editStartDate" type="date" placeholder="Starts"/>
+			<input id="editEndDate" type="date" placeholder="Ends" />
+			<button id="cancelEditTrip" data-theme="b">Cancel</button>
+			<button id="submitEditTrip" data-theme="a">Submit</button>
+		</div>
 	</div>
-	
 </div>
