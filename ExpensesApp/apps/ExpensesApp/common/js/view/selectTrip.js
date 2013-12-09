@@ -7,17 +7,6 @@ var SelectTrip = (function() {
 	return {
 		init : function(expenseID) {
 			console.log("selectTrip :: init");
-			// For testing purposes
-			/*
-			if (!expenseID) {
-				expenseID = 13;
-			}			
-			//testing data
-			DB.addTrip("Melbourne ANZ", "01-10-13", "03-10-13", function() {
-			});
-			DB.addTrip("ANZ Pitt St Meeting", "25-09-13", "25-09-13", function() {
-			});
-			*/
 			
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
@@ -47,7 +36,7 @@ var SelectTrip = (function() {
 							DB.getExpense(expenseID, function(expense){
 								DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
 										expense["receipt"], selectedTrip, function () {
-									Utils.loadPageWithAnimation("mainPage", expenseID, function() {
+									Utils.loadPage("mainPage", function() {
 										Utils.saveCurrentPageObject(SelectTrip);
 										MainPage.init();
 									});
@@ -55,7 +44,7 @@ var SelectTrip = (function() {
 							});	
 						} else {
 							// This should not be required after completion of ChargeTo screen
-							Utils.loadPageWithAnimation("mainPage", expenseID, function() {
+							Utils.loadPage("mainPage", function() {
 								Utils.saveCurrentPageObject(SelectTrip);
 								MainPage.init();
 							});
@@ -120,7 +109,7 @@ var SelectTrip = (function() {
 				});
 
 				$('.finishLater').on('click',function() {
-					Utils.loadPageWithAnimation('mainPage', expenseID, function() {
+					Utils.loadPage('mainPage', function() {
 						Utils.saveCurrentPageObject(SelectTrip);
 						MainPage.init();
 					});
