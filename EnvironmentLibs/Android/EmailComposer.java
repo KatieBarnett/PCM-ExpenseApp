@@ -36,7 +36,7 @@
  */
 
 
-package org.apache.cordova;
+package org.apache.cordova.plugin;
 
 import java.io.File;
 import java.util.ArrayList;
