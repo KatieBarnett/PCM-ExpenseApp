@@ -33,9 +33,6 @@ function wlCommonInit(){
 }
 
 $(document).ready(function() {
-	
-	var BACKBUTTON = 27;
-	
 	// Show the AJAX loading screen while the DB is being initiated
 	$.mobile.loading("show");
 	DB.initDB(function() {
@@ -45,10 +42,9 @@ $(document).ready(function() {
 			MainPage.init();
 		});
 		
-		$(document).keypress(function(e) {
-			if (e.which == BACKBUTTON) {
-				Utils.goBackWithAnimation(null);
-			}
+		$(document).on("backbutton", function(e) {
+			e.preventDefault();
+			Utils.goBackWithAnimation(null);
 		});
 		
 		$('#content-page-2').css('display', 'none');
