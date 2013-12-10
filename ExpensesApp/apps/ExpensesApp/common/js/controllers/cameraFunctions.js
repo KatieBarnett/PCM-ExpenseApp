@@ -9,7 +9,7 @@ var CameraFunctions = (function() {
 			
 			 navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
 		        destinationType: navigator.camera.DestinationType.FILE_URI,
-		        sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
+		        sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
 		        correctOrientation: true,
 		        targetWidth: 50,
 		        targetHeight: 50
@@ -18,9 +18,9 @@ var CameraFunctions = (function() {
 		
 		openCameraForImageCapture : function(){
 			
-			navigator.camera.getPicture(onPhotoURISuccess, onFail,{ quality: 50, 
+			navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
 		        destinationType: navigator.camera.DestinationType.FILE_URI,
-		        sourceType: Camera.PictureSourceType.Camera,
+		        sourceType: navigator.camera.PictureSourceType.Camera,
 		        correctOrientation: true,
 		        targetWidth: 50,
 		        targetHeight: 50
@@ -41,7 +41,7 @@ var CameraFunctions = (function() {
 		 
 		onFail : function(){
 			console.log("Failed to get image uri");
-			}
+		}
 
 	};
 }());
