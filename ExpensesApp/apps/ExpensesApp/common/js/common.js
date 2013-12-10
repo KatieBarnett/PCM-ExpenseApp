@@ -223,6 +223,11 @@ var Utils = (function() {
 			}
 			
 			return yyyy + '-' + mm  + '-' + dd;
+		},
+		
+		stripFile : function(stringToStrip) {
+			var strippedString = stringToStrip.replace(/file:\/\/\//g, '');
+			return strippedString;
 		}
 	};
 } ());

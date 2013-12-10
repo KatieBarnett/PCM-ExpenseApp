@@ -11,8 +11,8 @@ var CameraFunctions = (function() {
 		        destinationType: navigator.camera.DestinationType.FILE_URI,
 		        sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
 		        correctOrientation: true,
-		        targetWidth: 50,
-		        targetHeight: 50
+		        targetWidth: 2100,
+		        targetHeight: 2100
 		        });
 		},
 		
@@ -22,8 +22,8 @@ var CameraFunctions = (function() {
 		        destinationType: navigator.camera.DestinationType.FILE_URI,
 		        sourceType: navigator.camera.PictureSourceType.Camera,
 		        correctOrientation: true,
-		        targetWidth: 50,
-		        targetHeight: 50
+		        targetWidth: 2100,
+		        targetHeight: 2100
 		        });
 
 		},

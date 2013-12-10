@@ -59,7 +59,7 @@ var TripExpenses = (function() {
 							} else {
 								receiptThumbnail.setAttribute("src", data[j]["receipt"]);
 								// Add the image to the array of attachments
-								emailAttachments[count - 1] = data[j]["receipt"];
+								emailAttachments[count - 1] = Utils.stripFile(data[j]["receipt"]);
 							}
 							expenseAnchor.appendChild(receiptThumbnail);
 							expenseLI.appendChild(expenseAnchor);
@@ -268,7 +268,7 @@ var TripExpenses = (function() {
 							[],
 							[],
 							true,
-							[]);
+							emailAttachments);
 				};
 				
 				// Save the email address to the DB
