@@ -237,8 +237,8 @@ var Utils = (function() {
 		 * Function to convert the file name into xxxxx.jpg (human readable format)
 		 */
 		convertFile : function(filename) {
-			var splitString = filename.split('?');
-			return splitString[1] + ".jpg";
+			var splitString = filename.split('/');
+			return splitString[splitString.length-1]; 
 		}
 	};
 } ());

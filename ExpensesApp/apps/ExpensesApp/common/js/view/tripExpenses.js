@@ -68,7 +68,7 @@ var TripExpenses = (function() {
 							// Build the email body while we are here
 							expenseBody = expenseBody + "<br/><strong>Expense " + count + "</strong><br/>" + expenseTypes[i]["expenseTypeID"] + "<br/>" +
 							data[j]["accountProjectName"] + " - " + data[j]["accountProjectCode"] + "<br/>" +
-							"Filename: " + Utils.convertFile(data[j]["receipt"]) + "<br/><br/>";	
+							"Filename: " + Utils.convertFile(data[j]["receipt"]) + "<br/><br/>";
 							count++;
 						}
 					}
