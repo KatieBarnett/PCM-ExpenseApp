@@ -66,9 +66,9 @@ var TripExpenses = (function() {
 							expenseList.appendChild(expenseLI);
 							
 							// Build the email body while we are here
-							expenseBody = expenseBody + "<tr><td>" + count + "</td><td>" + expenseTypes[i]["expenseTypeID"] + "</td>" +
-							"<td>" + data[j]["accountProjectName"] + " - " + data[j]["accountProjectCode"] + "</td>" +
-							"<td>" + data[j]["receipt"] + "</td></tr>";	
+							expenseBody = expenseBody + "<br/><strong>Expense " + count + "</strong><br/>" + expenseTypes[i]["expenseTypeID"] + "<br/>" +
+							data[j]["accountProjectName"] + " - " + data[j]["accountProjectCode"] + "<br/>" +
+							"Filename: " + Utils.convertFile(data[j]["receipt"]) + "<br/><br/>";	
 							count++;
 						}
 					}
@@ -231,10 +231,7 @@ var TripExpenses = (function() {
 			// Build the body of the email
 			
 			var emailBody = "<html><head></head>Please find attached the expense receipts for the trip <span>" + $('#tripName').html() + "</span> for the period <span>" + $('#tripStart').html() + "</span> to <span>" + $('#tripEnd').html() + "</span>." + 
-			"<br/><br/>" +
-			"<table><thead><tr><th>Type</th><th>Charge To</th><th>Receipt</th></tr></thead><tbody>";
-
-			emailBody = emailBody  + expenseBody + "</tbody></table></html>" + emailAttachments;
+			"<br/><br/>" + expenseBody + "</html>";
 			
 			// Get the entered in email address
 			var emailAddress = $('#sendTripEmailAddress').val();

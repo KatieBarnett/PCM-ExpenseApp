@@ -225,9 +225,20 @@ var Utils = (function() {
 			return yyyy + '-' + mm  + '-' + dd;
 		},
 		
+		/** 
+		 * Function to strip the 'file:///' from the file name
+		 */
 		stripFile : function(stringToStrip) {
 			var strippedString = stringToStrip.replace(/file:\/\/\//g, '');
 			return strippedString;
+		},
+		
+		/** 
+		 * Function to convert the file name into xxxxx.jpg (human readable format)
+		 */
+		convertFile : function(filename) {
+			var splitString = filename.split('?');
+			return splitString[1] + ".jpg";
 		}
 	};
 } ());
