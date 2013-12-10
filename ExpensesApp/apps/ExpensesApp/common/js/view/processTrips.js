@@ -7,45 +7,13 @@ var ProcessTrips = (function() {
 	return {
 		init : function() {
 			console.log("ProcessTrips :: init");
-			// Load sample data
-			/*DB.addTrip("Melbourne ANZ", "01-10-13", "03-10-13", function() {
-				});
-			DB.addTrip("ANZ Pitt St Meeting", "25-09-13", "25-09-13", function() {
-			});
-			DB.addTrip("NCEVER Adelaide Go Live Meeting", "27-09-13", "27-09-13", function() {
-			});
-			DB.addTrip("Canberra DoD RFD", "10-09-13", "10-09-13", function() {
-			});
-			DB.addTrip("Melbourne ANZ", "07-09-13", "13-09-13", function() {
-			});
-			DB.addTrip("Melbourne ANZ", "01-09-13", "13-09-13", function() {
-			});
-			DB.addExpense("Public Transportation", "1DHTA", "images\\receipt-placeholder.gif", 4, function() {
-				console.log("added expense");
-			});
-			DB.addExpense("Public Transportation", "1DHTY", "images\\receipt-placeholder1.gif", 4, function() {
-				console.log("added expense");
-			});
-			DB.addExpense("Hotel", null, "images\\no-receipt.gif", 4, function() {
-				console.log("added expense");
-			});		
 			
-			DB.addClientCode("1DHTA", "ANZ", "1DHTA", function() {
-				console.log("added expense");
-			});
-			DB.addClientCode("1DHTY", "CBA", "1DHTY", function() {
-				console.log("added expense");
-			});
-			DB.addClientCode("1DHTH", "NCVER", "1DHTH", function() {
-				console.log("added expense");
-			});
-			*/
 			DB.getUnassociatedExpenses(function(expenseData){
 				for (var i=0; i<expenseData.length; i++){
 
 					expenseLI = document.createElement("li");
 					expenseLI.setAttribute("data-expense", expenseData[i]["expenseID"]);
-					expenseLI.setAttribute("class", "expenseItem");
+					expenseLI.setAttribute("class", "unassociatedExpenseItem");
 					expenseLI.setAttribute("data-icon", "none");
 					expenseAnchor = document.createElement("a");
 					
@@ -81,9 +49,9 @@ var ProcessTrips = (function() {
 
 					expenseAnchor.appendChild(receiptThumbnail);
 					expenseLI.appendChild(expenseAnchor);
-					expenseList.appendChild(expenseLI);
+					unassociatedExpenseList.appendChild(expenseLI);
 				};
-				$('#expenseList').listview('refresh');
+				$('#unassociatedExpenseList').listview('refresh');
 
 				// Move to next page after expense type is selected, pass expenseTypeID
 				$('.tripSelected').on('click', function() {
@@ -95,7 +63,7 @@ var ProcessTrips = (function() {
 				});
 				
 				// Handler for when the user clicks on the unassociated item.
-				$('.expenseItem').on('click', function() {
+				$('.unassociatedExpenseItem').on('click', function() {
 					var expenseID = parseInt($(this).attr("data-expense"));
 					
 					// Get the expense entry from the DB from the selected item
