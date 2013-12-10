@@ -4,16 +4,19 @@
  */
 
 var TripExpenses = (function() {
+	var fromHistoryPage = null;
 	return {		
-		_expenseData : [],
 		init : function(selectedTrip, fromHistory) {
 			console.log("TripExpenses :: init");
 			
 			var emailAttachments = new Array();
 			var expenseBody = "";
-			
-			
 			var headingPublished = false;
+
+			// Set if the page originally came from the history page or not
+			if (typeof fromHistory != 'undefined') {
+				fromHistoryPage = fromHistory;
+			}
 			
 			// Get the selected trip from the DB with the details
 			TripExpenses._getTrip(selectedTrip, function(tripName, tripStart, tripEnd) {
@@ -22,8 +25,6 @@ var TripExpenses = (function() {
 			});
 			
 			DB.getTripExpenses(selectedTrip, function(data) {
-				// Save the expense object internally
-				TripExpenses._expenseData = data;
 				
 				var expenseTypes = DB.getExpenseTypes();
 				var expenseList = document.getElementById("expenseList");
@@ -95,26 +96,7 @@ var TripExpenses = (function() {
 			
 			// Handler for when the send details button is clicked
 			$('#sendTripDetailsBtn').on('click', function() {
-				// Unhide the recent email if there is one
-				DB.getLastEmail(function(emailAddress) {
-					if (emailAddress && emailAddress.email) {
-						$('#recentEmailArea').removeClass("hidden");
-						
-						// Add the email address to a button
-						$('<a>', { href:"#", text: emailAddress.email, "data-icon":"false"}).appendTo(
-								$('<li>', {"class" : "recentEmail", "data-email" : emailAddress.email}).appendTo('#recentEmailList'));
-						// Refresh the list view for the CSS
-						$('#recentEmailList').listview('refresh');
-						
-						// Attach handler to the recent email address
-						$('.recentEmail').on('click',function() {
-							// Fill the input field with the text
-							$('#sendTripEmailAddress').val($(this).attr("data-email"));
-						});
-					}
-					$('.sendDetailsContainer').css('display','block');
-					$('.sendDetailsContainer').animate({bottom:'0px'}, 500);
-				});
+				TripExpenses._animateTripPopup();
 				
 				// Handler for when the cancel button is clicked
 				$('#cancelSendDetailsBtn').on('click', function() {
@@ -122,16 +104,33 @@ var TripExpenses = (function() {
 						$('.sendDetailsContainer').css("display","none");
 					});
 				});
-				
-				// Handler for when the submit button is clicked
-				$('#submitTripDetailsBtn').on('click', function() {
-					TripExpenses._sendTrip(selectedTrip, expenseBody, emailAttachments);
-				});
+			});
+			
+			// Handler for when the submit button is clicked
+			$('#submitTripDetailsBtn').on('click', function() {
+				TripExpenses._sendTrip(selectedTrip, expenseBody, emailAttachments);
 			});
 			
 			// If the previous page was from the history list, call function
-			if (fromHistory) {
+			if (fromHistoryPage) {
 				TripExpenses._changeToHistory(selectedTrip);
+				
+				// Modify the list divider
+				$('#emailListDivider').html('Email trip was sent to');
+				
+				// Get the email last used to send the trip and display it to the user
+				DB.getEmailLogs(selectedTrip, function(emailAddresses) {
+					if (emailAddresses && emailAddresses[0] && emailAddresses[0].email) {
+						TripExpenses._showLastEmail(emailAddresses[0]);
+					}
+				}); 
+			} else {
+				// Get the last email the user tried to send an email to and display it
+				DB.getLastEmail(function(emailAddress) {
+					if (emailAddress && emailAddress.email) {
+						TripExpenses._showLastEmail(emailAddress);
+					}
+				});
 			}
 		},
 		
@@ -295,8 +294,37 @@ var TripExpenses = (function() {
 			});
 			
 			// Attach handler for when email log is clicked
-			$('#emailLogBtn').on('clicked', function() {
+			$('#emailLogBtn').on('click', function() {
 				alert("Email log clicked, not yet implemented!");
+			});
+		},
+		
+		/**
+		 * Function that will animate the popup to show the email log and send trip buttons.
+		 * @param none
+		 */
+		_animateTripPopup : function() {
+			$('.sendDetailsContainer').css('display','block');
+			$('.sendDetailsContainer').animate({bottom:'0px'}, 500);
+		},
+		
+		/**
+		 * Function that will show the last email entered by the user
+		 * @param emailAddress the last email entered by the user
+		 */
+		_showLastEmail : function(emailAddress) {
+			$('#recentEmailArea').removeClass("hidden");
+			
+			// Add the email address to a button
+			$('<a>', { href:"#", text: emailAddress.email, "data-icon":"false"}).appendTo(
+					$('<li>', {"class" : "recentEmail", "data-email" : emailAddress.email}).appendTo('#recentEmailList'));
+			// Refresh the list view for the CSS
+			$('#recentEmailList').listview('refresh');
+			
+			// Attach handler to the recent email address
+			$('.recentEmail').on('click',function() {
+				// Fill the input field with the text
+				$('#sendTripEmailAddress').val($(this).attr("data-email"));
 			});
 		}
 	};

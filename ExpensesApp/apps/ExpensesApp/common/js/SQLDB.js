@@ -329,7 +329,7 @@ var DB = (function() {
 		 */
 		getEmailLogs : function(tid, callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT email, processDate FROM Logs WHERE tripID = ' + tid + ' ORDER BY processDate DESC';
+				var query = 'SELECT email, processDate FROM Logs WHERE tripID = ' + tid + ' ORDER BY processDate DESC, logID DESC';
 				tx.executeSql(query, [], function(tx, results) {
 					var logsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {

@@ -158,7 +158,7 @@ var ProcessTrips = (function() {
 					Utils.loadPageWithAnimation("tripExpenses", null, function() {
 						Utils.saveCurrentPageObject(ProcessTrips);						
 						// Pass selected 
-						TripExpenses.init(selectedTrip);
+						TripExpenses.init(selectedTrip, false);
 					});
 				});	
 			});
