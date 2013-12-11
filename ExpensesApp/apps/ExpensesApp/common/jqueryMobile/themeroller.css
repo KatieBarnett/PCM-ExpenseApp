@@ -983,7 +983,7 @@ a.ui-link-inherit {
 .ui-icon-alt .ui-icon-searchfield:after {
 	background-color: 						#fff;
 	background-color: 						rgba(255,255,255,.3);
-	background-image: url(images/icons-18-black.png);
+	background-image: url(images/icons-18-grey.png);
 	background-repeat: no-repeat;
 }
 /* No disc
@@ -1101,7 +1101,7 @@ a.ui-link-inherit {
 	}
 	
 	.ui-icon-althome .ui-icon{
-		background-image: url(images/icons-36-black.png);
+		background-image: url(images/icons-36-grey.png);
 	}
 	
 	.ui-icon-plus {
