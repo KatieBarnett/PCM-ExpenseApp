@@ -32,8 +32,8 @@ var SelectTrip = (function() {
 					// On Selection of trip, move to next screen
 					$('#tripList').on('click', '.tripSelected', function() {
 						var selectedTrip = $(this).attr("data-trip");
-						if (expenseID != null) {
-							DB.getExpense(expenseID, function(expense){
+						//if (expenseID != null) {
+//							DB.getExpense(expenseID, function(expense){
 								DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
 										expense["receipt"], selectedTrip, function () {
 									Utils.loadPage("mainPage", function() {
@@ -105,7 +105,7 @@ var SelectTrip = (function() {
 					} else {
 						console.log("empty text box detected");
 						$('#descriptionErrorMsg').removeClass('hidden');  
-					}
+					};
 				});
 
 				$('.finishLater').on('click',function() {

@@ -222,6 +222,7 @@ var DB = (function() {
 							singleAccountProject[value] = row[value];
 						});
 						accountsProjectsList.push(singleAccountProject);
+						console.log(singleAccountProject);
 					}
 					// Run the call function to return the array
 					if (callback) {
@@ -435,7 +436,9 @@ var DB = (function() {
 		 */
 		getExpense : function(eid, callback) {
 			// Convert either the id object into an int or take just the int value
+
 			var expenseID = eid && eid.seq ? eid.seq : eid;
+
 			db.transaction(function(tx) {
 				var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
 				tx.executeSql(query, [], function(tx, results) {
@@ -479,6 +482,7 @@ var DB = (function() {
 		 * 
 		 * @return  An array of email addresses ordered by descending order of use date
 		 */
+		
 		getEmailAddresses : function(callback) {
 			db.transaction(function(tx) {
 				var query = 'SELECT email FROM Logs ORDER BY processDate DESC';

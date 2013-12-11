@@ -1,24 +1,31 @@
 <script src="js/view/chargeTo.js"></script>
 <div>
 	<div data-role="header" data-theme="c">
-		<h2>Charge To:</h2>
+		
 		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
-	    <a href="#popupDialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-icon-nodisc btnShowModal" data-role="button" data-theme="e" data-icon="plus" data-iconpos="notext"></a>
+	    <h2>Charge To:</h2>
+	    <button class="ui-icon-nodisc ui-icon-alt btnShowModal" data-role="button" data-theme="e" data-icon="plus" data-iconpos="notext"> </button>
+	    
 	</div>
 	<div data-role="content">
 	   <p><canvas class="receiptThumb" id="receiptThumb" width="75" height="75"></canvas>Where should this expense be charged?</p>
-		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc clear">
-		    <li data-role="list-divider">Charge To:
-			   <button class="btnEditAcc" data-role="button" data-theme="e" data-icon="edit" data-iconpos="notext"></button>
+		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc clear" id="selectCodeList">
+		   <li data-role="list-divider">Charge To:
+
 			</li>
-			  <li><a class="selectTrip" data-icon="arrow-r">Default Accounting</a></li>
-			  <li><a class="selectTrip" data-icon="arrow-r">ANZ (1DHTA)</a></li>
-		      <li><a class="selectTrip" data-icon="arrow-r">NCVER (1DHTH)</a></li>
-			  <li><a class="selectTrip" data-icon="arrow-r">CBA (1DHTY)</a></li>
+			  <li data-code= "default accounting"><a class="selectCode" data-icon="arrow-r">Default Accounting</a></li> 
+			  <li><a class="selectCode" data-icon="arrow-r">ANZ (1DHTA)</a></li>
+		      <li><a class="selectCode" data-icon="arrow-r">NCVER (1DHTH)</a></li>
+			  <li><a class="selectCode" data-icon="arrow-r">CBA (1DHTY)</a></li>
 		</ul>
 		
-	<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
-          
+		<a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
+	 </div>
+		
+	<div data-role="popup" id="popupDialogue" data-overlay-theme="b" data-theme="b" data-history="false" style="max-width:400px;">
+          <span class="question">Add Client Code</span>
+          <div class="hidden" id="descriptionErrorMsg">Mandatory field missing!</div>
+
        <form>
        <div data-role="main" class="ui-content">
        <span class="question">Add Client Code</span>
@@ -28,13 +35,11 @@
             <option value="codeid">1DMPR</option>
             <option value="codeid">1DMN5</option>
           </select>
-          <input type="text" class="field" id="accDescription" required placeholder="Account/Project ID" />
-          <a data-rel="back" class="" data-role="button" data-theme="b">Cancel</a>
-          <button type="submit" class="" data-theme="a">Submit</button>
+          <input type="text" class="field" id="accID" required placeholder="Account/Project ID" />
+          <button id="cancelAddCode" data-theme="b">Cancel</button>
+          <button id="submitAddCode" class="" data-theme="a">Submit</button>
       </div>
       </form>
    </div>
 
-	  <a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
-  </div>
 </div>
