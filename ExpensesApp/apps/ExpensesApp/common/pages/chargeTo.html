@@ -8,17 +8,10 @@
 	    
 	</div>
 	<div data-role="content">
-	   <p><canvas class="receiptThumb" id="receiptThumb" width="75" height="75"></canvas>Where should this expense be charged?</p>
-		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc clear" id="selectCodeList">
-		   <li data-role="list-divider">Charge To:
 
-			</li>
-			  <li data-code= "default accounting"><a class="selectCode" data-icon="arrow-r">Default Accounting</a></li> 
-			  <li><a class="selectCode" data-icon="arrow-r">ANZ (1DHTA)</a></li>
-		      <li><a class="selectCode" data-icon="arrow-r">NCVER (1DHTH)</a></li>
-			  <li><a class="selectCode" data-icon="arrow-r">CBA (1DHTY)</a></li>
-		</ul>
-		
+	   <p><canvas class="receiptThumb" id="receiptThumb" width="75" height="75"></canvas>Where should this expense be charged?</p>
+		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc clear" id="selectCodeList"></ul>
+
 		<a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
 	 </div>
 		
@@ -26,9 +19,8 @@
           <span class="question">Add Client Code</span>
           <div class="hidden" id="descriptionErrorMsg">Mandatory field missing!</div>
 
-       <form>
+       
        <div data-role="main" class="ui-content">
-       <span class="question">Add Client Code</span>
           <input type="text" class="field" id="accDescription" required placeholder="Description of Account" />
           <select id="combobox" data-theme="c" data-icon="arrow-d" >
            <option value="">To be charged to</option>
@@ -39,7 +31,7 @@
           <button id="cancelAddCode" data-theme="b">Cancel</button>
           <button id="submitAddCode" class="" data-theme="a">Submit</button>
       </div>
-      </form>
+      
    </div>
 
 </div>

@@ -32,23 +32,15 @@ var SelectTrip = (function() {
 					// On Selection of trip, move to next screen
 					$('#tripList').on('click', '.tripSelected', function() {
 						var selectedTrip = $(this).attr("data-trip");
-						//if (expenseID != null) {
-//							DB.getExpense(expenseID, function(expense){
-								DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
-										expense["receipt"], selectedTrip, function () {
-									Utils.loadPage("mainPage", function() {
-										Utils.saveCurrentPageObject(SelectTrip);
-										MainPage.init();
-									});
+						DB.getExpense(expenseID, function(expense){
+							DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
+									expense["receipt"], selectedTrip, function () {
+								Utils.loadPage("mainPage", function() {
+									Utils.saveCurrentPageObject(SelectTrip);
+									MainPage.init();
 								});
-							});	
-						} else {
-							// This should not be required after completion of ChargeTo screen
-							Utils.loadPage("mainPage", function() {
-								Utils.saveCurrentPageObject(SelectTrip);
-								MainPage.init();
 							});
-						}
+						});
 					});
 				});
 
