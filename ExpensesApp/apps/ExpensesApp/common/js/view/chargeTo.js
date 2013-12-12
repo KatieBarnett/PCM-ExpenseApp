@@ -17,7 +17,7 @@ var ChargeTo = (function() {
 				Utils.getThumbNail(receipt, $('.receiptThumb')[0]);
 
 				$('.receiptThumb').on('click', function(){
-					Utils.getFullImage(receipt, ChargeTo);
+					Utils.getFullImage(receipt, expenseID, ChargeTo);
 				});
 			    
 				DB.getClientCodes(function(data){

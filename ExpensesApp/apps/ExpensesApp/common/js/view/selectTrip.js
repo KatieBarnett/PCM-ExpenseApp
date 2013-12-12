@@ -10,12 +10,12 @@ var SelectTrip = (function() {
 			
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
-				receipt = expense["receipt"];
-
-				Utils.getThumbNail(receipt, $('.receiptThumb')[0]);
+				var receipt = expense["receipt"];
+				console.log("the receipt URI is: " + receipt);
+				Utils.getThumbNail(receipt, $('#receiptTripThumb')[0]);
 
 				$('.receiptThumb').on('click', function(){
-					Utils.getFullImage(receipt, ExpenseType);
+					Utils.getFullImage(receipt, expenseID, ExpenseType);
 				});
 
 

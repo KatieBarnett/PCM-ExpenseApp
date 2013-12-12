@@ -172,10 +172,10 @@ var Utils = (function() {
 		 * @param ref, the URI of the image
 		 * @param page, the page that is calling the full image
 		 */
-		getFullImage: function(ref, page) {
+		getFullImage: function(ref, expenseID, page) {
 			console.log('loading viewReceipt');
 			//load viewReceiptPage
-			Utils.loadPageWithAnimation('viewReceipt',null, function() {
+			Utils.loadPageWithAnimation('viewReceipt',expenseID, function() {
 				Utils.saveCurrentPageObject(page); 
 				//change this to dynamically retrieve current page
 				ViewReceipt.init(ref);

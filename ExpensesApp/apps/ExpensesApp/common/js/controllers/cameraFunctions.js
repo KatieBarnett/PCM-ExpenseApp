@@ -7,23 +7,25 @@ var CameraFunctions = (function() {
 		
 		getPhotoFromLibrary : function(){
 			
-			 navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
+			 navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 45, 
 		        destinationType: navigator.camera.DestinationType.FILE_URI,
 		        sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
 		        correctOrientation: true,
-		        targetWidth: 2100,
-		        targetHeight: 2100
+		        encodingType : navigator.camera.EncodingType.JPEG,
+		        targetWidth: 1024,
+		        targetHeight: 1024
 		        });
 		},
 		
 		openCameraForImageCapture : function(){
 			
-			navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 50, 
+			navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 45, 
 		        destinationType: navigator.camera.DestinationType.FILE_URI,
 		        sourceType: navigator.camera.PictureSourceType.Camera,
 		        correctOrientation: true,
-		        targetWidth: 2100,
-		        targetHeight: 2100
+		        encodingType : navigator.camera.EncodingType.JPEG,
+		        targetWidth: 1024,
+		        targetHeight: 1024
 		        });
 
 		},

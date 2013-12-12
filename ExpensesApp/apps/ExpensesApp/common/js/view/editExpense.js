@@ -15,7 +15,7 @@ var EditExpense = (function() {
 				Utils.getThumbNail(expense["receipt"], document.getElementById('receiptThumb'));
 			    
 			    $('#receiptThumb').on('click', function(){
-			    	Utils.getFullImage(0, ExpenseType);
+			    	Utils.getFullImage(expense.receipt, expenseID, ExpenseType);
 			    });
 			    
 			    expenseUL = document.getElementById("expenseDetailsList");

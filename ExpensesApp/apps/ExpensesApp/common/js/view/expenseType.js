@@ -5,16 +5,14 @@
 
 var ExpenseType = (function() {
 	var expenseObject = null;
-	var receiptURI = null;
 	return {
 		setReceiptURI : function(URI) {
-			receiptURI = URI;
+			ImageURI.setCurrentImageURI(URI);
 			this.init();
 		},
 		
 		init : function(expenseID) {
 			console.log("ExpenseType :: init");
-			console.log(expenseID);
 			// Get the expense object if it exists
 			if (expenseID) {
 				DB.getExpense(expenseID, function(expense) {
@@ -26,14 +24,15 @@ var ExpenseType = (function() {
 			//draw thumbNail with latest receipt
 			if (expenseObject && expenseObject.receipt != 'undefined') {
 				thumbNailURI = expenseObject.receipt;
-			} else if (receiptURI) {
-				thumbNailURI = receiptURI;
+			} else if (ImageURI.getCurrentImageURI()) {
+				thumbNailURI = ImageURI.getCurrentImageURI();
 			}
-			console.log(thumbNailURI);
+				
+
 			Utils.getThumbNail(thumbNailURI, $('.receiptThumb')[0]);
 		    
 		    $('.receiptThumb').on('click', function(){
-		    	Utils.getFullImage(thumbNailURI, ExpenseType);
+		    	Utils.getFullImage(thumbNailURI, expenseID, ExpenseType);
 		    });
 			
 		    // Populate list of expenses
@@ -98,10 +97,15 @@ var ExpenseType = (function() {
 		    
 			// Navigation buttons functionality
 			$('.back').on('click', function() {
+				// Reset the current image URI
+				ImageURI.resetCurrentImageURI();
 				Utils.goBackWithAnimation();
 			});
 			
 			$('.finishLater').on('click',function() {
+				// Reset the current image URI
+				ImageURI.resetCurrentImageURI();
+				
 				// If expense has not previously been saved, save it then return to main page
 				if (expenseID == null) {
 					DB.addExpense(null, null, thumbNailURI, null, function(expenseID) {
@@ -124,6 +128,9 @@ var ExpenseType = (function() {
 			
 			// After expense type is selected, create or update expense record and pass id to next screen
 			$('.chargeTo').on('click', function() {
+				// Reset the current image URI
+				ImageURI.resetCurrentImageURI();
+				
 				var selectedType = $(this).attr("data-expense");
 				if (expenseID == null) {
 					DB.addExpense(selectedType, null, thumbNailURI, null, function(newExpenseID) {
