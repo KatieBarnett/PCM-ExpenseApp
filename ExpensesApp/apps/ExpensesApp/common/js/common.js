@@ -167,14 +167,18 @@ var Utils = (function() {
 			return previousObject;
 		},
 		
+		/**
+		 * Function that will get the full image
+		 * @param ref, the URI of the image
+		 * @param page, the page that is calling the full image
+		 */
 		getFullImage: function(ref, page) {
-			var imageData = receipts[ref];
 			console.log('loading viewReceipt');
 			//load viewReceiptPage
 			Utils.loadPageWithAnimation('viewReceipt',null, function() {
 				Utils.saveCurrentPageObject(page); 
 				//change this to dynamically retrieve current page
-				ViewReceipt.init(imageData);
+				ViewReceipt.init(ref);
 			});
 		},
 		

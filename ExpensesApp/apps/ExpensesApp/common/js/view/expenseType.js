@@ -4,15 +4,36 @@
  */
 
 var ExpenseType = (function() {
+	var expenseObject = null;
+	var receiptURI = null;
 	return {
+		setReceiptURI : function(URI) {
+			receiptURI = URI;
+			this.init();
+		},
+		
 		init : function(expenseID) {
 			console.log("ExpenseType :: init");
-		
+			console.log(expenseID);
+			// Get the expense object if it exists
+			if (expenseID) {
+				DB.getExpense(expenseID, function(expense) {
+					expenseObject = expense;
+				});
+			}
+			
+			var thumbNailURI = "images/no-receipt.gif";
 			//draw thumbNail with latest receipt
-			Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
+			if (expenseObject && expenseObject.receipt != 'undefined') {
+				thumbNailURI = expenseObject.receipt;
+			} else if (receiptURI) {
+				thumbNailURI = receiptURI;
+			}
+			console.log(thumbNailURI);
+			Utils.getThumbNail(thumbNailURI, $('.receiptThumb')[0]);
 		    
-		    $('#receiptThumb').on('click', function(){
-		    	Utils.getFullImage(0, ExpenseType);
+		    $('.receiptThumb').on('click', function(){
+		    	Utils.getFullImage(thumbNailURI, ExpenseType);
 		    });
 			
 		    // Populate list of expenses
@@ -22,6 +43,7 @@ var ExpenseType = (function() {
 		    
 		    expenseUL = document.getElementById("expenseList");
 		    
+		    console.log("got the UL");
 		    for (var i=0; i<expenseTypes.length; i++){
 		    		
 		    	group = expenseTypes[i]["expenseGroupID"];
@@ -72,6 +94,8 @@ var ExpenseType = (function() {
 		    $('#expenseList').trigger('create');
 		    $('#expenseList').listview('refresh');
 		    
+		    console.log("refresh list");
+		    
 			// Navigation buttons functionality
 			$('.back').on('click', function() {
 				Utils.goBackWithAnimation();
@@ -80,16 +104,21 @@ var ExpenseType = (function() {
 			$('.finishLater').on('click',function() {
 				// If expense has not previously been saved, save it then return to main page
 				if (expenseID == null) {
-					DB.addExpense(null, null, Utils.getReceipt(0), null, function(expenseID) {
-						console.log("finish later");
-						Utils.loadPageWithAnimation("mainPage", expenseID, function() {
+					DB.addExpense(null, null, thumbNailURI, null, function(expenseID) {
+						Utils.loadPage("mainPage", function() {
 							Utils.saveCurrentPageObject(ExpenseType);
 							MainPage.init();
 						});	
 					});	
 				} else {
-					Utils.saveCurrentPageObject(ExpenseType);
-					MainPage.init();
+					// Update the expense and then move to the main page
+					DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectCode"], 
+							expenseObject["receipt"], expenseObject["tripID"], function () {
+						Utils.loadPage("chargeTo", function() {
+							Utils.saveCurrentPageObject(ExpenseType);
+							MainPage.init();
+						});	
+					});
 				}	
 			});
 			
@@ -97,7 +126,7 @@ var ExpenseType = (function() {
 			$('.chargeTo').on('click', function() {
 				var selectedType = $(this).attr("data-expense");
 				if (expenseID == null) {
-					DB.addExpense(selectedType, null, Utils.getReceipt(0), null, function(newExpenseID) {
+					DB.addExpense(selectedType, null, thumbNailURI, null, function(newExpenseID) {
 						Utils.loadPageWithAnimation("chargeTo", newExpenseID, function() {
 							Utils.saveCurrentPageObject(ExpenseType);
 							ChargeTo.init(newExpenseID);
@@ -106,18 +135,14 @@ var ExpenseType = (function() {
 					});	
 				} else {
 					console.log("expense ID is not null");
-					DB.getExpense(expenseID, function(expense){
-						DB.updateExpense(expense["expenseID"], selectedType, expense["accountProjectCode"], 
-								expense["receipt"], expense["tripID"], function () {
-							Utils.loadPageWithAnimation("chargeTo", expense["expenseID"], function() {
-								Utils.saveCurrentPageObject(ExpenseType);
-								ChargeTo.init(expense["expenseID"]);
-							});	
-						});
-
+					DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectCode"], 
+							expenseObject["receipt"], expenseObject["tripID"], function () {
+						Utils.loadPageWithAnimation("chargeTo", expenseObject["expenseID"], function() {
+							Utils.saveCurrentPageObject(ExpenseType);
+							ChargeTo.init(expense["expenseID"]);
+						});	
 					});
-				}
-				 
+				}	 
 			});				
 		}
 	};

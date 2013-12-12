@@ -13,27 +13,12 @@ var ChargeTo = (function() {
 			
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
+				var receipt = expense["receipt"];
+				Utils.getThumbNail(receipt, $('.receiptThumb')[0]);
 
-				if ((expense["receipt"] == null) || (expense["receipt"] == undefined)){
-					console.log("Receipt not saved");
-					receipt = Utils.getReceipt(0);
-				} else {
-					receipt = expense["receipt"];
-				}
-
-				Utils.getThumbNail(receipt, document.getElementById('receiptThumb'));
-
-				$('#receiptThumb').on('click', function(){
-					Utils.getFullImage(0, ExpenseType);
+				$('.receiptThumb').on('click', function(){
+					Utils.getFullImage(receipt, ChargeTo);
 				});
-				
-				//draw thumbNail with latest receipt
-				Utils.getThumbNail(Utils.getReceipt(0), document.getElementById('receiptThumb'));
-			    
-			    $('#receiptThumb').on('click', function(){
-			    	Utils.getFullImage(0, ChargeTo);
-			    	console.log("receipt built");
-			    });
 			    
 				DB.getClientCodes(function(data){
 					// Build the list

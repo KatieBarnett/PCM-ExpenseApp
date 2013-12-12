@@ -10,18 +10,12 @@ var SelectTrip = (function() {
 			
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
+				receipt = expense["receipt"];
 
-				if ((expense["receipt"] == null) || (expense["receipt"] == undefined)){
-					console.log("Receipt not saved");
-					receipt = Utils.getReceipt(0);
-				} else {
-					receipt = expense["receipt"];
-				}
+				Utils.getThumbNail(receipt, $('.receiptThumb')[0]);
 
-				Utils.getThumbNail(receipt, document.getElementById('receiptThumb'));
-
-				$('#receiptThumb').on('click', function(){
-					Utils.getFullImage(0, ExpenseType);
+				$('.receiptThumb').on('click', function(){
+					Utils.getFullImage(receipt, ExpenseType);
 				});
 
 

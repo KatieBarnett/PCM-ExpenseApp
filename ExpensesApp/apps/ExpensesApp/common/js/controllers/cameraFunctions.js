@@ -35,7 +35,7 @@ var CameraFunctions = (function() {
 				//need to transfer to expenseType page
 				Utils.loadPageWithAnimation('expenseType', null, function() {
 					Utils.saveCurrentPageObject(MainPage);
-					ExpenseType.init();
+					ExpenseType.setReceiptURI(imageURI);
 				});
 		},
 		 
