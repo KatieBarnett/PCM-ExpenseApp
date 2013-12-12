@@ -24,6 +24,7 @@
 		<div class="sendDetailsContainer">
 			<form id="emailForm">
 				<span>Where would you like to send this trip?</span>
+				<span class="hidden" id="emailError">Mandatory field missing!</span>
 				<input type="text" id="sendTripEmailAddress" required placeholder="Email address" />
 			</form>
 			<div id="recentEmailArea" class="hidden">
@@ -41,7 +42,7 @@
 	<div data-role="popup" id="editTripModal" data-history="false" class="tripModal">
 		<div data-role="main" class="ui-content">
 			<span class="question">Edit Trip</span>
-			<div class="hidden" id="descriptionErrorMsg">Mandatory field missing!</div>
+			<div class="hidden" id="editTripError">Mandatory field missing!</div>
 			<input type="text" class="field" id="editTripDescription" required placeholder="Description of trip" />	
 			<input id="editStartDate" type="date" placeholder="Starts"/>
 			<input id="editEndDate" type="date" placeholder="Ends" />

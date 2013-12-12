@@ -5,8 +5,10 @@
 
 var TripExpenses = (function() {
 	var fromHistoryPage = null;
-	var EMAIL_SENT = 2;
-	return {		
+	return {
+		// Constants used in the function
+		EMAIL_SENT : 2,
+		
 		init : function(selectedTrip, fromHistory) {
 			console.log("TripExpenses :: init");
 			
@@ -97,6 +99,7 @@ var TripExpenses = (function() {
 			
 			// Handler for when the send details button is clicked
 			$('#sendTripDetailsBtn').on('click', function() {
+				$('#emailError').addClass("hidden");
 				TripExpenses._animateTripPopup();
 				
 				// Handler for when the cancel button is clicked
@@ -149,6 +152,9 @@ var TripExpenses = (function() {
 					$('#editStartDate').val(tripStart);
 					$('#editEndDate').val(tripEnd);
 					
+					// Hide the error message
+					$('#editTripError').addClass("hidden");
+					
 					// Bring up the modal
 					$('#editTripModal').popup("open");
 				});
@@ -164,17 +170,21 @@ var TripExpenses = (function() {
 					var tripStartDate = $('#editStartDate').val();
 					var tripEndDate = $('#editEndDate').val();
 					
-					// Submit the update to the DB
-					DB.updateTrip(selectedTrip, tripDescription, tripStartDate, tripEndDate, function() {
-						// Close the modal
-						$('#editTripModal').popup("close");
-						
-						// Clear the current title
-						TripExpenses._removeTitles();
-						
-						// Reload the current page
-						TripExpenses._fillTitles(tripDescription, tripStartDate, tripEndDate);
-					});
+					if (tripDescription.length > 0) {
+						// Submit the update to the DB
+						DB.updateTrip(selectedTrip, tripDescription, tripStartDate, tripEndDate, function() {
+							// Close the modal
+							$('#editTripModal').popup("close");
+							
+							// Clear the current title
+							TripExpenses._removeTitles();
+							
+							// Reload the current page
+							TripExpenses._fillTitles(tripDescription, tripStartDate, tripEndDate);
+						});
+					} else {
+						$('#editTripError').removeClass("hidden");
+					}
 				});
 			});
 		},
@@ -240,17 +250,46 @@ var TripExpenses = (function() {
 				var callback = function() {
 					// Check if the email was sent properly
 					var onComplete = function(returnValue) {
-						// Have the alert confirm if the email was sent?
-						if (returnValue == EMAIL_SENT) {
-							alert("Email sent");
+						if (Utils.isAndroid()) {
+							// Setting up the confirmation text for Android
+							var confirmText = "Has the email been sent to " + emailAddress + "?";
 							
-							// Update the trip to be processed
-							DB.processTrip(selectedTrip, Utils.getTodaysDate(), function() {
-								// Go to the main page after trip has been processed
-								Utils.loadPage("mainPage", function() {
-									MainPage.init();
-								});
-							});
+							// The rest of the confirmation text will change depending on where the user came from
+							if (fromHistoryPage) {
+								confirmText += " The submit date will be updated.";
+							} else {
+								confirmText += " This will process the trip and be moved to history.";
+							}
+							
+							// The user will need to press ok for the app to process the trip, as there is no return code for Androids
+							if (confirm(confirmText)) {
+								// Process the trip to the history
+								TripExpenses._processEmail(selectedTrip);
+							} else {
+								// Alerting the user if they cancelled the process
+								alert("This trip has not been processed.");
+							}
+						} else {
+							// The iOS will not need the user to actively set the confirmation
+							if (returnValue == TripExpenses.EMAIL_SENT) {
+								// Setting up the alert text for iOS
+								var alertText = "The trip has been emailed to " + emailAddress + ".";
+								
+								// The rest of the alert text will change depending on where the user came from
+								if (fromHistoryPage) {
+									alertText += " The submit date will be updated.";
+								} else {
+									alertText += " This trip will be moved to history.";
+								}
+								
+								// Display the alert to the user
+								alert(alertText);
+								// Process the trip to the history
+								TripExpenses._processEmail(selectedTrip);
+							} else {
+								// Alert the user to an error or the email has just been drafted.
+								alert("This trip has not been processed due to email being saved as a draft or an error has occurred.");
+							}
 						}
 					};
 					
@@ -271,6 +310,9 @@ var TripExpenses = (function() {
 				
 				// Save the email address to the DB
 				DB.logTrip(selectedTrip, emailAddress, Utils.getTodaysDate(), callback);
+			} else {
+				// Show the error message
+				$('#emailError').removeClass("hidden");
 			}
 		},
 		
@@ -323,6 +365,20 @@ var TripExpenses = (function() {
 			$('.recentEmail').on('click',function() {
 				// Fill the input field with the text
 				$('#sendTripEmailAddress').val($(this).attr("data-email"));
+			});
+		},
+		
+		/**
+		 * Function that will mark the trip as processed so it will appear in the history page.
+		 * @param selectedTrip, the trip ID
+		 */
+		_processEmail : function(selectedTrip) {
+			// Update the trip to be processed
+			DB.processTrip(selectedTrip, Utils.getTodaysDate(), function() {
+				// Go to the main page after trip has been processed
+				Utils.loadPage("mainPage", function() {
+					MainPage.init();
+				});
 			});
 		}
 	};

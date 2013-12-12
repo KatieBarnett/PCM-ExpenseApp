@@ -46,7 +46,7 @@
      
     function EmailComposer() {
         this.resultCallback = null; // Function
-    }
+    };
 
     EmailComposer.ComposeResultType = {
         Cancelled:0,
@@ -54,7 +54,7 @@
         Sent:2,
         Failed:3,
         NotSent:4
-    }
+    };
 
     // showEmailComposer : all args optional
     EmailComposer.prototype.showEmailComposer = function(subject, body, toRecipients, ccRecipients, bccRecipients, bIsHTML, attachments) {
@@ -66,17 +66,17 @@
         args.bccRecipients = bccRecipients ? bccRecipients : [];
         args.bIsHTML = bIsHTML ? true : false;
         args.attachments = attachments ? attachments : [];
-        cordovaRef.exec(null, null, "EmailComposer", "showEmailComposer", [args]);
-    }
+        cordovaRef.exec(this.resultCallback, null, "EmailComposer", "showEmailComposer", [args]);
+    };
 
     EmailComposer.prototype.showEmailComposerWithCallback = function(callback, subject, body, toRecipients, ccRecipients, bccRecipients, isHTML, attachments) {
         this.resultCallback = callback;
         this.showEmailComposer.apply(this, [subject, body, toRecipients, ccRecipients, bccRecipients, isHTML, attachments]);
-    }
+    };
 
     EmailComposer.prototype._didFinishWithResult = function(res) {
         this.resultCallback(res);
-    }
+    };
 
     cordovaRef.addConstructor(function() {
            if (!window.plugins) {
