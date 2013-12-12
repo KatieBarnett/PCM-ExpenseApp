@@ -128,6 +128,7 @@ var SelectTrip = (function() {
 			// Build the list divider
 			$('<li>', {"data-role":"list-divider", text: "Trips"}).appendTo("#tripList");
 
+			
 			for(var i=0; i<data.length; i++){
 				tripLI = document.createElement("li");
 

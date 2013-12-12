@@ -5,6 +5,7 @@
 
 var TripExpenses = (function() {
 	var fromHistoryPage = null;
+	var EMAIL_SENT = 2;
 	return {		
 		init : function(selectedTrip, fromHistory) {
 			console.log("TripExpenses :: init");
@@ -240,7 +241,7 @@ var TripExpenses = (function() {
 					// Check if the email was sent properly
 					var onComplete = function(returnValue) {
 						// Have the alert confirm if the email was sent?
-						if (returnValue > 0 && returnValue <= 3) {
+						if (returnValue == EMAIL_SENT) {
 							alert("Email sent");
 							
 							// Update the trip to be processed

@@ -227,6 +227,8 @@ var Utils = (function() {
 		
 		/** 
 		 * Function to strip the 'file:///' from the file name
+		 * @params stringToStrip the string containing the full path
+		 * @return string
 		 */
 		stripFile : function(stringToStrip) {
 			var strippedString = stringToStrip.replace(/file:\/\/\//g, '');
@@ -235,10 +237,20 @@ var Utils = (function() {
 		
 		/** 
 		 * Function to convert the file name into xxxxx.jpg (human readable format)
+		 * @params 
 		 */
 		convertFile : function(filename) {
 			var splitString = filename.split('/');
 			return splitString[splitString.length-1]; 
+		},
+		
+		/**
+		 * Function to determine if the environment is android or not
+		 * @return boolean
+		 */
+		isAndroid : function() {
+			var isAndroid = WL.Client.getEnvironment() == WL.Environment.ANDROID;
+			return isAndroid;
 		}
 	};
 } ());
