@@ -236,6 +236,7 @@ var TripExpenses = (function() {
 		 * @param selectedTrip
 		 */
 		_sendTrip : function(selectedTrip, expenseBody, emailAttachments) {
+			var sendEmail = true;
 			// Get the trip name that is being emailed.
 			var emailSubject = "Expenses for " + $('#tripName').html();
 			
@@ -272,40 +273,44 @@ var TripExpenses = (function() {
 						} else {
 							// The iOS will not need the user to actively set the confirmation
 							if (returnValue == TripExpenses.EMAIL_SENT) {
-								// Setting up the alert text for iOS
-								var alertText = "The trip has been emailed to " + emailAddress + ".";
-								
-								// The rest of the alert text will change depending on where the user came from
-								if (fromHistoryPage) {
-									alertText += " The submit date will be updated.";
-								} else {
-									alertText += " This trip will be moved to history.";
-								}
-								
-								// Display the alert to the user
-								alert(alertText);
-								// Process the trip to the history
 								TripExpenses._processEmail(selectedTrip);
-							} else {
-								// Alert the user to an error or the email has just been drafted.
-								alert("This trip has not been processed due to email being saved as a draft or an error has occurred.");
 							}
 						}
 					};
+					
+					// Alerts after the call back will break iOS, so confirmation should be used instead.
+					if (!Utils.isAndroid()) {
+						var alertText = "Once the trip has been emailed to " + emailAddress + ".";
+						
+						// The rest of the alert text will change depending on where the user came from
+						if (fromHistoryPage) {
+							alertText += " The submit date will be updated.";
+						} else {
+							alertText += " The trip will be moved to history.";
+						}
+						
+						if (confirm(alertText)) {
+							sendEmail = true;
+						} else {
+							sendEmail = false;
+						}
+					}
 					
 					/*
 					 * To use the email composer plugin, the following arguments are as follows:
 					 * showEmailComposerWithCallback(callback, subject, body, to, cc, bcc, boolean HTML, attachments)
 					 */
-					window.plugins.emailComposer.showEmailComposerWithCallback(
-							onComplete,
-							emailSubject, 
-							emailBody, 
-							[emailAddress],
-							[],
-							[],
-							true,
-							emailAttachments);
+					if (sendEmail) {
+						window.plugins.emailComposer.showEmailComposerWithCallback(
+								onComplete,
+								emailSubject, 
+								emailBody, 
+								[emailAddress],
+								[],
+								[],
+								true,
+								emailAttachments);
+					}
 				};
 				
 				// Save the email address to the DB

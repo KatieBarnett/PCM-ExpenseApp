@@ -19,7 +19,14 @@ var CameraFunctions = (function() {
 		
 		openCameraForImageCapture : function(){
 			
-			navigator.camera.getPicture(CameraFunctions.onPhotoURISuccess, CameraFunctions.onFail,{ quality: 45, 
+			var onSuccess = null;
+			if(Utils.isAndroid()) {
+				onSuccess = CameraFunctions.onPhotoURISuccess;
+			} else {
+				onSuccess = CameraFunctions.onPhotoSelectURISuccess;
+			}
+			
+			navigator.camera.getPicture(onSuccess, CameraFunctions.onFail,{ quality: 45, 
 		        destinationType: navigator.camera.DestinationType.FILE_URI,
 		        sourceType: navigator.camera.PictureSourceType.Camera,
 		        correctOrientation: true,
@@ -52,12 +59,17 @@ var CameraFunctions = (function() {
 		 * @param imageURI, the initial URI for the image selected.
 		 */
 		onPhotoSelectURISuccess : function(imageURI) {
-			// Get the unique timestamp name
-			var uniqueId = imageURI.substring(imageURI.lastIndexOf("?") + 1) + ".jpg";
+			console.log(imageURI);
 			var cachePath = "";
+			var uniqueId = "";
 			// Set the cachePath to Android specific file location if device is Android
 			if (Utils.isAndroid()) {
+				// Get the unique timestamp name
+				uniqueId = imageURI.substring(imageURI.lastIndexOf("?") + 1) + ".jpg";
 				cachePath = "Android/data/com.ExpensesApp/cache";
+			} else {
+				uniqueId = imageURI.substring(imageURI.lastIndexOf("/") + 1);
+				cachePath = "temporayPhotos";
 			}
 			
 			// When the resolution of the file system is successful
@@ -78,11 +90,16 @@ var CameraFunctions = (function() {
 							console.log("Error code for copy: " + error.code);
 						});
 					};
-					
-					// Get the directory to store the new file in the same location as where all the other photos are located
-					fileSys.root.getDirectory(cachePath, {create: false}, onDirectorySuccess, function(error) {
-						console.log("get directory failed " + error.code);
-					});
+					if (Utils.isAndroid()) {
+						// Get the directory to store the new file in the same location as where all the other photos are located
+						fileSys.root.getDirectory(cachePath, {create: false}, onDirectorySuccess, function(error) {
+							console.log("get directory failed " + error.code);
+						});
+					} else {
+						fileSys.root.getDirectory(cachePath, {create:true, exclusive: false},onDirectorySuccess, function(error) {
+							console.log("get directory for iOS failed " + error.code);
+						});
+					}
 				};
 				
 				// Request the file system to make sure the file can be stored in a persistent area
@@ -95,6 +112,6 @@ var CameraFunctions = (function() {
 			window.resolveLocalFileSystemURI(imageURI, onResolveSuccess, function(error) {
 				console.log("resolve local fs failed " + error.code);
 			});
-		}
+		} 
 	};
 }());
