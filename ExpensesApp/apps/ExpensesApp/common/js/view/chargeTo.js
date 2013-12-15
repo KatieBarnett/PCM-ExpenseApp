@@ -25,6 +25,10 @@ var ChargeTo = (function() {
 					ChargeTo._buildCodeList(data);
 				});
 				
+			
+				//build combobox options
+				ChargeTo._buildComboboxOptions(DB.getChargeAccountCodes());
+				
 				// On Selection of trip, move to next screen
 				$('#selectCodeList').on('click', '.selectCode', function() {
 					console.log("button pressed.");
@@ -82,7 +86,7 @@ var ChargeTo = (function() {
 					$('#accID').val("");
 					$('#combobox').val("");
 					$("#popupDialogue").popup("open");
-						
+					
 				});
 				
 				// Handler for when the cancel button is clicked on the modal
@@ -92,6 +96,7 @@ var ChargeTo = (function() {
 				    $("#popupDialogue").popup("close");
 	
 				});
+				
 	           
 				// Handler for when the submit button is clicked on the modal
 				$('#submitAddCode').on('click', function(event) {
@@ -175,6 +180,22 @@ var ChargeTo = (function() {
 			$('#selectCodeList').empty();
 		
 		},
+		
+		/**
+		 * Function to create combobox
+		 * @param none
+		 */
+		_buildComboboxOptions : function(data) {
+			console.log(data);
+			for (var i in data) {
+				$('<option>', { text : data[i]}).appendTo('#combobox');
+				
+			}
+			
+			// Refresh the combobox view
+			$('#combobox').selectmenu('refresh');
+		}
+		
 		
 		
 	};

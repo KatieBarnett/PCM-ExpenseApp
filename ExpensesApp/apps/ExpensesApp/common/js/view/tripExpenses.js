@@ -277,6 +277,7 @@ var TripExpenses = (function() {
 							}
 						}
 					};
+					onComplete(2);
 					
 					// Alerts after the call back will break iOS, so confirmation should be used instead.
 					if (!Utils.isAndroid()) {
@@ -300,6 +301,7 @@ var TripExpenses = (function() {
 					 * To use the email composer plugin, the following arguments are as follows:
 					 * showEmailComposerWithCallback(callback, subject, body, to, cc, bcc, boolean HTML, attachments)
 					 */
+
 					if (sendEmail) {
 						window.plugins.emailComposer.showEmailComposerWithCallback(
 								onComplete,
@@ -340,8 +342,13 @@ var TripExpenses = (function() {
 			
 			// Attach handler for when email log is clicked
 			$('#emailLogBtn').on('click', function() {
-				alert("Email log clicked, not yet implemented!");
+				Utils.loadPageWithAnimation("EmailLog", selectedTrip, function() {
+					Utils.saveCurrentPageObject(TripExpenses);
+					EmailLog.init(selectedTrip);
+				
 			});
+		});
+			
 		},
 		
 		/**
