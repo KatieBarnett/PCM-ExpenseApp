@@ -2,6 +2,7 @@
     <wb-module deploy-name="ExpensesApp">
         <wb-resource deploy-path="/" source-path="/apps/ExpensesApp/common"/>
         <wb-resource deploy-path="/" source-path="/apps/ExpensesApp/android"/>
+        <wb-resource deploy-path="/" source-path="/server/java"/>
         <property name="context-root" value="ExpensesApp"/>
     </wb-module>
 </project-modules>

@@ -126,14 +126,15 @@ var TripExpenses = (function() {
 				
 				// Get the email last used to send the trip and display it to the user
 				DB.getEmailLogs(selectedTrip, function(emailAddresses) {
-					if (emailAddresses && emailAddresses[0] && emailAddresses[0].email) {
-						TripExpenses._showLastEmail(emailAddresses[0]);
+					console.log(emailAddresses);
+					if (emailAddresses.length > 0) {
+						TripExpenses._showLastEmail(emailAddresses);
 					}
 				}); 
 			} else {
 				// Get the last email the user tried to send an email to and display it
 				DB.getLastEmail(function(emailAddress) {
-					if (emailAddress && emailAddress.email) {
+					if (emailAddress.length > 0) {
 						TripExpenses._showLastEmail(emailAddress);
 					}
 				});
@@ -296,7 +297,6 @@ var TripExpenses = (function() {
 							}
 						}
 					};
-					onComplete(2);
 					
 					// Alerts after the call back will break iOS, so confirmation should be used instead.
 					if (!Utils.isAndroid()) {
@@ -385,10 +385,27 @@ var TripExpenses = (function() {
 		 */
 		_showLastEmail : function(emailAddress) {
 			$('#recentEmailArea').removeClass("hidden");
+			var firstEmail = null;
+			var secondEmail = null;
+			
+			// Find the email addresses and determine whether one should be displayed or two
+			firstEmail = emailAddress[0].email;
+			for (var i in emailAddress) {
+				if (firstEmail != emailAddress[i].email) {
+					secondEmail = emailAddress[i].email;
+					break;
+				}
+			}
 			
 			// Add the email address to a button
-			$('<a>', { href:"#", text: emailAddress.email, "data-icon":"false"}).appendTo(
-					$('<li>', {"class" : "recentEmail", "data-email" : emailAddress.email}).appendTo('#recentEmailList'));
+			$('<a>', { href:"#", text: firstEmail, "data-icon":"false"}).appendTo(
+					$('<li>', {"class" : "recentEmail", "data-email" : firstEmail}).appendTo('#recentEmailList'));
+			
+			if (secondEmail) {
+				$('<a>', { href:"#", text: secondEmail, "data-icon":"false"}).appendTo(
+						$('<li>', {"class" : "recentEmail", "data-email" : secondEmail}).appendTo('#recentEmailList'));
+			}
+			
 			// Refresh the list view for the CSS
 			$('#recentEmailList').listview('refresh');
 			

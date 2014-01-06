@@ -339,6 +339,7 @@ var DB = (function() {
 						$.each(["email", "processDate"], function(index, value) {
 							singleLog[value] = row[value];
 						});
+						console.log(singleLog);
 						logsList.push(singleLog);
 					}
 					if (callback) {
@@ -349,7 +350,7 @@ var DB = (function() {
 		},
 		
 		/**
-		 * Retrieves the latest email from the logs table
+		 * Retrieves the latest 2 emails from the logs table
 		 * 
 		 * @return		A single object containing the email address
 		 */
@@ -357,13 +358,13 @@ var DB = (function() {
 			db.transaction(function(tx) {
 				var query = 'SELECT email FROM Logs ORDER BY logID DESC';
 				tx.executeSql(query, [], function(tx, results) {
-					var row = null;
-					if (results.rows.length > 0) {
-						row = results.rows.item(0);
+					var email = new Array();
+					for (var i = 0; i < results.rows.length; i++) {
+						email.push(results.rows.item(i));
 					}
 					
 					if (callback) {
-						callback(row);						
+						callback(email);						
 					}
 				}, errorCB);
 			}, errorCB);
