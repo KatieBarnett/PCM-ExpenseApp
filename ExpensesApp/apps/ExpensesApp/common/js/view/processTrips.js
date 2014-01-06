@@ -97,9 +97,17 @@ var ProcessTrips = (function() {
 					tripLI.setAttribute("data-trip", data[i]["tripID"]);
 					tripLI.appendChild(tripAnchor);
 					tripDates = document.createElement("p");
-					tripDates.appendChild(document.createTextNode(data[i]["startDate"]));
-					tripDates.appendChild(document.createTextNode("/"));
-					tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
+					if (data[i]["startDate"]) {				
+						tripDates.appendChild(document.createTextNode(data[i]["startDate"]));						
+					}
+					if (data[i]["startDate"] && data[i]["endDate"]) {
+						tripDates.appendChild(document.createTextNode("/"));
+					} else if (!data[i]["startDate"] && !data[i]["endDate"]) {
+						tripDates.appendChild(document.createTextNode("No trip dates specified."));
+					}
+					if (data[i]["endDate"]) {
+						tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
+					}
 					tripLI.appendChild(tripDates);
 					tripUL.appendChild(tripLI);
 					

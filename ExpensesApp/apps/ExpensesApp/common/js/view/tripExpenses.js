@@ -69,9 +69,11 @@ var TripExpenses = (function() {
 							expenseList.appendChild(expenseLI);
 							
 							// Build the email body while we are here
-							expenseBody = expenseBody + "<br/><strong>Expense " + count + "</strong><br/>" + expenseTypes[i]["expenseTypeID"] + "<br/>" +
-							data[j]["accountProjectName"] + " - " + data[j]["accountProjectCode"] + "<br/>" +
-							"Filename: " + Utils.convertFile(data[j]["receipt"]) + "<br/><br/>";
+							expenseBody = expenseBody + "<br/><strong>Expense " + count + "</strong><br/>" + expenseTypes[i]["expenseTypeID"] + "<br/>";
+							if (data[j]["accountProjectName"]) {
+								expenseBody = expenseBody + data[j]["accountProjectName"] + " - ";
+							}
+							expenseBody = expenseBody + data[j]["accountProjectCode"] + "<br/>" + "Filename: " + Utils.convertFile(data[j]["receipt"]) + "<br/><br/>";
 							count++;
 						}
 					}
@@ -206,9 +208,19 @@ var TripExpenses = (function() {
 		 * @param tripEnd the end date of the trip
 		 */
 		_fillTitles : function(tripName, tripStart, tripEnd) {
-			$('#tripName').html(tripName);
-			$('#tripStart').html(tripStart);
-			$('#tripEnd').html(tripEnd);
+			if (tripName) {
+				$('#tripName').html(tripName);
+			}
+			if (tripStart) {
+				$('#tripStart').html(tripStart);
+			} else {
+				$('#tripStartTitle').empty();
+			}
+			if (tripEnd) {
+				$('#tripEnd').html(tripEnd);
+			} else {
+				$('#tripEndTitle').empty();
+			}
 		},
 		
 		/**
@@ -242,8 +254,15 @@ var TripExpenses = (function() {
 			
 			// Build the body of the email
 			
-			var emailBody = "<html><head></head>Please find attached the expense receipts for the trip <span>" + $('#tripName').html() + "</span> for the period <span>" + $('#tripStart').html() + "</span> to <span>" + $('#tripEnd').html() + "</span>." + 
-			"<br/><br/>" + expenseBody + "</html>";
+			var emailBody = "<html><head></head>Please find attached the expense receipts for the trip <span>" + $('#tripName').html() + "</span> ";
+			if ($('#tripStart').length > 0 && $('#tripEnd').length > 0) {
+				emailBody = emailBody + "for the period <span>" + $('#tripStart').html() + "</span> to <span>" + $('#tripEnd').html() + "</span>"; 
+			} else if ($('#tripStart').length > 0) {
+				emailBody = emailBody + "for <span>" + $('#tripStart').html() + "</span>";
+			} else if ($('#tripEnd').length > 0) {
+				emailBody = emailBody + "for <span>" + $('#tripEnd').html() + "</span>"; 
+			}
+			emailBody = emailBody + ".<br/><br/>" + expenseBody + "</html>";
 			
 			// Get the entered in email address
 			var emailAddress = $('#sendTripEmailAddress').val();
