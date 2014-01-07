@@ -85,10 +85,16 @@ var TripExpenses = (function() {
 				// Move to next page after expense type is selected, pass expenseTypeID
 				$('.expenseItem').on('click', function() {
 					var expenseID = $(this).attr("data-expense");
-					Utils.loadPageWithAnimation("editExpense", selectedTrip, function() {
-						Utils.saveCurrentPageObject(TripExpenses);
-						EditExpense.init(expenseID);
-					});
+					// Check if the element type of this event element is the image, if so, just display the thumbnail
+					if (event.target.nodeName.toUpperCase() == "IMG") {
+						Utils.getFullImage(event.target.getAttribute("src"), expenseID, TripExpenses);
+					} else {
+						// Otherwise load the expense details
+						Utils.loadPageWithAnimation("editExpense", selectedTrip, function() {
+							Utils.saveCurrentPageObject(TripExpenses);
+							EditExpense.init(expenseID);
+						});
+					}
 				});
 			});
 			

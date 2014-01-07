@@ -42,7 +42,7 @@ var ProcessTrips = (function() {
 				};
 				$('#unassociatedExpenseList').listview('refresh');
 
-				// Move to next page after expense type is selected, pass expenseTypeID
+				// Move to next page after trip is selected, pass expenseTypeID
 				$('.tripSelected').on('click', function() {
 					var expenseID = $(this).attr("data-expense");
 					Utils.loadPageWithAnimation("editExpense", null, function() {
@@ -52,32 +52,38 @@ var ProcessTrips = (function() {
 				});
 				
 				// Handler for when the user clicks on the unassociated item.
-				$('.unassociatedExpenseItem').on('click', function() {
-					var expenseID = parseInt($(this).attr("data-expense"));
+				$('.unassociatedExpenseItem').on('click', function(event) {
 					
-					// Get the expense entry from the DB from the selected item
-					DB.getExpense(expenseID, function(singleExpense) {
-						console.log(singleExpense.expenseTypeID);
-						if (singleExpense.expenseTypeID == "null") {
-							// Move the user to the beginning of the process flow
-							Utils.loadPageWithAnimation("expenseType", null, function() {
-								Utils.saveCurrentPageObject(ProcessTrips);
-								ExpenseType.init(expenseID);
-							});
-						} else if (singleExpense.accountProjectCode == "null") {
-							// Move the user to select the charge to code
-							Utils.loadPageWithAnimation("chargeTo", null, function() {
-								Utils.saveCurrentPageObject(ProcessTrips);
-								ChargeTo.init(expenseID);
-							});
-						} else if (singleExpense.tripID) {
-							// Move the user to select a trip to associate the expense to
-							Utils.loadPageWithAnimation("selectTrip", null, function() {
-								Utils.saveCurrentPageObject(ProcessTrips);
-								SelectTrip.init(expenseID);
-							});
-						}
-					});
+					var expenseID = parseInt($(this).attr("data-expense"));			
+					// Check if the element type of this event element is the image, if so, just display the thumbnail
+					if (event.target.nodeName.toUpperCase() == "IMG") {
+						Utils.getFullImage(event.target.getAttribute("src"), expenseID, ProcessTrips);
+					} else {
+						// Otherwise complete the expense details
+						// Get the expense entry from the DB from the selected item
+						DB.getExpense(expenseID, function(singleExpense) {
+							console.log(singleExpense.expenseTypeID);
+							if (singleExpense.expenseTypeID == "null") {
+								// Move the user to the beginning of the process flow
+								Utils.loadPageWithAnimation("expenseType", null, function() {
+									Utils.saveCurrentPageObject(ProcessTrips);
+									ExpenseType.init(expenseID);
+								});
+							} else if (singleExpense.accountProjectCode == "null") {
+								// Move the user to select the charge to code
+								Utils.loadPageWithAnimation("chargeTo", null, function() {
+									Utils.saveCurrentPageObject(ProcessTrips);
+									ChargeTo.init(expenseID);
+								});
+							} else if (singleExpense.tripID) {
+								// Move the user to select a trip to associate the expense to
+								Utils.loadPageWithAnimation("selectTrip", null, function() {
+									Utils.saveCurrentPageObject(ProcessTrips);
+									SelectTrip.init(expenseID);
+								});
+							}
+						});
+					}
 				});
 			});
 
