@@ -16,8 +16,7 @@ var ProcessTrips = (function() {
 					expenseLI.setAttribute("class", "unassociatedExpenseItem");
 					expenseLI.setAttribute("data-icon", "none");
 					expenseAnchor = document.createElement("a");
-
-					if (expenseData[i]["expenseTypeID"] == null){
+					if (expenseData[i]["expenseTypeID"] == null || expenseData[i]["expenseTypeID"] == "null"){
 						expenseAnchor.appendChild(document.createTextNode("Please complete the expense questions"));
 					} else {
 						expenseAnchor.appendChild(document.createTextNode(expenseData[i]["expenseTypeID"]));
