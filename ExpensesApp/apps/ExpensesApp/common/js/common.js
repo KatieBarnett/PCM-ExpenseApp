@@ -108,6 +108,9 @@ var Utils = (function() {
 				// Move the current container into the centre of the screen and then hide the other container
 				$(currentContainer).animate({left:"0%"}, 500, function() {
 					$(PageChangeHelper.getOtherContainer()).css('display','none');
+					// Destroy the other container
+					$(PageChangeHelper.getOtherContainer()).empty();
+					
 					// Execute the call back function if it exists
 					if (callbackFunction == null) {
 						alert("Missing callback function. Need init");
@@ -142,8 +145,10 @@ var Utils = (function() {
 				$(PageChangeHelper.getOtherContainer()).animate({left:'100%'}, 500);
 				$(currentContainer).animate({left:'0%'}, 500, function() {
 					$(PageChangeHelper.getOtherContainer()).css('display','none');
+					// Destroy the other container
+					$(PageChangeHelper.getOtherContainer()).empty();
 					// Execute the call back function
-					if (callbackFunction != null) {
+					if (callbackFunction) {
 						callbackFunction();
 					}
 				});

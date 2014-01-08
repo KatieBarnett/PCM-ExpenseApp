@@ -116,9 +116,9 @@ var ExpenseType = (function() {
 					});	
 				} else {
 					// Update the expense and then move to the main page
-					DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectCode"], 
+					DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectCode"], 
 							expenseObject["receipt"], expenseObject["tripID"], function () {
-						Utils.loadPage("chargeTo", function() {
+						Utils.loadPage("mainPage", function() {
 							Utils.saveCurrentPageObject(ExpenseType);
 							MainPage.init();
 						});	
@@ -141,7 +141,7 @@ var ExpenseType = (function() {
 
 					});	
 				} else {
-					DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectCode"], 
+					DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectCode"], 
 							expenseObject["receipt"], expenseObject["tripID"], function () {
 						Utils.loadPageWithAnimation("chargeTo", expenseObject["expenseID"], function() {
 							Utils.saveCurrentPageObject(ExpenseType);
