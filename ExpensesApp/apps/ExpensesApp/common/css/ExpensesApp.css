@@ -43,7 +43,16 @@ body{
 	clear:both;
 }
 
-
+.opacity{
+	position:fixed;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	opacity:0.6;
+	background-color:#000;
+	display:none;
+}
 .ui-body-c .ui-link{
 	font-weight:normal;
 }
