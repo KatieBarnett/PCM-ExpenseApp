@@ -87,7 +87,7 @@ var TripExpenses = (function() {
 					var expenseID = $(this).attr("data-expense");
 					// Check if the element type of this event element is the image, if so, just display the thumbnail
 					if (event.target.nodeName.toUpperCase() == "IMG") {
-						Utils.getFullImage(event.target.getAttribute("src"), expenseID, TripExpenses);
+						Utils.getFullImage(event.target.getAttribute("src"), selectedTrip, TripExpenses);
 					} else {
 						// Otherwise load the expense details
 						Utils.loadPageWithAnimation("editExpense", selectedTrip, function() {
