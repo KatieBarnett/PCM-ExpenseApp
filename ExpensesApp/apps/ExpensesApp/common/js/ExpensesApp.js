@@ -35,6 +35,12 @@ function wlCommonInit(){
 $(document).ready(function() {
 	// Show the AJAX loading screen while the DB is being initiated
 	$.mobile.loading("show");
+	
+   if(Utils.isiOS7()){
+	   document.body.style.webkitTransform = 'translate3d(0, 20px, 0)';
+   }
+	   
+	
 	DB.initDB(function() {
 		// Load the login page
 		Utils.loadPage("mainPage", function() {

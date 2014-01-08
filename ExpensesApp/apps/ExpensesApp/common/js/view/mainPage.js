@@ -8,6 +8,10 @@ var MainPage = (function() {
 		init : function() {
 			console.log("MainPage :: init");
 			
+			if(Utils.isiOS7()){
+				$('.contentHome').bind('touchmove', function(e){e.preventDefault();});
+			}
+			
 			// Add handlers
 			$('#processTrip').on('click',function() {
 				// Load the new page
@@ -52,7 +56,12 @@ var MainPage = (function() {
 
 function displayAttachmentOptions(){
 	$('.attachReceipt').css('display','block');
-	$('.attachReceipt').animate({bottom:'0px'}, 500);
+	if(Utils.isiOS7()){
+	$('.attachReceipt').animate({bottom:'20px'}, 500);
+	}
+	else{
+		$('.attachReceipt').animate({bottom:'0px'}, 500);	
+	}
 }
 
 function closeAttachmentOptions(){

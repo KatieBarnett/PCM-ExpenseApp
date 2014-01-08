@@ -255,6 +255,13 @@ var Utils = (function() {
 		isAndroid : function() {
 			var isAndroid = WL.Client.getEnvironment() == WL.Environment.ANDROID;
 			return isAndroid;
+		},
+		
+		isiOS7 : function() {
+			var isiOS7 = WL.Client.getEnvironment() == WL.Environment.IPHONE &&
+	        parseInt(navigator.appVersion.match(/OS (\d)/)[1], 10) >= 7;
+	        
+	        return isiOS7;
 		}
 	};
 } ());
