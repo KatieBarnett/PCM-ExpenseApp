@@ -69,9 +69,11 @@ var TripExpenses = (function() {
 							expenseList.appendChild(expenseLI);
 							
 							// Build the email body while we are here
-							expenseBody = expenseBody + "<br/><strong>Expense " + count + "</strong><br/>" + expenseTypes[i]["expenseTypeID"] + "<br/>" +
-							data[j]["accountProjectName"] + " - " + data[j]["accountProjectCode"] + "<br/>" +
-							"Filename: " + Utils.convertFile(data[j]["receipt"]) + "<br/><br/>";
+							expenseBody = expenseBody + "<br/><strong>Expense " + count + "</strong><br/>" + expenseTypes[i]["expenseTypeID"] + "<br/>";
+							if (data[j]["accountProjectName"]) {
+								expenseBody = expenseBody + data[j]["accountProjectName"] + " - ";
+							}
+							expenseBody = expenseBody + data[j]["accountProjectCode"] + "<br/>" + "Filename: " + Utils.convertFile(data[j]["receipt"]) + "<br/><br/>";
 							count++;
 						}
 					}
@@ -83,10 +85,16 @@ var TripExpenses = (function() {
 				// Move to next page after expense type is selected, pass expenseTypeID
 				$('.expenseItem').on('click', function() {
 					var expenseID = $(this).attr("data-expense");
-					Utils.loadPageWithAnimation("editExpense", selectedTrip, function() {
-						Utils.saveCurrentPageObject(TripExpenses);
-						EditExpense.init(expenseID);
-					});
+					// Check if the element type of this event element is the image, if so, just display the thumbnail
+					if (event.target.nodeName.toUpperCase() == "IMG") {
+						Utils.getFullImage(event.target.getAttribute("src"), expenseID, TripExpenses);
+					} else {
+						// Otherwise load the expense details
+						Utils.loadPageWithAnimation("editExpense", selectedTrip, function() {
+							Utils.saveCurrentPageObject(TripExpenses);
+							EditExpense.init(expenseID);
+						});
+					}
 				});
 			});
 			
@@ -124,14 +132,15 @@ var TripExpenses = (function() {
 				
 				// Get the email last used to send the trip and display it to the user
 				DB.getEmailLogs(selectedTrip, function(emailAddresses) {
-					if (emailAddresses && emailAddresses[0] && emailAddresses[0].email) {
-						TripExpenses._showLastEmail(emailAddresses[0]);
+					console.log(emailAddresses);
+					if (emailAddresses.length > 0) {
+						TripExpenses._showLastEmail(emailAddresses);
 					}
 				}); 
 			} else {
 				// Get the last email the user tried to send an email to and display it
 				DB.getLastEmail(function(emailAddress) {
-					if (emailAddress && emailAddress.email) {
+					if (emailAddress.length > 0) {
 						TripExpenses._showLastEmail(emailAddress);
 					}
 				});
@@ -206,9 +215,19 @@ var TripExpenses = (function() {
 		 * @param tripEnd the end date of the trip
 		 */
 		_fillTitles : function(tripName, tripStart, tripEnd) {
-			$('#tripName').html(tripName);
-			$('#tripStart').html(tripStart);
-			$('#tripEnd').html(tripEnd);
+			if (tripName) {
+				$('#tripName').html(tripName);
+			}
+			if (tripStart) {
+				$('#tripStart').html(tripStart);
+			} else {
+				$('#tripStartTitle').empty();
+			}
+			if (tripEnd) {
+				$('#tripEnd').html(tripEnd);
+			} else {
+				$('#tripEndTitle').empty();
+			}
 		},
 		
 		/**
@@ -242,8 +261,15 @@ var TripExpenses = (function() {
 			
 			// Build the body of the email
 			
-			var emailBody = "<html><head></head>Please find attached the expense receipts for the trip <span>" + $('#tripName').html() + "</span> for the period <span>" + $('#tripStart').html() + "</span> to <span>" + $('#tripEnd').html() + "</span>." + 
-			"<br/><br/>" + expenseBody + "</html>";
+			var emailBody = "<html><head></head>Please find attached the expense receipts for the trip <span>" + $('#tripName').html() + "</span> ";
+			if ($('#tripStart').length > 0 && $('#tripEnd').length > 0) {
+				emailBody = emailBody + "for the period <span>" + $('#tripStart').html() + "</span> to <span>" + $('#tripEnd').html() + "</span>"; 
+			} else if ($('#tripStart').length > 0) {
+				emailBody = emailBody + "for <span>" + $('#tripStart').html() + "</span>";
+			} else if ($('#tripEnd').length > 0) {
+				emailBody = emailBody + "for <span>" + $('#tripEnd').html() + "</span>"; 
+			}
+			emailBody = emailBody + ".<br/><br/>" + expenseBody + "</html>";
 			
 			// Get the entered in email address
 			var emailAddress = $('#sendTripEmailAddress').val();
@@ -277,7 +303,6 @@ var TripExpenses = (function() {
 							}
 						}
 					};
-					onComplete(2);
 					
 					// Alerts after the call back will break iOS, so confirmation should be used instead.
 					if (!Utils.isAndroid()) {
@@ -366,10 +391,27 @@ var TripExpenses = (function() {
 		 */
 		_showLastEmail : function(emailAddress) {
 			$('#recentEmailArea').removeClass("hidden");
+			var firstEmail = null;
+			var secondEmail = null;
+			
+			// Find the email addresses and determine whether one should be displayed or two
+			firstEmail = emailAddress[0].email;
+			for (var i in emailAddress) {
+				if (firstEmail != emailAddress[i].email) {
+					secondEmail = emailAddress[i].email;
+					break;
+				}
+			}
 			
 			// Add the email address to a button
-			$('<a>', { href:"#", text: emailAddress.email, "data-icon":"false"}).appendTo(
-					$('<li>', {"class" : "recentEmail", "data-email" : emailAddress.email}).appendTo('#recentEmailList'));
+			$('<a>', { href:"#", text: firstEmail, "data-icon":"false"}).appendTo(
+					$('<li>', {"class" : "recentEmail", "data-email" : firstEmail}).appendTo('#recentEmailList'));
+			
+			if (secondEmail) {
+				$('<a>', { href:"#", text: secondEmail, "data-icon":"false"}).appendTo(
+						$('<li>', {"class" : "recentEmail", "data-email" : secondEmail}).appendTo('#recentEmailList'));
+			}
+			
 			// Refresh the list view for the CSS
 			$('#recentEmailList').listview('refresh');
 			

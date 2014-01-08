@@ -141,12 +141,11 @@ var ExpenseType = (function() {
 
 					});	
 				} else {
-					console.log("expense ID is not null");
 					DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectCode"], 
 							expenseObject["receipt"], expenseObject["tripID"], function () {
 						Utils.loadPageWithAnimation("chargeTo", expenseObject["expenseID"], function() {
 							Utils.saveCurrentPageObject(ExpenseType);
-							ChargeTo.init(expense["expenseID"]);
+							ChargeTo.init(expenseObject["expenseID"]);
 						});	
 					});
 				}	 
