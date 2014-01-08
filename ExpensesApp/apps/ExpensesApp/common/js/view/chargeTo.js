@@ -80,6 +80,7 @@ var ChargeTo = (function() {
 	
 					$( ".ui-select div" ).addClass( "ui-icon-alt" ); /*change the icon colour of the select*/
 					$('#descriptionErrorMsg').addClass('hidden');
+					
 					  console.log("Function called");
 					// Clear any value in the inputs
 					$('#accDescription').val("");
@@ -127,7 +128,9 @@ var ChargeTo = (function() {
 						DB.addClientCode(apCode, apName, chargeCode, callback);
 					} else {
 						console.log("empty text box detected");
-						$('#descriptionErrorMsg').removeClass('hidden');  
+						$('#descriptionErrorMsg').removeClass('hidden');
+						
+						
 					};
 				});
 			});
