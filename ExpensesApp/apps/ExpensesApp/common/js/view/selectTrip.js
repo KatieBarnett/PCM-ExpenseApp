@@ -11,13 +11,11 @@ var SelectTrip = (function() {
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
 				var receipt = expense["receipt"];
-				console.log("the receipt URI is: " + receipt);
 				Utils.getThumbNail(receipt, $('#receiptTripThumb')[0]);
 
 				$('.receiptThumb').on('click', function(){
 					Utils.getFullImage(receipt, expenseID, ExpenseType);
 				});
-
 
 				DB.getUnprocessedTrips(function(data){
 					// Build the list
@@ -60,7 +58,6 @@ var SelectTrip = (function() {
 				
 				// Handler for when the cancel button is clicked on the modal
 				$('#cancelAddTrip').on('click', function(){
-				    console.log("close modal");
 				    $("#addTripModal").popup("close");
 				    $('.opacity').css('display', 'none');
 				});
@@ -83,7 +80,6 @@ var SelectTrip = (function() {
 								
 								// Refresh the page so the scrolling will still work on the page.
 								$.mobile.activePage.trigger('pagecreate');
-								
 								// Close the modal once completed
 								$('#addTripModal').popup("close");
 								$('.opacity').css('display', 'none');
@@ -98,9 +94,14 @@ var SelectTrip = (function() {
 				});
 
 				$('.finishLater').on('click',function() {
-					Utils.loadPage('mainPage', function() {
-						Utils.saveCurrentPageObject(SelectTrip);
-						MainPage.init();
+					DB.getExpense(expenseID, function(expense){
+						DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
+								expense["receipt"], expense["tripID"], function () {
+							Utils.loadPage("mainPage", function() {
+								Utils.saveCurrentPageObject(SelectTrip);
+								MainPage.init();
+							});
+						});
 					});
 				});
 			});
