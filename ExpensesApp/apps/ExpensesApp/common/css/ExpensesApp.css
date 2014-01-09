@@ -190,12 +190,12 @@ body{
 }
 
 /*---------------------------trip details------------*/
-.tripDetailsBtnArea {
+/*.tripDetailsBtnArea {
 	position: absolute;
 	border-top: 1px solid #ADADAD;
 	bottom: 0px;
 	width: 91%;
-}
+}*/
 
 #recentEmailArea {
 	width: 100%;

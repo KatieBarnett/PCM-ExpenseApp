@@ -42,6 +42,7 @@ $(document).ready(function() {
 	   
 	
 	DB.initDB(function() {
+		//DB.addTrip("Manual Trip","2014-01-08","2014-02-09");
 		// Load the login page
 		Utils.loadPage("mainPage", function() {
 			// Call the init function
