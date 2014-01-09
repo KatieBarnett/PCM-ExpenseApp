@@ -112,6 +112,7 @@ var TripExpenses = (function() {
 				
 				// Handler for when the cancel button is clicked
 				$('#cancelSendDetailsBtn').on('click', function() {
+					$('.opacity').css('display','none');
 					$('.sendDetailsContainer').animate({bottom:'-284px'}, 500, function() { 
 						$('.sendDetailsContainer').css("display","none");
 					});
@@ -385,6 +386,7 @@ var TripExpenses = (function() {
 		 */
 		_animateTripPopup : function() {
 			$('.sendDetailsContainer').css('display','block');
+			$('.opacity').css('display', 'block');
 			$('.sendDetailsContainer').animate({bottom:'0px'}, 500);
 		},
 		
