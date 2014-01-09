@@ -22,10 +22,12 @@
         <span class="question">Add Client Code</span>
           <div class="hidden" id="descriptionErrorMsg">"Description of Account" is a required field.</div>
           <input type="text" class="field" id="accDescription" required placeholder="Description of Account *" />
+          <div class="hidden" id="chargeCodeErrorMsg">"To be charged to: " is a required field.</div>
           <select id="combobox" data-theme="c" data-icon="arrow-d" >
-          <option>To be charged to:</option>
+          <option>To be charged to: *</option>
           </select>
-          <input type="text" class="field" id="accID" required placeholder="Account/Project ID" />
+          <div class="hidden" id="accountProjectErrorMsg">"Account/Project ID" is a required field.</div>
+          <input type="text" class="field" id="accID" required placeholder="Account/Project ID *" />
           <button id="cancelAddCode" data-theme="b">Cancel</button>
           <button id="submitAddCode" class="" data-theme="a">Submit</button>
       </div>
