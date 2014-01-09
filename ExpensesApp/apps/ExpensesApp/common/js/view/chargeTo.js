@@ -103,7 +103,26 @@ var ChargeTo = (function() {
 				$('#submitAddCode').on('click', function(event) {
 					event.preventDefault();
 					console.log("add button clicked");
-					if ($('#accDescription').val().length > 1) {
+					
+					// Check if fields have valid data and display/hide error message accordingly
+					if ($('#accDescription').val().length == 0) {
+						$('#descriptionErrorMsg').removeClass('hidden');
+					} else {
+						$('#descriptionErrorMsg').addClass('hidden');
+					}
+					if ($('#combobox option:first').is(":selected")) {
+						$('#chargeCodeErrorMsg').removeClass('hidden');
+					} else {
+						$('#chargeCodeErrorMsg').addClass('hidden');
+					}
+					if ($('#accID').val().length == 0) {
+						$('#accountProjectErrorMsg').removeClass('hidden');
+					} else {
+						$('#accountProjectErrorMsg').addClass('hidden');
+					}
+					
+					// If all fields are populated, add the client code
+					if ($('#accDescription').val().length >= 1 && !$('#combobox option:first').is(":selected") && $('#accID').val().length >= 1) {
 						var apName = $('#accDescription').val();
 						var	apCode = $('#accID').val();
 						var chargeCode = $('#combobox').val();
@@ -125,13 +144,8 @@ var ChargeTo = (function() {
 							});
 						};
 	
-						DB.addClientCode(apCode, apName, chargeCode, callback);
-					} else {
-						console.log("empty text box detected");
-						$('#descriptionErrorMsg').removeClass('hidden');
-						
-						
-					};
+						DB.addClientCode(apCode, apName, chargeCode, callback);						
+					}
 				});
 			});
 		},

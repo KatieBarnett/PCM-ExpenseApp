@@ -147,7 +147,10 @@ body{
 .deleteExpense{
 	margin-top:20px;
 }
-#descriptionErrorMsg, #editTripError{
+#descriptionErrorMsg, 
+#chargeCodeErrorMsg,
+#accountProjectErrorMsg,
+#editTripError {
 	color:#FF0000;
 	width:195px;
 	margin-top:5px;
