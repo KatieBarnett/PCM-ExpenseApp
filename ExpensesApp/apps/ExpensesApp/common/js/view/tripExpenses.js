@@ -36,6 +36,7 @@ var TripExpenses = (function() {
 				for (var i=0; i<expenseTypes.length; i++){
 					for (var j=0; j<data.length; j++){
 						if (expenseTypes[i]["expenseTypeID"] == data[j]["expenseTypeID"]){
+							console.log(data[j]);
 							// Publish list divider for each existing expense type
 							if (headingPublished == false){
 								expenseLI = document.createElement("li");
@@ -48,14 +49,12 @@ var TripExpenses = (function() {
 							expenseLI.setAttribute("data-expense", data[j]["expenseID"]);
 							expenseLI.setAttribute("class", "expenseItem");
 							expenseAnchor = document.createElement("a");
-							if (data[j]["accountProjectName"] == null){
-								expenseAnchor.appendChild(document.createTextNode("Please complete the expense questions"));
+							if (data[j]["accountProjectCode"] == "Default Accounting") {
+								expenseAnchor.appendChild(document.createTextNode(data[j]["accountProjectCode"]));
 							} else {
 								expenseAnchor.appendChild(document.createTextNode(data[j]["accountProjectName"]));
-								if (data[j]["accountProjectCode"] != null){
-									expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
-								}
-							}
+								expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
+							}	
 							receiptThumbnail = document.createElement("img");
 							if (data[j]["receipt"] == "undefined"){
 								receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
