@@ -166,11 +166,13 @@ var TripExpenses = (function() {
 					
 					// Bring up the modal
 					$('#editTripModal').popup("open");
+					$('.opacity').css('display','block');
 				});
 		
 				// Handler to close the popup
 				$('#cancelEditTrip').on('click', function() {
 					$('#editTripModal').popup("close");
+					$('.opacity').css('display','none');
 				});
 				
 				// Handler for when the submit button is pressed
@@ -184,6 +186,7 @@ var TripExpenses = (function() {
 						DB.updateTrip(selectedTrip, tripDescription, tripStartDate, tripEndDate, function() {
 							// Close the modal
 							$('#editTripModal').popup("close");
+							$('.opacity').css('display','none');
 							
 							// Clear the current title
 							TripExpenses._removeTitles();
