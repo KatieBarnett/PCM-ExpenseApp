@@ -53,6 +53,9 @@ $(document).ready(function() {
 			Utils.goBackWithAnimation(null);
 		});
 		
+		// The css change to display block is to prevent the jquery mobile to hide the 
+		// page when the active page is changed. This will stop the initial flash from occurring.
+		$('#content-page').css('display', 'block');
 		$('#content-page-2').css('display', 'none');
 		
 		// Hide the AJAX loading
