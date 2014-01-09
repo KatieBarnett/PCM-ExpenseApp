@@ -113,7 +113,7 @@ body{
 /* Expense Type Page receipt thumbnail formatting */
 .receiptThumb {
 	float:left;
-	margin:0% 2% 2% 2% ;
+	margin:0% 2% 2% 0% ;
 }
 
 /* Expense Type Selection Collapsible Format */
