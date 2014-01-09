@@ -55,12 +55,14 @@ var SelectTrip = (function() {
 					$('#endDate').val("");
 					
 					$("#addTripModal").popup("open");
+					$('.opacity').css('display', 'block');
 				});
 				
 				// Handler for when the cancel button is clicked on the modal
 				$('#cancelAddTrip').on('click', function(){
 				    console.log("close modal");
 				    $("#addTripModal").popup("close");
+				    $('.opacity').css('display', 'none');
 				});
 				
 				// Handler for when the submit button is clicked on the modal
@@ -84,6 +86,7 @@ var SelectTrip = (function() {
 								
 								// Close the modal once completed
 								$('#addTripModal').popup("close");
+								$('.opacity').css('display', 'none');
 							});
 						};
 	
