@@ -439,21 +439,27 @@ var DB = (function() {
 			// Convert either the id object into an int or take just the int value
 
 			var expenseID = eid && eid.seq ? eid.seq : eid;
-
-			db.transaction(function(tx) {
-				var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
-				tx.executeSql(query, [], function(tx, results) {
-					var row = results.rows.item(0);
-					console.log(row);
-					var singleExpense = {};
-					$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt", "tripID"], function(index, value) {
-						singleExpense[value] = row[value];
-					});					
-					if (callback) {
-						callback(singleExpense);						
-					}
+			if (expenseID) {
+				db.transaction(function(tx) {
+					var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
+					tx.executeSql(query, [], function(tx, results) {
+						var row = results.rows.item(0);
+						console.log(row);
+						var singleExpense = {};
+						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt", "tripID"], function(index, value) {
+							singleExpense[value] = row[value];
+						});					
+						if (callback) {
+							callback(singleExpense);						
+						}
+					}, errorCB);
 				}, errorCB);
-			}, errorCB);
+			} else {
+				if (callback) {
+					callback(null);
+				}
+			}
+			
 		},
 		
 		/**
