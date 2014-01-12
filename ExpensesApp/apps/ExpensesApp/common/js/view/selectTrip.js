@@ -98,9 +98,14 @@ var SelectTrip = (function() {
 				});
 
 				$('.finishLater').on('click',function() {
-					Utils.loadPage('mainPage', function() {
-						Utils.saveCurrentPageObject(SelectTrip);
-						MainPage.init();
+					DB.getExpense(expenseID, function(expense){
+						DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
+								expense["receipt"], expense["tripID"], function () {
+							Utils.loadPage("mainPage", function() {
+								Utils.saveCurrentPageObject(SelectTrip);
+								MainPage.init();
+							});
+						});
 					});
 				});
 			});
