@@ -74,7 +74,7 @@ var DB = (function() {
 									'tripName varchar(100),' +
 									'startDate date,' +
 									'endDate date,' +
-									'processed date' +
+									'originalProcessDate date' +
 									')');
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Logs(' + 
 									'logID integer PRIMARY KEY AUTOINCREMENT,' +
@@ -222,6 +222,7 @@ var DB = (function() {
 							singleAccountProject[value] = row[value];
 						});
 						accountsProjectsList.push(singleAccountProject);
+						console.log(singleAccountProject);
 					}
 					// Run the call function to return the array
 					if (callback) {
@@ -238,7 +239,7 @@ var DB = (function() {
 		 */
 		getUnprocessedTrips : function(callback) {	
 			db.transaction(function(tx) {
-				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE processed IS NULL ORDER BY startDate, endDate DESC';
+				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE originalProcessDate IS NULL ORDER BY startDate, endDate DESC';
 				tx.executeSql(query, [], function(tx, results) {
 					var unprocessedTripsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
@@ -284,7 +285,7 @@ var DB = (function() {
 		 */
 		getProcessedTrips : function(callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE processed IS NOT NULL ORDER BY originalProcessDate DESC';
+				var query = 'SELECT tripID, tripName, startDate, endDate FROM Trips WHERE originalProcessDate IS NOT NULL ORDER BY originalProcessDate DESC';
 				tx.executeSql(query, [], function(tx, results) {
 					var processedTripsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
@@ -338,6 +339,7 @@ var DB = (function() {
 						$.each(["email", "processDate"], function(index, value) {
 							singleLog[value] = row[value];
 						});
+						console.log(singleLog);
 						logsList.push(singleLog);
 					}
 					if (callback) {
@@ -442,6 +444,7 @@ var DB = (function() {
 					var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
 					tx.executeSql(query, [], function(tx, results) {
 						var row = results.rows.item(0);
+						console.log(row);
 						var singleExpense = {};
 						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt", "tripID"], function(index, value) {
 							singleExpense[value] = row[value];
