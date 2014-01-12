@@ -169,18 +169,20 @@ var Utils = (function() {
 		},
 		
 		/**
-		 * Function that will get the full image
+		 * Function that will get the full image (if it is not the no image image)
 		 * @param ref, the URI of the image
 		 * @param page, the page that is calling the full image
 		 */
 		getFullImage: function(ref, expenseID, page) {
-			console.log('loading viewReceipt');
-			//load viewReceiptPage
-			Utils.loadPageWithAnimation('viewReceipt',expenseID, function() {
-				Utils.saveCurrentPageObject(page); 
-				//change this to dynamically retrieve current page
-				ViewReceipt.init(ref);
-			});
+			if (ref != "images/no-receipt.gif") {
+				console.log('loading viewReceipt');
+				//load viewReceiptPage
+				Utils.loadPageWithAnimation('viewReceipt',expenseID, function() {
+					Utils.saveCurrentPageObject(page); 
+					//change this to dynamically retrieve current page
+					ViewReceipt.init(ref);
+				});
+			}
 		},
 		
 		getReceipt : function(ref){
