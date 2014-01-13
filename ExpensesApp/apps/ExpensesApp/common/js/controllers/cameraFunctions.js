@@ -68,7 +68,7 @@ var CameraFunctions = (function() {
 				uniqueId = imageURI.substring(imageURI.lastIndexOf("?") + 1) + ".jpg";
 				cachePath = "Android/data/com.ExpensesApp/cache";
 			} else {
-				uniqueId = imageURI.substring(imageURI.lastIndexOf("/") + 1);
+				uniqueId = "Pic" + new Date().getTime() + ".jpg";
 				cachePath = "temporayPhotos";
 			}
 			
