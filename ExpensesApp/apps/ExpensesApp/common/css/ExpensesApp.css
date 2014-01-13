@@ -26,6 +26,7 @@ body{
 .homeNav{
 	/*float:right;*/
 	margin-top:15px;
+	margin-right: 10px;
 }
 .homeNav li{
 	padding:4%; 
@@ -69,6 +70,9 @@ body{
 .contentHome h2{
 	color:#004266;
 	font-weight:normal;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }
 .attachReceipt{
 	display:none;
@@ -106,14 +110,43 @@ body{
 	font-weight:bold;
 	color:#656162;
 	display:block;
+	text-align:center;
 }
 .back{
 	border-style:none;
 }
+.receiptThumb + p {
+	position: absolute;
+	padding-left: 95px;
+}
+.horizontal-rule {
+	border-top: 1px solid #999;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-left: -20px;
+	margin-right: -20px;
+}
+ul#expenseList,
+ul#expenseDetailsList,
+ul#selectCodeList,
+ul#selectTripList {
+	margin-top: 94px;
+}
+#tripDetails + #expenseList {
+	margin-top: 18px;
+}
+
+/** Edit Expense **/
+#expenseDetailsList {
+	margin-bottom: 40px;
+}
+
 /* Expense Type Page receipt thumbnail formatting */
 .receiptThumb {
 	float:left;
 	margin:0% 2% 2% 0% ;
+	border: 1px solid #888;
+	border-radius: 5px;
 }
 
 /* Expense Type Selection Collapsible Format */
@@ -208,7 +241,7 @@ body{
 	margin: 0 -15px;
 }
 
-/*---------------------------process/select trips------------*/
+/*--------------------process/select trips------------*/
 #noTripsMsg {
 	border: none;
 	text-align: center;

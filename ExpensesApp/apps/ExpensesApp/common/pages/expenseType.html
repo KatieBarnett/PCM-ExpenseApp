@@ -6,11 +6,12 @@
 		<button class="ui-icon-nodisc ui-icon-alt back" data-role="button" data-theme="e" data-icon="arrow-l" data-iconpos="notext" data-direction="reverse"></button>
 	</div>
 	<div data-role="content">
-		<p><canvas class="receiptThumb" width="75" height="75" id="expenseTypeThumb"></canvas>What type of expense is this receipt?</p>
+		<canvas class="receiptThumb" width="75" height="75" id="expenseTypeThumb"></canvas>
+		<p>What type of expense is this receipt?</p>
 		<ul id="expenseList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc clear">
-			
+			<li data-role="list-divider">Expense Types</li>
 		</ul>
-		
+		<div class='horizontal-rule' />
 		<a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
 	</div>
 </div>

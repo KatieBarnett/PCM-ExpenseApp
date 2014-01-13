@@ -24,13 +24,13 @@ var SelectTrip = (function() {
 						// Build the list
 						SelectTrip._buildList(data);
 					} else {
-						$("#tripList").removeClass("ui-shadow");
-						$("#tripList li:first-child").addClass("ui-shadow");
+						$("#selectTripList").removeClass("ui-shadow");
+						$("#selectTripList li:first-child").addClass("ui-shadow");
 						$("#noTripsMsg").removeClass("hidden");
 					}
 					
 					// On Selection of trip, move to next screen
-					$('#tripList').on('click', '.tripSelected', function() {
+					$('#selectTripList').on('click', '.tripSelected', function() {
 						var selectedTrip = $(this).attr("data-trip");
 						DB.getExpense(expenseID, function(expense){
 							DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
@@ -43,8 +43,6 @@ var SelectTrip = (function() {
 						});
 					});
 				});
-
-				$('#tripList').listview('refresh');
 
 				// Navigation buttons functionality
 				$('.back').on('click', function() {
@@ -122,7 +120,7 @@ var SelectTrip = (function() {
 		 */
 		_buildList : function(data) {
 			//Populate trip list
-			var tripUL=document.getElementById("tripList");
+			var tripUL=document.getElementById("selectTripList");
 			
 			for(var i=0; i<data.length; i++){
 				tripLI = document.createElement("li");
@@ -149,7 +147,7 @@ var SelectTrip = (function() {
 			}
 			
 			// Refresh the list view
-			$('#tripList').listview('refresh');
+			$('#selectTripList').listview('refresh');
 		},
 		
 		/**
@@ -157,7 +155,7 @@ var SelectTrip = (function() {
 		 * @param none
 		 */
 		_removeList : function() {
-			$('#tripList li + li').nextAll('li').remove();
+			$('#selectTripList li + li').nextAll('li').remove();
 		}
 	};
 }());
