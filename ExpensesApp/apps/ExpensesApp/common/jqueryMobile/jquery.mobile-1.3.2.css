@@ -2292,7 +2292,8 @@ label.ui-submit { font-size: 16px; line-height: 1.4; font-weight: normal; margin
 	z-index: 1099;
 }
 .ui-popup-screen.in {
-	opacity: 0.5;
+	opacity: 0.6;
+	background-color:#000;
 	filter: Alpha(Opacity=50);
 }
 .ui-popup-screen.out {

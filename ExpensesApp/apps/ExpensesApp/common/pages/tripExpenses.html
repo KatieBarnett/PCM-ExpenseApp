@@ -17,10 +17,13 @@
 		
 		<ul id="expenseList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc expenseList"></ul>
 		<div class="tripDetailsBtnArea">
-			<span id="emailLogBtnArea" class="hidden"><button id="emailLogBtn" data-theme="b">Email Log</button></span>
-			<button id="sendTripDetailsBtn" data-theme="a">Send Trip Details</button>
+			<!-- <span id="emailLogBtnArea" class="hidden"><button id="emailLogBtn" data-theme="b">Email Log</button></span>
+			<button id="sendTripDetailsBtn" data-theme="a"></button> -->
+
+			<span id="emailLogBtnArea" class="hidden"><a id="emailLogBtn" class="" data-role="button" data-theme="b">Email Log</a></span>
+			<a id="sendTripDetailsBtn" class="" data-role="button" data-theme="a">Send Trip Details</a>
 		</div>
-		
+	<div class="opacity"></div>		
 		<div class="sendDetailsContainer">
 			<form id="emailForm">
 				<span>Where would you like to send this trip?</span>
@@ -38,14 +41,14 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div data-role="popup" id="editTripModal" data-history="false" class="tripModal">
 		<div data-role="main" class="ui-content">
 			<span class="question">Edit Trip</span>
-			<div class="hidden" id="editTripError">Mandatory field missing!</div>
-			<input type="text" class="field" id="editTripDescription" required placeholder="Description of trip" />	
-			<input id="editStartDate" type="text" placeholder="Starts"/>
-			<input id="editEndDate" type="text" placeholder="Ends" />
+			<div class="hidden" id="editTripError">"Description of Trip" is a required field.</div>
+			<input type="text" class="field" id="editTripDescription" required placeholder="Description of Trip" />	
+			<input id="editStartDate" type="text" placeholder="Starts (yyyy-mm-dd)"/>
+			<input id="editEndDate" type="text" placeholder="Ends (yyyy-mm-dd)" />
 			<button id="cancelEditTrip" data-theme="b">Cancel</button>
 			<button id="submitEditTrip" data-theme="a">Submit</button>
 		</div>

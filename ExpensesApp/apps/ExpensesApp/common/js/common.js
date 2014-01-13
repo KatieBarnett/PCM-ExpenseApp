@@ -99,15 +99,16 @@ var Utils = (function() {
 			
 			// Call the load page function
 			Utils.loadPage(pageToLoad, function() {
-				var currentContainer = PageChangeHelper.getCurrentContainer();
+				var currentContainer = $(PageChangeHelper.getCurrentContainer());
+				var otherContainer = $(PageChangeHelper.getOtherContainer());
 				// Move the container off screen on the right so it can be animated right to left.
-				$(currentContainer).css('left','100%');
-				$(currentContainer).css('display', 'block');
+				currentContainer.css('left','100%').css('display', 'block');
 				// Move the other container off screen to the left
-				$(PageChangeHelper.getOtherContainer()).animate({left:"-100%"}, 500);
+				otherContainer.animate({left:"-100%"}, 500);
 				// Move the current container into the centre of the screen and then hide the other container
-				$(currentContainer).animate({left:"0%"}, 500, function() {
-					$(PageChangeHelper.getOtherContainer()).css('display','none');
+				currentContainer.animate({left:"0%"}, 500, function() {
+					otherContainer.css('display','none').empty();
+					
 					// Execute the call back function if it exists
 					if (callbackFunction == null) {
 						alert("Missing callback function. Need init");
@@ -134,16 +135,16 @@ var Utils = (function() {
 			
 			// Call the function to load the previous page
 			Utils.goBack(function() {
-				var currentContainer = PageChangeHelper.getCurrentContainer();
+				var currentContainer = $(PageChangeHelper.getCurrentContainer());
+				var otherContainer = $(PageChangeHelper.getOtherContainer());
 				// Move the current container to the left of the centre so it can be animated from left to right
-				$(currentContainer).css('left','-100%');
-				$(currentContainer).css('display','block');
+				currentContainer.css('left','-100%').css('display','block');
 				// Move the other container off screen going to the right
-				$(PageChangeHelper.getOtherContainer()).animate({left:'100%'}, 500);
-				$(currentContainer).animate({left:'0%'}, 500, function() {
-					$(PageChangeHelper.getOtherContainer()).css('display','none');
+				otherContainer.animate({left:'100%'}, 500);
+				currentContainer.animate({left:'0%'}, 500, function() {
+					otherContainer.css('display','none').empty();
 					// Execute the call back function
-					if (callbackFunction != null) {
+					if (callbackFunction) {
 						callbackFunction();
 					}
 				});
@@ -168,18 +169,20 @@ var Utils = (function() {
 		},
 		
 		/**
-		 * Function that will get the full image
+		 * Function that will get the full image (if it is not the no image image)
 		 * @param ref, the URI of the image
 		 * @param page, the page that is calling the full image
 		 */
 		getFullImage: function(ref, expenseID, page) {
-			console.log('loading viewReceipt');
-			//load viewReceiptPage
-			Utils.loadPageWithAnimation('viewReceipt',expenseID, function() {
-				Utils.saveCurrentPageObject(page); 
-				//change this to dynamically retrieve current page
-				ViewReceipt.init(ref);
-			});
+			if (ref != "images/no-receipt.gif") {
+				console.log('loading viewReceipt');
+				//load viewReceiptPage
+				Utils.loadPageWithAnimation('viewReceipt',expenseID, function() {
+					Utils.saveCurrentPageObject(page); 
+					//change this to dynamically retrieve current page
+					ViewReceipt.init(ref);
+				});
+			}
 		},
 		
 		getReceipt : function(ref){
@@ -193,11 +196,11 @@ var Utils = (function() {
 		getThumbNail : function(uri, canvas) {
 			if(uri) {
 				var imageObj = new Image();
-				imageObj.src = uri;
 				var context = canvas.getContext('2d');
 			    imageObj.onload = function(){
 			        context.drawImage(imageObj, 0, 0, 75, 75);
 			    };
+			    imageObj.src = uri;
 			}
 		},
 		

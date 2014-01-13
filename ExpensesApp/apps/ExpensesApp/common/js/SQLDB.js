@@ -222,7 +222,6 @@ var DB = (function() {
 							singleAccountProject[value] = row[value];
 						});
 						accountsProjectsList.push(singleAccountProject);
-						console.log(singleAccountProject);
 					}
 					// Run the call function to return the array
 					if (callback) {
@@ -339,7 +338,6 @@ var DB = (function() {
 						$.each(["email", "processDate"], function(index, value) {
 							singleLog[value] = row[value];
 						});
-						console.log(singleLog);
 						logsList.push(singleLog);
 					}
 					if (callback) {
@@ -381,7 +379,7 @@ var DB = (function() {
 								'FROM Expenses AS e ' + 
 								'LEFT JOIN AccountProjects AS a ' + 
 								'ON e.accountProjectCode = a.accountProjectCode ' + 
-								'WHERE e.tripID IS NULL';
+								'WHERE e.tripID IS NULL OR e.tripID="null"';
 				tx.executeSql(query, [], function(tx, results) {
 					var unassociatedExpensesList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
@@ -437,23 +435,27 @@ var DB = (function() {
 		 */
 		getExpense : function(eid, callback) {
 			// Convert either the id object into an int or take just the int value
-
 			var expenseID = eid && eid.seq ? eid.seq : eid;
-
-			db.transaction(function(tx) {
-				var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
-				tx.executeSql(query, [], function(tx, results) {
-					var row = results.rows.item(0);
-					console.log(row);
-					var singleExpense = {};
-					$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt", "tripID"], function(index, value) {
-						singleExpense[value] = row[value];
-					});					
-					if (callback) {
-						callback(singleExpense);						
-					}
+			if (expenseID) {
+				db.transaction(function(tx) {
+					var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
+					tx.executeSql(query, [], function(tx, results) {
+						var row = results.rows.item(0);
+						var singleExpense = {};
+						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt", "tripID"], function(index, value) {
+							singleExpense[value] = row[value];
+						});					
+						if (callback) {
+							callback(singleExpense);						
+						}
+					}, errorCB);
 				}, errorCB);
-			}, errorCB);
+			} else {
+				if (callback) {
+					callback(null);
+				}
+			}
+			
 		},
 		
 		/**

@@ -42,6 +42,7 @@ $(document).ready(function() {
 	   
 	
 	DB.initDB(function() {
+		//DB.addTrip("Manual Trip","2014-01-08","2014-02-09");
 		// Load the login page
 		Utils.loadPage("mainPage", function() {
 			// Call the init function
@@ -53,6 +54,9 @@ $(document).ready(function() {
 			Utils.goBackWithAnimation(null);
 		});
 		
+		// The css change to display block is to prevent the jquery mobile to hide the 
+		// page when the active page is changed. This will stop the initial flash from occurring.
+		$('#content-page').css('display', 'block');
 		$('#content-page-2').css('display', 'none');
 		
 		// Hide the AJAX loading

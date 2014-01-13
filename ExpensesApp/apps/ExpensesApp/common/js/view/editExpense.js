@@ -12,10 +12,10 @@ var EditExpense = (function() {
 				
 				console.log(expense);
 				//draw thumbNail with receipt
-				Utils.getThumbNail(expense["receipt"], document.getElementById('receiptThumb'));
+				Utils.getThumbNail(expense["receipt"], $('#editExpenseReceipt')[0]);
 			    
-			    $('#receiptThumb').on('click', function(){
-			    	Utils.getFullImage(expense.receipt, expenseID, ExpenseType);
+			    $('.receiptThumb').on('click', function(){
+			    	Utils.getFullImage(expense.receipt, expenseID, EditExpense);
 			    });
 			    
 			    expenseUL = document.getElementById("expenseDetailsList");
@@ -25,8 +25,8 @@ var EditExpense = (function() {
 			    if (expense["expenseTypeID"]== "null" || expense["expenseTypeID"]==null){
 			    	expenseA.appendChild(document.createTextNode("Unknown"));
 			    } else {
-			    expenseA.appendChild(document.createTextNode(expense["expenseTypeID"]));
-			}
+				    expenseA.appendChild(document.createTextNode(expense["expenseTypeID"]));
+				}
 			    expenseLI.appendChild(expenseA);
 			    expenseUL.appendChild(expenseLI);
 			    

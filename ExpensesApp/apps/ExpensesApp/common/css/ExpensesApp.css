@@ -43,7 +43,16 @@ body{
 	clear:both;
 }
 
-
+.opacity{
+	position:fixed;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	opacity:0.6;
+	background-color:#000;
+	display:none;
+}
 .ui-body-c .ui-link{
 	font-weight:normal;
 }
@@ -104,7 +113,7 @@ body{
 /* Expense Type Page receipt thumbnail formatting */
 .receiptThumb {
 	float:left;
-	margin:0% 2% 2% 2% ;
+	margin:0% 2% 2% 0% ;
 }
 
 /* Expense Type Selection Collapsible Format */
@@ -138,7 +147,14 @@ body{
 .deleteExpense{
 	margin-top:20px;
 }
-
+#descriptionErrorMsg, 
+#chargeCodeErrorMsg,
+#accountProjectErrorMsg,
+#editTripError {
+	color:#FF0000;
+	width:195px;
+	margin-top:5px;
+}
 /*---------------------------combobox-------------*/
 
 .custom-combobox {
@@ -177,12 +193,12 @@ body{
 }
 
 /*---------------------------trip details------------*/
-.tripDetailsBtnArea {
+/*.tripDetailsBtnArea {
 	position: absolute;
 	border-top: 1px solid #ADADAD;
 	bottom: 0px;
 	width: 91%;
-}
+}*/
 
 #recentEmailArea {
 	width: 100%;

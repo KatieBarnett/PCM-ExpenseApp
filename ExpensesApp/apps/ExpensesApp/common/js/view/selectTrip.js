@@ -11,7 +11,6 @@ var SelectTrip = (function() {
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
 				var receipt = expense["receipt"];
-				console.log("the receipt URI is: " + receipt);
 				Utils.getThumbNail(receipt, $('#receiptTripThumb')[0]);
 
 				$('.receiptThumb').on('click', function(){
@@ -55,12 +54,13 @@ var SelectTrip = (function() {
 					$('#endDate').val("");
 					
 					$("#addTripModal").popup("open");
+					$('.opacity').css('display', 'block');
 				});
 				
 				// Handler for when the cancel button is clicked on the modal
 				$('#cancelAddTrip').on('click', function(){
-				    console.log("close modal");
 				    $("#addTripModal").popup("close");
+				    $('.opacity').css('display', 'none');
 				});
 				
 				// Handler for when the submit button is clicked on the modal
@@ -84,22 +84,24 @@ var SelectTrip = (function() {
 								
 								// Close the modal once completed
 								$('#addTripModal').popup("close");
+								$('.opacity').css('display', 'none');
 							});
 						};
 	
 						DB.addTrip(tripDescription, startDate, endDate, callback);
 					} else {
-						console.log("empty text box detected");
 						$('#descriptionErrorMsg').removeClass('hidden');  
 					};
 				});
 
 				$('.finishLater').on('click',function() {
-					Utils.loadPage('mainPage', function() {
+					// Add function for requirement of the Finish this later button
+					Utils.loadPageWithAnimation('mainPage', expenseID, function() {
 						Utils.saveCurrentPageObject(SelectTrip);
 						MainPage.init();
 					});
 				});
+				
 			});
 		},
 		

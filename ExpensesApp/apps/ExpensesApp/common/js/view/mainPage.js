@@ -56,6 +56,7 @@ var MainPage = (function() {
 
 function displayAttachmentOptions(){
 	$('.attachReceipt').css('display','block');
+	$('.opacity').css('display','block');
 	if(Utils.isiOS7()){
 	$('.attachReceipt').animate({bottom:'20px'}, 500);
 	}
@@ -65,6 +66,7 @@ function displayAttachmentOptions(){
 }
 
 function closeAttachmentOptions(){
+	$('.opacity').css('display','none');
 	$('.needs').animate({paddingTop:'5px'}, 500, function() { 
 		$('.have').css("display","block");
 		});

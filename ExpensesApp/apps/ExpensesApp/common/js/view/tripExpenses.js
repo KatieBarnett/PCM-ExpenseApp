@@ -36,6 +36,7 @@ var TripExpenses = (function() {
 				for (var i=0; i<expenseTypes.length; i++){
 					for (var j=0; j<data.length; j++){
 						if (expenseTypes[i]["expenseTypeID"] == data[j]["expenseTypeID"]){
+							console.log(data[j]);
 							// Publish list divider for each existing expense type
 							if (headingPublished == false){
 								expenseLI = document.createElement("li");
@@ -48,14 +49,12 @@ var TripExpenses = (function() {
 							expenseLI.setAttribute("data-expense", data[j]["expenseID"]);
 							expenseLI.setAttribute("class", "expenseItem");
 							expenseAnchor = document.createElement("a");
-							if (data[j]["accountProjectName"] == null){
-								expenseAnchor.appendChild(document.createTextNode("Please complete the expense questions"));
+							if (data[j]["accountProjectCode"] == "Default Accounting") {
+								expenseAnchor.appendChild(document.createTextNode(data[j]["accountProjectCode"]));
 							} else {
 								expenseAnchor.appendChild(document.createTextNode(data[j]["accountProjectName"]));
-								if (data[j]["accountProjectCode"] != null){
-									expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
-								}
-							}
+								expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
+							}	
 							receiptThumbnail = document.createElement("img");
 							if (data[j]["receipt"] == "undefined"){
 								receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
@@ -87,7 +86,7 @@ var TripExpenses = (function() {
 					var expenseID = $(this).attr("data-expense");
 					// Check if the element type of this event element is the image, if so, just display the thumbnail
 					if (event.target.nodeName.toUpperCase() == "IMG") {
-						Utils.getFullImage(event.target.getAttribute("src"), expenseID, TripExpenses);
+						Utils.getFullImage(event.target.getAttribute("src"), selectedTrip, TripExpenses);
 					} else {
 						// Otherwise load the expense details
 						Utils.loadPageWithAnimation("editExpense", selectedTrip, function() {
@@ -112,6 +111,7 @@ var TripExpenses = (function() {
 				
 				// Handler for when the cancel button is clicked
 				$('#cancelSendDetailsBtn').on('click', function() {
+					$('.opacity').css('display','none');
 					$('.sendDetailsContainer').animate({bottom:'-284px'}, 500, function() { 
 						$('.sendDetailsContainer').css("display","none");
 					});
@@ -166,11 +166,13 @@ var TripExpenses = (function() {
 					
 					// Bring up the modal
 					$('#editTripModal').popup("open");
+					$('.opacity').css('display','block');
 				});
 		
 				// Handler to close the popup
 				$('#cancelEditTrip').on('click', function() {
 					$('#editTripModal').popup("close");
+					$('.opacity').css('display','none');
 				});
 				
 				// Handler for when the submit button is pressed
@@ -184,6 +186,7 @@ var TripExpenses = (function() {
 						DB.updateTrip(selectedTrip, tripDescription, tripStartDate, tripEndDate, function() {
 							// Close the modal
 							$('#editTripModal').popup("close");
+							$('.opacity').css('display','none');
 							
 							// Clear the current title
 							TripExpenses._removeTitles();
@@ -382,6 +385,7 @@ var TripExpenses = (function() {
 		 */
 		_animateTripPopup : function() {
 			$('.sendDetailsContainer').css('display','block');
+			$('.opacity').css('display', 'block');
 			$('.sendDetailsContainer').animate({bottom:'0px'}, 500);
 		},
 		
