@@ -14,7 +14,7 @@ var SelectTrip = (function() {
 				Utils.getThumbNail(receipt, $('#selectTripThumb')[0]);
 
 				$('.receiptThumb').on('click', function(){
-					Utils.getFullImage(receipt, expenseID, ExpenseType);
+					Utils.getFullImage(receipt, expenseID, SelectTrip);
 				});
 
 
