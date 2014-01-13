@@ -9,37 +9,41 @@ var ProcessTrips = (function() {
 			console.log("ProcessTrips :: init");
 			
 			DB.getUnassociatedExpenses(function(expenseData){
-				for (var i=0; i<expenseData.length; i++){
-
-					expenseLI = document.createElement("li");
-					expenseLI.setAttribute("data-expense", expenseData[i]["expenseID"]);
-					expenseLI.setAttribute("class", "unassociatedExpenseItem");
-					expenseLI.setAttribute("data-icon", "none");
-					expenseAnchor = document.createElement("a");
-					if (expenseData[i]["expenseTypeID"] == null || expenseData[i]["expenseTypeID"] == "null"){
-						expenseAnchor.appendChild(document.createTextNode("Please complete the expense questions"));
-					} else {
-						expenseAnchor.appendChild(document.createTextNode(expenseData[i]["expenseTypeID"]));
-						if (expenseData[i]["accountProjectName"] != null){
-							expenseAnchor.appendChild(document.createTextNode(expenseData[i]["accountProjectName"]));
-							if (expenseData[i]["accountProjectCode"] != null){
-								expenseAnchor.appendChild(document.createTextNode("(" + expenseData[i]["accountProjectCode"]+ ")" ));
+				if (expenseData.length > 0) {										
+					for (var i=0; i < expenseData.length; i++){						
+						
+						expenseLI = document.createElement("li");
+						expenseLI.setAttribute("data-expense", expenseData[i]["expenseID"]);
+						expenseLI.setAttribute("class", "unassociatedExpenseItem");
+						expenseLI.setAttribute("data-icon", "none");						
+						expenseAnchor = document.createElement("a");					
+						if (expenseData[i]["expenseTypeID"] == null || expenseData[i]["expenseTypeID"] == "null"){
+							expenseAnchor.appendChild(document.createTextNode("Please complete the expense questions"));
+						} else {
+							expenseAnchor.appendChild(document.createTextNode(expenseData[i]["expenseTypeID"]));
+							if (expenseData[i]["accountProjectName"] != null){
+								expenseAnchor.appendChild(document.createTextNode(expenseData[i]["accountProjectName"]));
+								if (expenseData[i]["accountProjectCode"] != null){
+									expenseAnchor.appendChild(document.createTextNode("(" + expenseData[i]["accountProjectCode"]+ ")" ));
+								};
 							};
-						};
-					}
-					
-					receiptThumbnail = document.createElement("img");
-					if (expenseData[i]["receipt"] == "undefined"){
-						receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
-					} else {
-						receiptThumbnail.setAttribute("src", expenseData[i]["receipt"]);
-					}
-					
-					expenseAnchor.appendChild(receiptThumbnail);
-					expenseLI.appendChild(expenseAnchor);
-					unassociatedExpenseList.appendChild(expenseLI);
-				};
-				$('#unassociatedExpenseList').listview('refresh');
+						}
+						
+						receiptThumbnail = document.createElement("img");
+						if (expenseData[i]["receipt"] == "undefined"){
+							receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
+						} else {
+							receiptThumbnail.setAttribute("src", expenseData[i]["receipt"]);
+						}
+						
+						expenseAnchor.appendChild(receiptThumbnail);
+						expenseLI.appendChild(expenseAnchor);
+						unassociatedExpenseList.appendChild(expenseLI);
+					};					
+					$('#unassociatedExpenseList').listview('refresh');
+				} else {
+					$("#unassociatedExpenseList").addClass('hidden');					
+				}
 
 				// Move to next page after trip is selected, pass expenseTypeID
 				$('.tripSelected').on('click', function() {
