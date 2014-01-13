@@ -93,38 +93,42 @@ var ProcessTrips = (function() {
 
 
 			DB.getUnprocessedTrips(function(data){
-				
-				//Populate trip list
-				var tripUL=document.getElementById("tripList");
-				
-				for(var i=0; i<data.length; i++){
-					tripLI = document.createElement("li");
+
+				if (data.length > 0) {
+					//Populate trip list
+					var tripUL=document.getElementById("tripList");
 					
-					tripAnchor = document.createElement("a");
-					tripAnchor.appendChild(document.createTextNode(data[i]["tripName"]));
-					tripLI.setAttribute("class", "tripSelected");
-					tripLI.setAttribute("data-trip", data[i]["tripID"]);
-					tripLI.appendChild(tripAnchor);
-					tripDates = document.createElement("p");
-					if (data[i]["startDate"]) {				
-						tripDates.appendChild(document.createTextNode(data[i]["startDate"]));						
+					for(var i=0; i<data.length; i++){
+						tripLI = document.createElement("li");
+						
+						tripAnchor = document.createElement("a");
+						tripAnchor.appendChild(document.createTextNode(data[i]["tripName"]));
+						tripLI.setAttribute("class", "tripSelected");
+						tripLI.setAttribute("data-trip", data[i]["tripID"]);
+						tripLI.appendChild(tripAnchor);
+						tripDates = document.createElement("p");
+						if (data[i]["startDate"]) {				
+							tripDates.appendChild(document.createTextNode(data[i]["startDate"]));						
+						}
+						if (data[i]["startDate"] && data[i]["endDate"]) {
+							tripDates.appendChild(document.createTextNode("/"));
+						} else if (!data[i]["startDate"] && !data[i]["endDate"]) {
+							tripDates.appendChild(document.createTextNode("No trip dates specified."));
+						}
+						if (data[i]["endDate"]) {
+							tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
+						}
+						tripLI.appendChild(tripDates);
+						tripUL.appendChild(tripLI);
 					}
-					if (data[i]["startDate"] && data[i]["endDate"]) {
-						tripDates.appendChild(document.createTextNode("/"));
-					} else if (!data[i]["startDate"] && !data[i]["endDate"]) {
-						tripDates.appendChild(document.createTextNode("No trip dates specified."));
-					}
-					if (data[i]["endDate"]) {
-						tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
-					}
-					tripLI.appendChild(tripDates);
-					tripUL.appendChild(tripLI);
 					
+					$('#tripList').listview('refresh');
 					
-					
-					
-				}
-				$('#tripList').listview('refresh');
+				} else {
+					$("#tripList").removeClass("ui-shadow");
+					$("#tripList li:first-child").addClass("ui-shadow");
+					$("#noTripsMsg").removeClass("hidden");
+				}				
 				
 				// On Selection of trip, move to next screen
 				$('.tripSelected').on('click', function() {

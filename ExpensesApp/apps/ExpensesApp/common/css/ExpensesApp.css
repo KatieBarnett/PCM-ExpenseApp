@@ -138,7 +138,7 @@ body{
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .expenseTypeLI li{
@@ -206,4 +206,14 @@ body{
 
 #recentEmailArea .ui-listview {
 	margin: 0 -15px;
+}
+
+/*---------------------------process/select trips------------*/
+#noTripsMsg {
+	border: none;
+	text-align: center;
+	font-style: italic;
+	color: #888;
+	text-shadow: 0;
+ 	background: none;
 }

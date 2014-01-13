@@ -19,8 +19,15 @@ var SelectTrip = (function() {
 
 
 				DB.getUnprocessedTrips(function(data){
-					// Build the list
-					SelectTrip._buildList(data);
+
+					if (data.length > 0) {
+						// Build the list
+						SelectTrip._buildList(data);
+					} else {
+						$("#tripList").removeClass("ui-shadow");
+						$("#tripList li:first-child").addClass("ui-shadow");
+						$("#noTripsMsg").removeClass("hidden");
+					}
 					
 					// On Selection of trip, move to next screen
 					$('#tripList').on('click', '.tripSelected', function() {
@@ -65,7 +72,7 @@ var SelectTrip = (function() {
 				
 				// Handler for when the submit button is clicked on the modal
 				$('#submitAddTrip').on('click', function() {
-					if ($('#tripDescription').val().length > 1) {
+					if ($('#tripDescription').val().length >= 1) {
 						var tripDescription = $('#tripDescription').val();
 						var	startDate = $('#startDate').val();
 						var	endDate = $('#endDate').val();
@@ -76,6 +83,10 @@ var SelectTrip = (function() {
 							
 							// Query the DB for the information to rebuild the list
 							DB.getUnprocessedTrips(function(data) {
+								
+								// Hide the message
+								$("#noTripsMsg").addClass("hidden");
+								
 								// Build the list
 								SelectTrip._buildList(data);
 								
@@ -113,10 +124,6 @@ var SelectTrip = (function() {
 			//Populate trip list
 			var tripUL=document.getElementById("tripList");
 			
-			// Build the list divider
-			$('<li>', {"data-role":"list-divider", text: "Trips"}).appendTo("#tripList");
-
-			
 			for(var i=0; i<data.length; i++){
 				tripLI = document.createElement("li");
 
@@ -150,7 +157,7 @@ var SelectTrip = (function() {
 		 * @param none
 		 */
 		_removeList : function() {
-			$('#tripList').empty();
+			$('#tripList li + li').nextAll('li').remove();
 		}
 	};
 }());
