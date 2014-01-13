@@ -9,103 +9,100 @@ var EditExpense = (function() {
 			console.log("EditExpense :: init");
 
 			DB.getExpense(expenseID, function(expense) {
-				
-				console.log(expense);
-				//draw thumbNail with receipt
-				Utils.getThumbNail(expense["receipt"], $('#editExpenseReceipt')[0]);
-			    
-			    $('.receiptThumb').on('click', function(){
-			    	Utils.getFullImage(expense.receipt, expenseID, EditExpense);
-			    });
-			    
-			    expenseUL = document.getElementById("expenseDetailsList");
-			    expenseLI = document.createElement("li");
-			    expenseLI.setAttribute("class", "expenseType");
-			    expenseA = document.createElement("a");
-			    if (expense["expenseTypeID"]== "null" || expense["expenseTypeID"]==null){
-			    	expenseA.appendChild(document.createTextNode("Unknown"));
-			    } else {
-				    expenseA.appendChild(document.createTextNode(expense["expenseTypeID"]));
-				}
-			    expenseLI.appendChild(expenseA);
-			    expenseUL.appendChild(expenseLI);
-			    
-			    expenseLI = document.createElement("li");
-			    expenseLI.setAttribute("data-role", "list-divider");
-			    expenseLI.setAttribute("data-theme", "f");
-			    expenseLI.appendChild(document.createTextNode("Charge to"));
-			    expenseUL.appendChild(expenseLI);
-			    
-			    expenseLI = document.createElement("li");
-			    expenseLI.setAttribute("class", "expenseCharge");
-			    expenseA = document.createElement("a");
-			    if (expense["accountProjectCode"] == "null" || expense["accountProjectCode"] == null ){
-			    	expenseA.appendChild(document.createTextNode("Unknown"));
-			    } else {
-			    expenseA.appendChild(document.createTextNode(expense["accountProjectCode"]));
-			    }
-			    expenseLI.appendChild(expenseA);
-			    expenseUL.appendChild(expenseLI);
-			    
-			    expenseLI = document.createElement("li");
-			    expenseLI.setAttribute("data-role", "list-divider");
-			    expenseLI.setAttribute("data-theme", "f");
-			    expenseLI.appendChild(document.createTextNode("Trip"));
-			    expenseUL.appendChild(expenseLI);
-			    
-			    expenseLI = document.createElement("li");
-			    expenseLI.setAttribute("class", "expenseTrip");
-			    expenseA = document.createElement("a");
-			    if (expense["tripID"]== "null" || expense["tripID"]==null){
-			    	expenseA.appendChild(document.createTextNode("Unknown"));
-			    } else {
-			    expenseA.appendChild(document.createTextNode(expense["tripID"]));
-			    }
-			    expenseLI.appendChild(expenseA);
-			    expenseUL.appendChild(expenseLI);
-			    
-			    $('#expenseDetailsList').trigger('create');
-			    $('#expenseDetailsList').listview('refresh');
-			    
-			    // Move to selected screen
-				$('.expenseType').on('click', function() {
+			    // Get the trip description from unprocessed trip
+				DB.getUnprocessedTrip(expense["tripID"], function(trip) {
+					console.log(expense);
+					//draw thumbNail with receipt
+					Utils.getThumbNail(expense["receipt"], $('#editExpenseReceipt')[0]);
+					
+					$('.receiptThumb').on('click', function(){
+						Utils.getFullImage(expense.receipt, expenseID, EditExpense);
+					});
+					
+					expenseUL = document.getElementById("expenseDetailsList");
+					expenseLI = document.createElement("li");
+					expenseLI.setAttribute("class", "expenseType");
+					expenseA = document.createElement("a");
+					if (expense["expenseTypeID"]== "null" || expense["expenseTypeID"]==null){
+					expenseA.appendChild(document.createTextNode("Unknown"));
+					} else {
+					    expenseA.appendChild(document.createTextNode(expense["expenseTypeID"]));
+					}
+					expenseLI.appendChild(expenseA);
+					expenseUL.appendChild(expenseLI);
+					
+					expenseLI = document.createElement("li");
+					expenseLI.setAttribute("data-role", "list-divider");
+					expenseLI.setAttribute("data-theme", "f");
+					expenseLI.appendChild(document.createTextNode("Charge to"));
+					expenseUL.appendChild(expenseLI);
+					
+					expenseLI = document.createElement("li");
+					expenseLI.setAttribute("class", "expenseCharge");
+					expenseA = document.createElement("a");
+					if (expense["accountProjectCode"] == "Default Accounting") {
+					expenseA.appendChild(document.createTextNode(expense["accountProjectCode"]));
+					} else {
+						expenseA.appendChild(document.createTextNode(expense["accountProjectName"] + " (" + expense["accountProjectCode"] + ")"));
+					}
+					expenseLI.appendChild(expenseA);
+					expenseUL.appendChild(expenseLI);
+					
+					expenseLI = document.createElement("li");
+					expenseLI.setAttribute("data-role", "list-divider");
+					expenseLI.setAttribute("data-theme", "f");
+					expenseLI.appendChild(document.createTextNode("Trip"));
+					expenseUL.appendChild(expenseLI);
+					
+					expenseLI = document.createElement("li");
+					expenseLI.setAttribute("class", "expenseTrip");
+					expenseA = document.createElement("a");
+					
+					expenseA.appendChild(document.createTextNode(trip.tripName));
+					
+					 expenseLI.appendChild(expenseA);
+					    expenseUL.appendChild(expenseLI);
+					    
+					    $('#expenseDetailsList').trigger('create');
+					$('#expenseDetailsList').listview('refresh');
+					
+					// Move to selected screen
+					$('.expenseType').on('click', function() {
 					Utils.loadPageWithAnimation("expenseType", expenseID, function() {
-						Utils.saveCurrentPageObject(EditExpense);
-						ExpenseType.init(expenseID);
+							Utils.saveCurrentPageObject(EditExpense);
+							ExpenseType.init(expenseID);
+						});
 					});
-				});
-				
-				$('.expenseCharge').on('click', function() {
+					
+					$('.expenseCharge').on('click', function() {
 					Utils.loadPageWithAnimation("chargeTo", expenseID, function() {
-						Utils.saveCurrentPageObject(EditExpense);
-						ChargeTo.init(expenseID);
+							Utils.saveCurrentPageObject(EditExpense);
+							ChargeTo.init(expenseID);
+						});
 					});
-				});
-				
-				$('.expenseTrip').on('click', function() {
+					
+					$('.expenseTrip').on('click', function() {
 					Utils.loadPageWithAnimation("selectTrip", expenseID, function() {
-						Utils.saveCurrentPageObject(EditExpense);
-						SelectTrip.init(expenseID);
+								Utils.saveCurrentPageObject(EditExpense);
+								SelectTrip.init(expenseID);
+							});
+						});
+					});
+					
+					
+					// Navigation buttons functionality
+					$('.back').on('click', function() {
+						Utils.goBackWithAnimation();
+					});
+					$('.deleteExpense').on('click',function() {
+					DB.deleteExpense(expenseID, function() {
+						Utils.loadPageWithAnimation('mainPage', null, function() {
+							Utils.saveCurrentPageObject(EditExpense);
+							MainPage.init();
+						});
 					});
 				});
 			});
-			
-
-			// Navigation buttons functionality
-			$('.back').on('click', function() {
-				Utils.goBackWithAnimation();
-			});
-			$('.deleteExpense').on('click',function() {
-				DB.deleteExpense(expenseID, function() {
-					Utils.loadPageWithAnimation('mainPage', null, function() {
-						Utils.saveCurrentPageObject(EditExpense);
-						MainPage.init();
-					});
-				});
-			});
-
-			
-			
 		}
 	};
 }());
