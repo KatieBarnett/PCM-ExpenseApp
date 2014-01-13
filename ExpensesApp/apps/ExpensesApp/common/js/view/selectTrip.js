@@ -11,7 +11,7 @@ var SelectTrip = (function() {
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
 				var receipt = expense["receipt"];
-				Utils.getThumbNail(receipt, $('#receiptTripThumb')[0]);
+				Utils.getThumbNail(receipt, $('#selectTripThumb')[0]);
 
 				$('.receiptThumb').on('click', function(){
 					Utils.getFullImage(receipt, expenseID, ExpenseType);

@@ -14,7 +14,7 @@ var ChargeTo = (function() {
 			//draw thumbNail with latest receipt or saved receipt if it exists
 			DB.getExpense(expenseID, function(expense){
 				var receipt = expense["receipt"];
-				Utils.getThumbNail(receipt, $('.receiptThumb')[0]);
+				Utils.getThumbNail(receipt, $('#chargeToThumb')[0]);
 
 				$('.receiptThumb').on('click', function(){
 					Utils.getFullImage(receipt, expenseID, ChargeTo);
