@@ -257,6 +257,10 @@ var Utils = (function() {
 			return isAndroid;
 		},
 		
+		/**
+		 * Function to determine if the environment is iOS7 or not
+		 * @return boolean
+		 */
 		isiOS7 : function() {
 			var isiOS7 = WL.Client.getEnvironment() == WL.Environment.IPHONE &&
 	        parseInt(navigator.appVersion.match(/OS (\d)/)[1], 10) >= 7;
