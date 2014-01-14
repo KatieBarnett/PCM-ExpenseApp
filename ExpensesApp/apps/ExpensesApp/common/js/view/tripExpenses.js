@@ -199,6 +199,35 @@ var TripExpenses = (function() {
 					}
 				});
 			});
+			
+			// Click handler for 'Delete' button
+			$('#deleteBtn').on('click', function() {
+				$('.confirm').css('display', 'block');	
+				$('.opacity').css('display', 'block');
+				if(Utils.isiOS7()){
+					$('.confirm').animate({bottom:'20px'}, 500);
+				} else{
+					$('.confirm').animate({bottom:'0px'}, 500);	
+				}
+			});
+			
+			// Click handler for 'No' button
+			$('#noBtn').on('click', function() {				
+				$('.opacity').css('display', 'none');				
+				$('.confirm').animate({bottom:'-210px'}, 500, function() { 
+					$(".confirm").css('display', 'none');
+				});				
+			});
+
+			// Click handler for 'Yes' button
+			$('#yesBtn').on('click', function() {				
+				DB.deleteTrip(selectedTrip, function() {
+					Utils.loadPageWithAnimation('mainPage', null, function() {
+						Utils.saveCurrentPageObject(TripExpenses);
+						MainPage.init();
+					});
+				});
+			});
 		},
 		
 		/**

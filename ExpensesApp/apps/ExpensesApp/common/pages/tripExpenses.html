@@ -12,15 +12,20 @@
 			<h3 id="tripName"></h3>
 			<p id="tripStartTitle">Starts: <span id=tripStart></span></p><p id="tripEndTitle">Ends: <span id=tripEnd></span></p>
 			<div id="processedDate"></div>
-		</div>
-		
+		</div>		
 		
 		<ul id="expenseList" data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc expenseList"></ul>
+		
+		<div class='horizontal-rule'></div>
+		
 		<div class="tripDetailsBtnArea">
 			<span id="emailLogBtnArea" class="hidden"><button id="emailLogBtn" data-theme="b">Email Log</button></span>
 			<button id="sendTripDetailsBtn" data-theme="a">Send Trip Details</button>
+			<a id="deleteBtn" data-role="button" data-theme="b" data-inline="false">Delete Trip</a>
 		</div>
-	<div class="opacity"></div>		
+		
+		<div class="opacity"></div>		
+		
 		<div class="sendDetailsContainer">
 			<form id="emailForm">
 				<span>Where would you like to send this trip?</span>
@@ -33,9 +38,15 @@
 				</ul>
 			</div>
 			<div class="sendDetailsBtns">
-				<button id="cancelSendDetailsBtn" data-theme="b">Cancel</button>
 				<button id="submitTripDetailsBtn" data-theme="a">Send Trip Details</button>
+				<button id="cancelSendDetailsBtn" data-theme="b">Cancel</button>
 			</div>
+		</div>
+		
+		<div class="confirm">
+			<span class="question">Are you sure?</span>
+			<a id="noBtn" data-role="button" data-theme="a">No</a>
+			<a id="yesBtn" data-role="button" data-theme="b">Yes</a>
 		</div>
 	</div>
 
@@ -46,8 +57,8 @@
 			<input type="text" class="field" id="editTripDescription" required placeholder="Description of Trip" />	
 			<input id="editStartDate" type="text" placeholder="Starts (yyyy-mm-dd)"/>
 			<input id="editEndDate" type="text" placeholder="Ends (yyyy-mm-dd)" />
-			<button id="cancelEditTrip" data-theme="b">Cancel</button>
 			<button id="submitEditTrip" data-theme="a">Submit</button>
+			<button id="cancelEditTrip" data-theme="b">Cancel</button>
 		</div>
 	</div>
 </div>
