@@ -115,6 +115,18 @@ body{
 .back{
 	border-style:none;
 }
+.confirmCancel {
+	z-index: 9999;
+	display: none;
+	position:absolute;
+	bottom:-210px;
+	left:0;
+	height:210px;
+	width:91%;
+	padding:5%;
+	background:#FFFFFF;
+	color:#fff;	
+}
 .receiptThumb + p {
 	position: absolute;
 	padding-left: 95px;

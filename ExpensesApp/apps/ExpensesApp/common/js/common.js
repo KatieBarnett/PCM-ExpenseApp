@@ -269,6 +269,36 @@ var Utils = (function() {
 	        parseInt(navigator.appVersion.match(/OS (\d)/)[1], 10) >= 7;
 	        
 	        return isiOS7;
+		},
+		
+		/**
+		 * Handler for the Cancel confirmation popup
+		 */
+		cancelModalHandler : function() {
+			// Click handler for 'Cancel' button
+			$('.cancelBtn').on('click', function() {
+				$('.confirmCancel').css('display', 'block');	
+				$('.opacity').css('display', 'block');
+				if(Utils.isiOS7()){
+					$('.confirmCancel').animate({bottom:'20px'}, 500);
+				} else{
+					$('.confirmCancel').animate({bottom:'0px'}, 500);	
+				}
+			});
+			
+			// Click handler for 'No' button
+			$('#noBtn').on('click', function() {				
+				$('.opacity').css('display', 'none');				
+				$('.confirmCancel').animate({bottom:'-210px'}, 500, function() { 
+					$(".confirmCancel").css('display', 'none');
+				});				
+			});
+
+			// Click handler for 'Yes' button
+			$('#yesBtn').on('click', function() {
+				// Display the previous page
+				Utils.goBackWithAnimation();
+			});
 		}
 	};
 } ());

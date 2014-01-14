@@ -103,6 +103,9 @@ var SelectTrip = (function() {
 					};
 				});
 
+				// Attach modal handler to the screen
+				Utils.cancelModalHandler();
+				
 				$('.finishLater').on('click',function() {
 					// Add function for requirement of the Finish this later button
 					Utils.loadPageWithAnimation('mainPage', expenseID, function() {

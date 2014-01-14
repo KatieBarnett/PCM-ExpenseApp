@@ -150,6 +150,8 @@ var ChargeTo = (function() {
 						}
 					}
 				});
+				
+				Utils.cancelModalHandler();
 			});
 		},
 		
@@ -215,17 +217,5 @@ var ChargeTo = (function() {
 			// Refresh the combobox view
 			$('#combobox').selectmenu('refresh');
 		}
-		
-		
-		
-	};
-	
-	
-			
+	};		
 }());
-			
-
-			
-
-
-

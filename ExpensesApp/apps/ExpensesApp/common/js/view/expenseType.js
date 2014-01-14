@@ -96,6 +96,9 @@ var ExpenseType = (function() {
 					Utils.goBackWithAnimation();
 				});
 				
+				// Attach modal handler to the screen
+				Utils.cancelModalHandler();
+				
 				$('.finishLater').on('click',function() {
 					// Reset the current image URI
 					ImageURI.resetCurrentImageURI();
