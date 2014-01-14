@@ -73,8 +73,7 @@ var ChargeTo = (function() {
 						SelectTrip.init(expenseID);
 					});
 				});
-				
-				
+								
 				// trigger add client code modal
 				$('.btnShowModal').on('click', function() {
 	
@@ -104,8 +103,8 @@ var ChargeTo = (function() {
 					event.preventDefault();
 					console.log("add button clicked");
 					
-					// If all fields are populated, add the client code
-					if ($('#accDescription').val().length >= 1 && !$('#combobox option:first').is(":selected") && $('#accID').val().length >= 1) {
+					// If at least the Description is not empty, add the client code
+					if ($('#accDescription').val().length >= 1) {
 						var apName = $('#accDescription').val();
 						var	apCode = $('#accID').val();
 						var chargeCode = $('#combobox').val();
@@ -130,23 +129,11 @@ var ChargeTo = (function() {
 						DB.addClientCode(apCode, apName, chargeCode, callback);		
 						
 					} else {
-						// Validate data and show/hide errors
+						// Validate data and show/hide error
 						if ($('#accDescription').val().length == 0) {
 							$('#descriptionErrorMsg').removeClass('hidden');
 						} else {
 							$('#descriptionErrorMsg').addClass('hidden');
-						}
-						
-						if ($('#combobox option:first').is(":selected")) {
-							$('#chargeCodeErrorMsg').removeClass('hidden');
-						} else {
-							$('#chargeCodeErrorMsg').addClass('hidden');
-						}
-						
-						if ($('#accID').val().length == 0) {
-							$('#accountProjectErrorMsg').removeClass('hidden');
-						} else {
-							$('#accountProjectErrorMsg').addClass('hidden');
 						}
 					}
 				});

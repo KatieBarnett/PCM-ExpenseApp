@@ -181,8 +181,6 @@ ul#selectTripList {
 	margin-top:20px;
 }
 #descriptionErrorMsg, 
-#chargeCodeErrorMsg,
-#accountProjectErrorMsg,
 #editTripError {
 	color:#FF0000;
 	width:195px;

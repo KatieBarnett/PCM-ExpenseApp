@@ -11,7 +11,7 @@
 		<canvas class="receiptThumb" width="75" height="75" id="chargeToThumb"></canvas>
 	   <p>Where should this expense be charged?</p>
 		<ul data-role="listview" data-theme="d" data-inset="true" class="ui-icon-nodisc clear" id="selectCodeList"></ul>
-		<div class='horizontal-rule' />
+		<div class='horizontal-rule'></div>
 		<a class="finishLater" data-role="button" data-theme="b">Finish this later</a>
 	 </div>
 		
@@ -22,12 +22,10 @@
         <span class="question">Add Client Code</span>
           <div class="hidden" id="descriptionErrorMsg">"Description of Account" is a required field.</div>
           <input type="text" class="field" id="accDescription" required placeholder="Description of Account *" />
-          <div class="hidden" id="chargeCodeErrorMsg">"To be charged to: " is a required field.</div>
           <select id="combobox" data-theme="c" data-icon="arrow-d" >
-          <option>To be charged to: *</option>
+          <option>To be charged to: </option>
           </select>
-          <div class="hidden" id="accountProjectErrorMsg">"Account/Project ID" is a required field.</div>
-          <input type="text" class="field" id="accID" required placeholder="Account/Project ID *" />
+          <input type="text" class="field" id="accID" required placeholder="Account/Project ID" />
           <button id="cancelAddCode" data-theme="b">Cancel</button>
           <button id="submitAddCode" class="" data-theme="a">Submit</button>
       </div>
