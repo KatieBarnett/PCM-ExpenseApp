@@ -118,6 +118,7 @@ body{
 .receiptThumb + p {
 	position: absolute;
 	padding-left: 95px;
+	margin-right: 5px;
 }
 .horizontal-rule {
 	border-top: 1px solid #999;
