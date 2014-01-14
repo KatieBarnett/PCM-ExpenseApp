@@ -89,17 +89,46 @@ var EditExpense = (function() {
 						});
 					});
 					
-					
 					// Navigation buttons functionality
 					$('.back').on('click', function() {
-						Utils.goBackWithAnimation();
+						Utils.goBackWithAnimation(expenseID);
 					});
-					$('.deleteExpense').on('click',function() {
-					DB.deleteExpense(expenseID, function() {
-						Utils.loadPageWithAnimation('mainPage', null, function() {
-							Utils.saveCurrentPageObject(EditExpense);
-							MainPage.init();
-						});
+					
+					// Attach handler to screen
+					EditExpense.deleteModalHandler(expenseID);
+			});
+		},
+		
+		/**
+		 * Handler for the Delete confirmation popup
+		 */
+		deleteModalHandler : function(expenseID) {
+			// Click handler for 'Delete' button
+			$('#deleteBtn').on('click', function() {
+				$('.confirm').css('display', 'block');	
+				$('.opacity').css('display', 'block');
+				if(Utils.isiOS7()){
+					$('.confirm').animate({bottom:'20px'}, 500);
+				} else{
+					$('.confirm').animate({bottom:'0px'}, 500);	
+				}
+			});
+			
+			// Click handler for 'No' button
+			$('#noBtn').on('click', function() {				
+				$('.opacity').css('display', 'none');				
+				$('.confirm').animate({bottom:'-210px'}, 500, function() { 
+					$(".confirm").css('display', 'none');
+				});				
+			});
+
+			// Click handler for 'Yes' button
+			$('#yesBtn').on('click', function() {
+				
+				DB.deleteExpense(expenseID, function() {
+					Utils.loadPageWithAnimation('mainPage', null, function() {
+						Utils.saveCurrentPageObject(EditExpense);
+						MainPage.init();
 					});
 				});
 			});

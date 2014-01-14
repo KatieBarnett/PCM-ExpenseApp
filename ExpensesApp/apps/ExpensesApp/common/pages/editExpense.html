@@ -9,9 +9,16 @@
 		<p><canvas class="receiptThumb" width="75" height="75" id="editExpenseReceipt"></canvas></p>
 		<ul id="expenseDetailsList" data-role="listview" data-theme="f" data-inset="false" class="ui-icon-nodisc ui-icon-alt clear">
 			<li data-role="list-divider" data-theme="f">Type</li>
-			
 		</ul>
-		<a class="deleteExpense" data-role="button" data-theme="b" data-inline="false">Delete Expense</a>
-	</div>
+		<div class='horizontal-rule'></div>
+		<a id="deleteBtn" data-role="button" data-theme="a" data-inline="false">Delete Expense</a>
 
+		<div class="opacity"></div>
+		
+		<div class="confirm">
+			<span class="question">Are you sure?</span>
+			<a id="noBtn" data-role="button" data-theme="a">No</a>
+			<a id="yesBtn" data-role="button" data-theme="b">Yes</a>
+		</div>
+	</div>	
 </div>
