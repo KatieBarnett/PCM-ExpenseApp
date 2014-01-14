@@ -104,7 +104,7 @@ var SelectTrip = (function() {
 				});
 
 				// Attach modal handler to the screen
-				Utils.cancelModalHandler();
+				Utils.confirmModalHandler();
 				
 				$('.finishLater').on('click',function() {
 					// Add function for requirement of the Finish this later button

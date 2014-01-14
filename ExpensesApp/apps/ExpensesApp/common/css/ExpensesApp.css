@@ -115,7 +115,7 @@ body{
 .back{
 	border-style:none;
 }
-.confirmCancel {
+.confirm {
 	z-index: 9999;
 	display: none;
 	position:absolute;

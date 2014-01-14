@@ -151,7 +151,7 @@ var ChargeTo = (function() {
 					}
 				});
 				
-				Utils.cancelModalHandler();
+				Utils.confirmModalHandler();
 			});
 		},
 		

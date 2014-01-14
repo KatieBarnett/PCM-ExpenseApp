@@ -97,7 +97,7 @@ var ExpenseType = (function() {
 				});
 				
 				// Attach modal handler to the screen
-				Utils.cancelModalHandler();
+				Utils.confirmModalHandler();
 				
 				$('.finishLater').on('click',function() {
 					// Reset the current image URI

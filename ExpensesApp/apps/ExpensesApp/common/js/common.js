@@ -272,25 +272,25 @@ var Utils = (function() {
 		},
 		
 		/**
-		 * Handler for the Cancel confirmation popup
+		 * Handler for the 'Are you sure?' confirmation popup
 		 */
-		cancelModalHandler : function() {
+		confirmModalHandler : function() {
 			// Click handler for 'Cancel' button
 			$('.cancelBtn').on('click', function() {
-				$('.confirmCancel').css('display', 'block');	
+				$('.confirm').css('display', 'block');	
 				$('.opacity').css('display', 'block');
 				if(Utils.isiOS7()){
-					$('.confirmCancel').animate({bottom:'20px'}, 500);
+					$('.confirm').animate({bottom:'20px'}, 500);
 				} else{
-					$('.confirmCancel').animate({bottom:'0px'}, 500);	
+					$('.confirm').animate({bottom:'0px'}, 500);	
 				}
 			});
 			
 			// Click handler for 'No' button
 			$('#noBtn').on('click', function() {				
 				$('.opacity').css('display', 'none');				
-				$('.confirmCancel').animate({bottom:'-210px'}, 500, function() { 
-					$(".confirmCancel").css('display', 'none');
+				$('.confirm').animate({bottom:'-210px'}, 500, function() { 
+					$('.confirm').css('display', 'none');
 				});				
 			});
 
