@@ -108,6 +108,7 @@ var ExpenseType = (function() {
 						DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectCode"], 
 								expenseObject["receipt"], expenseObject["tripID"], function () {
 							Utils.loadPage("mainPage", function() {
+								Utils.displayExpenseCreatedAlert(false);
 								Utils.saveCurrentPageObject(ExpenseType);
 								MainPage.init();
 							});	
@@ -116,6 +117,7 @@ var ExpenseType = (function() {
 						// Update the expense and then move to the main page
 						DB.addExpense(null, null, thumbNailURI, null, function(expenseID) {
 							Utils.loadPage("mainPage", function() {
+								Utils.displayExpenseCreatedAlert(false);
 								Utils.saveCurrentPageObject(ExpenseType);
 								MainPage.init();
 							});	

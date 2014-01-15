@@ -59,7 +59,7 @@ var ChargeTo = (function() {
 					// Add function for requirement of the Finish this later button
 	
 					Utils.loadPageWithAnimation('mainPage', expenseID, function() {
-	
+						Utils.displayExpenseCreatedAlert(false);
 						Utils.saveCurrentPageObject(ChargeTo);
 						MainPage.init();
 					});

@@ -7,6 +7,9 @@ body{
 	height:100%;
 	position:relative;
 }
+.bold {
+	font-weight: bold;
+}
 /* Worklight container div */
 
 /* ----------------------------------------- Index */
@@ -54,6 +57,42 @@ body{
 	background-color:#000;
 	display:none;
 }
+.alert {
+	background: #FFFFFF;
+	display: none;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	position: absolute;
+	width: 270px;
+	height: 265px;
+	z-index: 9999;
+}
+.alertHeading {
+	color: #00a6a0;
+	display: block;
+	font-size: 14pt;
+	font-weight: normal;
+	padding: 20px 0 20px 0;
+	text-align: center;
+}
+.alert #container {
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+.alert p {
+	font-weight: normal !important;
+	margin: 0 20px 20px 20px;
+}
+.alert a {
+	margin: 10px 20px 0 20px;
+}
+.alert .bold {
+	font-size: 11pt;
+}
+
 .ui-body-c .ui-link{
 	font-weight:normal;
 }

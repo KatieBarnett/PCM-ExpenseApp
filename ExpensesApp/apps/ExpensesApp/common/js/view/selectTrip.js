@@ -36,6 +36,7 @@ var SelectTrip = (function() {
 							DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
 									expense["receipt"], selectedTrip, function () {
 								Utils.loadPage("mainPage", function() {
+									Utils.displayExpenseCreatedAlert(true);
 									Utils.saveCurrentPageObject(SelectTrip);
 									MainPage.init();
 								});
@@ -109,6 +110,7 @@ var SelectTrip = (function() {
 				$('.finishLater').on('click',function() {
 					// Add function for requirement of the Finish this later button
 					Utils.loadPageWithAnimation('mainPage', expenseID, function() {
+						Utils.displayExpenseCreatedAlert(false);
 						Utils.saveCurrentPageObject(SelectTrip);
 						MainPage.init();
 					});

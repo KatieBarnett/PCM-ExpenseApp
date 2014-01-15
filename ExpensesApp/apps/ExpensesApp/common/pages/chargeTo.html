@@ -25,8 +25,7 @@
 		</div>	
 	 </div>
 
-	<div data-role="popup" id="popupDialogue" data-overlay-theme="b" data-theme="b" data-dismissible="false" data-history="false" style="max-width:400px;">   
-       
+	<div data-role="popup" id="popupDialogue" data-overlay-theme="b" data-theme="b" data-dismissible="false" data-history="false" style="max-width:400px;">
        <div data-role="main" class="ui-content">
         <span class="question">Add Client Code</span>
           <div class="hidden" id="descriptionErrorMsg">"Description of Account" is a required field.</div>
@@ -39,8 +38,14 @@
           <input type="text" class="field" id="accID" required placeholder="Account/Project ID *" />
           <button id="submitAddCode" class="" data-theme="a">Submit</button>
           <button id="cancelAddCode" data-theme="b">Cancel</button>
-      </div>
-      
+      </div>      
    </div>
 
+	<div class="alert">
+		<div id="container">
+			<span class="alertHeading">Expense Created.</span>
+			<p id="alertMsg"></p>
+			<a id="okBtn" data-role="button" data-theme="a">OK</a>
+		</div>
+	</div>
 </div>

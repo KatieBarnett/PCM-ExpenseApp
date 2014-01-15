@@ -10,6 +10,7 @@ var Utils = (function() {
 	var objectHistory = [];
 	var receipts = [];
 	var expenseIDHistory = [];
+		
 	return {
 		/**
 		 * Method that will load the desired page with params and callback
@@ -298,6 +299,37 @@ var Utils = (function() {
 			$('#yesBtn').on('click', function() {
 				// Display the previous page
 				Utils.goBackWithAnimation();
+			});
+		},
+		
+		/**
+		 * Function to handle the 'Expense Created' alert
+		 * @param  expenseCompleteIndicator  True if the expense is complete, false otherwise.
+		 */
+		displayExpenseCreatedAlert : function(expenseCompleteIndicator) {
+			
+			$('.opacity').css('display', 'block');
+			$('.alert').css('display', 'block');
+
+			// Display message
+			if (expenseCompleteIndicator) {
+				$('<span />', { 
+							text: 'Your expense has been created. Once you have created all of your expenses, you can send the trip details from the '
+						}).appendTo("#alertMsg");			
+				$('<span />', { 'class': 'bold', text: 'Process Trips ' }).appendTo("#alertMsg");				
+				$('<span />', { text: 'section.' }).appendTo("#alertMsg");	
+			} else {				
+				$('<span />', { 
+							text: 'Your expense has been created, but didn\'t answer all of our questions. Please complete these questions from the '
+						}).appendTo("#alertMsg");				
+				$('<span />', { 'class': 'bold', text: 'Process Trips ' }).appendTo("#alertMsg");				
+				$('<span />', { text: 'section.' }).appendTo("#alertMsg");	
+			}
+			
+			// Click handler for 'OK' button
+			$('#okBtn').on('click', function(event) {
+				$('.opacity').css('display', 'none');
+				$('.alert').css('display', 'none');
 			});
 		}
 	};
