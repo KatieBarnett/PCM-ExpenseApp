@@ -60,7 +60,7 @@ var SelectTrip = (function() {
 					$('#endDate').val("");
 					
 					$("#addTripModal").popup("open");
-					$('.opacity').css('display', 'block');
+					//$('.opacity').css('display', 'block');
 				});
 				
 				// Handler for when the cancel button is clicked on the modal

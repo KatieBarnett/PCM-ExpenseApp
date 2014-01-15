@@ -42,11 +42,9 @@ body{
 	text-align:center;
 	font-weight:normal;
 }
-
 .clear {
 	clear:both;
 }
-
 .opacity{
 	position:fixed;
 	top:0;
@@ -56,6 +54,7 @@ body{
 	opacity:0.6;
 	background-color:#000;
 	display:none;
+	z-index: 9998;
 }
 .alert {
 	background: #FFFFFF;
@@ -92,7 +91,6 @@ body{
 .alert .bold {
 	font-size: 11pt;
 }
-
 .ui-body-c .ui-link{
 	font-weight:normal;
 }
@@ -123,6 +121,7 @@ body{
 	padding:5%;
 	background:#FFFFFF;
 	color:#fff;
+	z-index: 9999;
 }
 .attachReceipt li{
 	padding:5%; 
@@ -274,7 +273,7 @@ ul#selectTripList {
 	width:91%;
 	padding:5%;
 	background:#FFFFFF;
-	z-index:6;
+	z-index:9999;
 }
 
 /*---------------------------trip details------------*/
