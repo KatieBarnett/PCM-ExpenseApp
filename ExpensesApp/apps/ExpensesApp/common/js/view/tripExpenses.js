@@ -270,7 +270,7 @@ var TripExpenses = (function() {
 		 */
 		_getTrip : function(selectedTrip, callback) {
 			console.log(selectedTrip);
-			DB.getUnprocessedTrip(selectedTrip, function(data) {
+			DB.getTrip(selectedTrip, function(data) {
 				var tripName = data.tripName;
 				var tripStart = data.startDate;
 				var tripEnd = data.endDate;
