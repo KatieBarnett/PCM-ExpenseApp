@@ -4,10 +4,10 @@
  */
 
 var EditExpense = (function() {
+	DEFAULT_ACCOUNTING = "Default Accounting";
 	return {
 		init : function(expenseID) {
 			console.log("EditExpense :: init");
-
 			DB.getExpense(expenseID, function(expense) {
 			    // Get the trip description from unprocessed trip
 				DB.getTrip(expense["tripID"], function(trip) {
@@ -20,15 +20,19 @@ var EditExpense = (function() {
 					});
 					
 					expenseUL = document.getElementById("expenseDetailsList");
+					var blnInProcess = (trip["originalProcessDate"] == null || trip["originalProcessDate"] == "null");
 					expenseLI = document.createElement("li");
 					expenseLI.setAttribute("class", "expenseType");
-					expenseA = document.createElement("a");
-					if (expense["expenseTypeID"]== "null" || expense["expenseTypeID"]==null){
-					expenseA.appendChild(document.createTextNode("Unknown"));
+					
+					// Create an anchor tag if the trip has not been processed.
+					if (blnInProcess) {
+						expenseA = document.createElement("a");
+						expenseA.appendChild(document.createTextNode(expense["expenseTypeID"]));
+						expenseLI.appendChild(expenseA);
 					} else {
-					    expenseA.appendChild(document.createTextNode(expense["expenseTypeID"]));
+						expenseLI.appendChild(document.createTextNode(expense["expenseTypeID"]));
 					}
-					expenseLI.appendChild(expenseA);
+				
 					expenseUL.appendChild(expenseLI);
 					
 					expenseLI = document.createElement("li");
@@ -39,13 +43,14 @@ var EditExpense = (function() {
 					
 					expenseLI = document.createElement("li");
 					expenseLI.setAttribute("class", "expenseCharge");
-					expenseA = document.createElement("a");
-					if (expense["accountProjectCode"] == "Default Accounting") {
-						expenseA.appendChild(document.createTextNode(expense["accountProjectCode"]));
+					
+					if (blnInProcess) {
+						expenseA = document.createElement("a");
+						expenseA.appendChild(document.createTextNode(EditExpense.findChargeToString(expense["accountProjectCode"], expense["accountProjectName"])));
+						expenseLI.appendChild(expenseA);
 					} else {
-						expenseA.appendChild(document.createTextNode(expense["accountProjectName"] + " (" + expense["accountProjectCode"] + ")"));
+						expenseLI.appendChild(document.createTextNode(EditExpense.findChargeToString(expense["accountProjectCode"], expense["accountProjectName"])));
 					}
-					expenseLI.appendChild(expenseA);
 					expenseUL.appendChild(expenseLI);
 					
 					expenseLI = document.createElement("li");
@@ -56,39 +61,44 @@ var EditExpense = (function() {
 					
 					expenseLI = document.createElement("li");
 					expenseLI.setAttribute("class", "expenseTrip");
-					expenseA = document.createElement("a");
+					if (blnInProcess) {
+						expenseA = document.createElement("a");
+						expenseA.appendChild(document.createTextNode(trip.tripName));
+						expenseLI.appendChild(expenseA);
+					} else {
+						expenseLI.appendChild(document.createTextNode(trip.tripName));
+					}
 					
-					expenseA.appendChild(document.createTextNode(trip.tripName));
-					
-					 expenseLI.appendChild(expenseA);
-					    expenseUL.appendChild(expenseLI);
+					expenseUL.appendChild(expenseLI);
 					    
-					    $('#expenseDetailsList').trigger('create');
+					$('#expenseDetailsList').trigger('create');
 					$('#expenseDetailsList').listview('refresh');
 					
-					// Move to selected screen
-					$('.expenseType').on('click', function() {
-					Utils.loadPageWithAnimation("expenseType", expenseID, function() {
-							Utils.saveCurrentPageObject(EditExpense);
-							ExpenseType.init(expenseID);
+					// Only attach these event listeners if the trip has not been processed
+					if (blnInProcess) {
+						// Move to selected screen
+						$('.expenseType').on('click', function() {
+							Utils.loadPageWithAnimation("expenseType", expenseID, function() {
+								Utils.saveCurrentPageObject(EditExpense);
+								ExpenseType.init(expenseID);
+							});
 						});
-					});
-					
-					$('.expenseCharge').on('click', function() {
-					Utils.loadPageWithAnimation("chargeTo", expenseID, function() {
-							Utils.saveCurrentPageObject(EditExpense);
-							ChargeTo.init(expenseID);
+						
+						$('.expenseCharge').on('click', function() {
+							Utils.loadPageWithAnimation("chargeTo", expenseID, function() {
+								Utils.saveCurrentPageObject(EditExpense);
+								ChargeTo.init(expenseID);
+							});
 						});
-					});
-					
-					$('.expenseTrip').on('click', function() {
-					Utils.loadPageWithAnimation("selectTrip", expenseID, function() {
+						
+						$('.expenseTrip').on('click', function() {
+							Utils.loadPageWithAnimation("selectTrip", expenseID, function() {
 								Utils.saveCurrentPageObject(EditExpense);
 								SelectTrip.init(expenseID);
 							});
 						});
-					});
-					
+					}
+				
 					// Navigation buttons functionality
 					$('.back').on('click', function() {
 						Utils.goBackWithAnimation();
@@ -96,6 +106,7 @@ var EditExpense = (function() {
 					
 					// Attach handler to screen
 					EditExpense.deleteModalHandler(expenseID);
+				});
 			});
 		},
 		
@@ -132,6 +143,19 @@ var EditExpense = (function() {
 					});
 				});
 			});
+		},
+		
+		/**
+		 * Function that will return the correct string to display according to the account code.
+		 * @param accountCode, the account code for the expense
+		 * @param accountName, the name of the account
+		 */
+		findChargeToString : function(accountCode, accountName) {
+			if (accountCode == DEFAULT_ACCOUNTING) {
+				return accountCode;
+			} else {
+				return accountName + " (" + accountCode + ")";
+			}
 		}
 	};
 }());
