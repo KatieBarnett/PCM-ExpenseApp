@@ -17,7 +17,12 @@ var SelectTrip = (function() {
 					Utils.getFullImage(receipt, expenseID, SelectTrip);
 				});
 
-
+				// Change the date selection depending on the platform
+				if (!Utils.isAndroid()) {
+					$("#startDate").attr("type", "date");
+					$("#endDate").attr("type", "date");
+				}
+				
 				DB.getUnprocessedTrips(function(data){
 
 					if (data.length > 0) {
