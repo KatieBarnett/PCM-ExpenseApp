@@ -262,11 +262,11 @@ var DB = (function() {
 		 * 
 		 * @return A single entry in the Trips table
 		 */
-		getUnprocessedTrip : function(selectedTripInput, callback) {
+		getTrip : function(selectedTripInput, callback) {
 			// Convert the input into an int if not already an int
 			var selectedTrip = selectedTripInput && selectedTripInput.seq ? selectedTripInput.seq : selectedTripInput;
 			db.transaction(function(tx) {
-				var query = 'SELECT tripName, startDate, endDate FROM Trips WHERE tripID = ' + selectedTrip;
+				var query = 'SELECT tripName, startDate, endDate, originalProcessDate FROM Trips WHERE tripID = ' + selectedTrip;
 				tx.executeSql(query, [], function(tx, results) {
 					var row = results.rows.item(0);
 					
@@ -438,11 +438,15 @@ var DB = (function() {
 			var expenseID = eid && eid.seq ? eid.seq : eid;
 			if (expenseID) {
 				db.transaction(function(tx) {
-					var query = 'SELECT expenseID, expenseTypeID, accountProjectCode, receipt, tripID FROM Expenses WHERE expenseID = ' + expenseID;
+					var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectCode, a.accountProjectName, e.receipt, e.tripID ' +
+								'FROM Expenses AS e ' + 
+								'LEFT JOIN AccountProjects AS a ' +
+								'ON e.accountProjectCode = a.accountProjectCode ' +
+								'WHERE expenseID = ' + expenseID;
 					tx.executeSql(query, [], function(tx, results) {
 						var row = results.rows.item(0);
 						var singleExpense = {};
-						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "receipt", "tripID"], function(index, value) {
+						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "accountProjectName", "receipt", "tripID"], function(index, value) {
 							singleExpense[value] = row[value];
 						});					
 						if (callback) {

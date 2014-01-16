@@ -10,7 +10,7 @@ var EditExpense = (function() {
 
 			DB.getExpense(expenseID, function(expense) {
 			    // Get the trip description from unprocessed trip
-				DB.getUnprocessedTrip(expense["tripID"], function(trip) {
+				DB.getTrip(expense["tripID"], function(trip) {
 					console.log(expense);
 					//draw thumbNail with receipt
 					Utils.getThumbNail(expense["receipt"], $('#editExpenseReceipt')[0]);
@@ -41,7 +41,7 @@ var EditExpense = (function() {
 					expenseLI.setAttribute("class", "expenseCharge");
 					expenseA = document.createElement("a");
 					if (expense["accountProjectCode"] == "Default Accounting") {
-					expenseA.appendChild(document.createTextNode(expense["accountProjectCode"]));
+						expenseA.appendChild(document.createTextNode(expense["accountProjectCode"]));
 					} else {
 						expenseA.appendChild(document.createTextNode(expense["accountProjectName"] + " (" + expense["accountProjectCode"] + ")"));
 					}
@@ -91,7 +91,7 @@ var EditExpense = (function() {
 					
 					// Navigation buttons functionality
 					$('.back').on('click', function() {
-						Utils.goBackWithAnimation(expenseID);
+						Utils.goBackWithAnimation();
 					});
 					
 					// Attach handler to screen
