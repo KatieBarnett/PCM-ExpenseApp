@@ -110,7 +110,7 @@ var SelectTrip = (function() {
 				});
 
 				// Attach modal handler to the screen
-				Utils.confirmModalHandler();
+				Utils.confirmModalHandler(expenseID);
 				
 				$('.finishLater').on('click',function() {
 					// Add function for requirement of the Finish this later button

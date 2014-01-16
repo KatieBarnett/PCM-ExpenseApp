@@ -74,6 +74,7 @@ var ChargeTo = (function() {
 					});
 				});
 				
+				Utils.confirmModalHandler(expenseID["seq"]);
 				
 				// trigger add client code modal
 				$('.btnShowModal').on('click', function() {
@@ -87,7 +88,6 @@ var ChargeTo = (function() {
 					$('#accID').val("");
 					$('#combobox').val("");
 					$("#popupDialogue").popup("open");
-					
 				});
 				
 				// Handler for when the cancel button is clicked on the modal
@@ -97,7 +97,6 @@ var ChargeTo = (function() {
 				    $("#popupDialogue").popup("close");
 	
 				});
-				
 	           
 				// Handler for when the submit button is clicked on the modal
 				$('#submitAddCode').on('click', function(event) {
@@ -150,8 +149,6 @@ var ChargeTo = (function() {
 						}
 					}
 				});
-				
-				Utils.confirmModalHandler();
 			});
 		},
 		

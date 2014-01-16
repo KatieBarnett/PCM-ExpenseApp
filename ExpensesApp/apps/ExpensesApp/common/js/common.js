@@ -274,8 +274,11 @@ var Utils = (function() {
 		
 		/**
 		 * Handler for the 'Are you sure?' confirmation popup
+		 * @param  expenseID  An expense ID
 		 */
-		confirmModalHandler : function() {
+		confirmModalHandler : function(expenseID) {
+			console.info(expenseID);
+
 			// Click handler for 'Cancel' button
 			$('.cancelBtn').on('click', function() {
 				$('.confirm').css('display', 'block');	
@@ -297,8 +300,19 @@ var Utils = (function() {
 
 			// Click handler for 'Yes' button
 			$('#yesBtn').on('click', function() {
-				// Display the previous page
-				Utils.goBackWithAnimation();
+				if (typeof expenseID == 'undefined') {
+					Utils.loadPage('mainPage', function() {
+						MainPage.init();							
+					});
+				} else {
+					console.info(expenseID);
+					console.log("expense id to del: " + expenseID);
+					DB.deleteExpense(expenseID, function() {
+						Utils.loadPage('mainPage', function() {
+							MainPage.init();							
+						});
+					});
+				}
 			});
 		},
 		
@@ -327,7 +341,7 @@ var Utils = (function() {
 			}
 			
 			// Click handler for 'OK' button
-			$('#okBtn').on('click', function(event) {
+			$('#okBtn').on('click', function() {
 				$('.opacity').css('display', 'none');
 				$('.alert').css('display', 'none');
 			});
