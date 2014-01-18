@@ -86,7 +86,15 @@ var ChargeTo = (function() {
 					// Clear any value in the inputs
 					$('#accDescription').val("");
 					$('#accID').val("");
-					$('#combobox').val("");
+					
+					// Re-build the drop-down list
+					$('#combobox').empty();
+					ChargeTo._buildComboboxOptions(DB.getChargeAccountCodes());
+					
+					// Hide the error messages
+					$('div[id$="ErrorMsg"]').addClass('hidden');
+					
+					// Display the pop-up
 					$("#popupDialogue").popup("open");
 				});
 				
@@ -206,9 +214,13 @@ var ChargeTo = (function() {
 		 */
 		_buildComboboxOptions : function(data) {
 			console.log(data);
+			
+			// Create the default option
+			$('<option />', { text: 'To be charged to: *'} ).appendTo('#combobox');
+			
+			// Create the remaining options
 			for (var i in data) {
-				$('<option>', { text : data[i]}).appendTo('#combobox');
-				
+				$('<option />', { text : data[i]}).appendTo('#combobox');				
 			}
 			
 			// Refresh the combobox view
