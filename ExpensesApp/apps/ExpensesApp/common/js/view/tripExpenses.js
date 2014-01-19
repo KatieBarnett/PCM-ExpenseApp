@@ -23,6 +23,11 @@ var TripExpenses = (function() {
 			
 			// Get the selected trip from the DB with the details
 			TripExpenses._getTrip(selectedTrip, function(tripName, tripStart, tripEnd) {
+				// Make the date fields use the native date picker if it's not android
+				if (!Utils.isAndroid()) {
+					$("#editStartDate").attr("type", "date");
+					$("#editEndDate").attr("type", "date");
+				}
 				// Publish trip details
 				TripExpenses._fillTitles(tripName, tripStart, tripEnd);
 			});
@@ -193,6 +198,7 @@ var TripExpenses = (function() {
 							
 							// Reload the current page
 							TripExpenses._fillTitles(tripDescription, tripStartDate, tripEndDate);
+							
 						});
 					} else {
 						$('#editTripError').removeClass("hidden");
@@ -252,13 +258,15 @@ var TripExpenses = (function() {
 			}
 			if (tripStart) {
 				$('#tripStart').html(tripStart);
+				$('#tripStartTitle').css("display","block");
 			} else {
-				$('#tripStartTitle').empty();
+				$('#tripStartTitle').css("display","none");
 			}
 			if (tripEnd) {
 				$('#tripEnd').html(tripEnd);
+				$('#tripEndTitle').css("display","block");
 			} else {
-				$('#tripEndTitle').empty();
+				$('#tripEndTitle').css("display","none");
 			}
 		},
 		
