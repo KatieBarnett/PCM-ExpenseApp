@@ -10,6 +10,13 @@ body{
 .bold {
 	font-weight: bold;
 }
+ul li.ui-icon-hide span.ui-icon-arrow-r {
+	margin: -999px;
+}
+ul li[data-role="collapsible"] div {
+	background: #006093;
+	z-index: 0;
+}
 /* Worklight container div */
 
 /* ----------------------------------------- Index */
@@ -223,10 +230,6 @@ ul#selectTripList {
 
 .hidden {
 	display: none !important;
-}
-
-.expenseTypeLI li{
-	background:#006093;
 }
 .deleteExpense{
 	margin-top:20px;

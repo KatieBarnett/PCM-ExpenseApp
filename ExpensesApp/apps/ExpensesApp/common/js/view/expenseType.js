@@ -21,7 +21,6 @@ var ExpenseType = (function() {
 				} else if (ImageURI.getCurrentImageURI()) {
 					thumbNailURI = ImageURI.getCurrentImageURI();
 				}
-					
 
 				Utils.getThumbNail(thumbNailURI, $('#expenseTypeThumb')[0]);
 			    
@@ -34,54 +33,62 @@ var ExpenseType = (function() {
 			    var currentGroup = 0;
 			    var expenseTypes = DB.getExpenseTypes();
 			    
-			    expenseUL = document.getElementById("expenseList");
+			    expenseUL = $('#expenseList');
 			    
-			    console.log("got the UL");
 			    for (var i=0; i<expenseTypes.length; i++){
-			    		
+			    	
 			    	group = expenseTypes[i]["expenseGroupID"];
-			 
-			    	// If parent of new sub group set up collapsible list item
+			    	
+			    	var expenseSubUL;
+			    	var expenseLI;
+			    	
+			    	// If parent of new sub group, set up collapsible list item
 			    	if (group > currentGroup) {
-			    		expenseLI = document.createElement("li");
-			    		expenseLI.setAttribute("class", "expenseTypeLI");
-			    		expenseLI.setAttribute("data-role", "collapsible");
-			    		expenseLI.setAttribute("data-iconpos", "right");
-			    		expenseLI.setAttribute("data-theme", "d");
-			    		parentText = document.createElement("h2");
-			    		parentText.appendChild(document.createTextNode(expenseTypes[i]["expenseTypeID"]));
-			    		expenseLI.appendChild(parentText);
-			    		expenseSubUL = document.createElement("ul");
-			    		expenseSubUL.setAttribute("data-role", "listview");
+			    		expenseLI = $('<li />', { 'class': 'expenseTypeLI',
+			    		                          'data-role': 'collapsible',
+			    		                          'data-iconpos': 'right',
+			    		                          'data-theme': 'd'});
+			    		parentText = $('<h2 />', { text: expenseTypes[i]["expenseTypeID"] }).appendTo(expenseLI);
+			    		expenseSubUL = $('<ul />', { 'data-role': 'listview' });
 			    		currentGroup = group;
 			    	}
-			    	// If child of sub group add to collapsible list
+			    	// If child of existing sub group, add to collapsible list
 			    	else if (group > 0){
-			    		expenseSubLI = document.createElement("li");
-			    		expenseSubLI.setAttribute("class", "chargeTo");
-				    	expenseSubLI.setAttribute("data-expense", expenseTypes[i]["expenseTypeID"]);
-				    	expenseSubLI.setAttribute("data-theme", "d");
-			    		expenseA = document.createElement("a");
-				    	expenseA.appendChild(document.createTextNode(expenseTypes[i]["expenseTypeID"]));
-				    	expenseSubLI.appendChild(expenseA);
-				    	expenseSubUL.appendChild(expenseSubLI);
+			    		
+			    		var expenseSubLI;
+			    		
+			    		if (Utils.getPreviousPage() == "editExpense") {
+				    		expenseSubLI = $('<li />', { 'class': 'expenseTypeLI chargeTo ui-icon-hide', 
+				    		                             'data-expense': expenseTypes[i]["expenseTypeID"],
+				    		                             'data-theme': 'd' });
+			    		} else {
+				    		expenseSubLI = $('<li />', { 'class': 'expenseTypeLI chargeTo',
+				    	                                 'data-expense': expenseTypes[i]["expenseTypeID"],
+				    	                                 'data-theme': 'd' });
+			    		}
+			    		
+			    		expenseA = $('<a />', { text: expenseTypes[i]["expenseTypeID"] }).appendTo(expenseSubLI);
+			    		expenseSubLI.appendTo(expenseSubUL);
 				    	
 				    	// If last of subgroup, close collapsible menu
 				    	if (expenseTypes[i+1]["expenseGroupID"] != currentGroup){
-				    		expenseLI.appendChild(expenseSubUL);
-				    		expenseUL.appendChild(expenseLI);
+				    		expenseSubUL.appendTo(expenseLI);
+				    		expenseLI.appendTo(expenseUL);
 				    	}
 			    	}
-			    	// If single type add to main list
+			    	// If single type, add to main list
 			    	else {
-			    		expenseLI = document.createElement("li");
-			    		expenseLI.setAttribute("class", "expenseTypeLI");
-			    		expenseLI.setAttribute("class", "chargeTo");
-				    	expenseLI.setAttribute("data-expense", expenseTypes[i]["expenseTypeID"]);
-			    		expenseA = document.createElement("a");
-			    		expenseA.appendChild(document.createTextNode(expenseTypes[i]["expenseTypeID"]));
-			    		expenseLI.appendChild(expenseA);
-			    		expenseUL.appendChild(expenseLI);
+			    		
+			    		if (Utils.getPreviousPage() == "editExpense") {
+			    			expenseLI = $('<li />', { 'class': 'expenseTypeLI chargeTo ui-icon-hide',
+			    			                          'data-expense': expenseTypes[i]["expenseTypeID"] });
+			    		} else {
+			    			expenseLI = $('<li />', { 'class': 'expenseTypeLI chargeTo', 
+			    	                                  'data-expense': expenseTypes[i]["expenseTypeID"] });
+			    		}
+			    		
+			    		expenseA = $('<a />', { text: expenseTypes[i]["expenseTypeID"] }).appendTo(expenseLI);
+			    		expenseLI.appendTo(expenseUL);
 			    	}
 			    }
 			    $('#expenseList').trigger('create');
@@ -133,13 +140,20 @@ var ExpenseType = (function() {
 					var selectedType = $(this).attr("data-expense");
 					// If expense does exist, then update the expense, otherwise create a new one.
 					if (expenseObject) {
-						DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectCode"], 
-								expenseObject["receipt"], expenseObject["tripID"], function () {
-							Utils.loadPageWithAnimation("chargeTo", expenseObject["expenseID"], function() {
-								Utils.saveCurrentPageObject(ExpenseType);
-								ChargeTo.init(expenseObject["expenseID"]);
-							});	
-						});
+						if (Utils.getPreviousPage() == "editExpense") {
+							DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectCode"], 
+												expenseObject["receipt"], expenseObject["tripID"], function() {
+								Utils.goBackWithAnimation();
+							});
+						} else {
+							DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectCode"], 
+												expenseObject["receipt"], expenseObject["tripID"], function() {
+								Utils.loadPageWithAnimation("chargeTo", expenseObject["expenseID"], function() {
+									Utils.saveCurrentPageObject(ExpenseType);
+									ChargeTo.init(expenseObject["expenseID"]);
+								});
+							});
+						}
 					} else {
 						DB.addExpense(selectedType, null, thumbNailURI, null, function(newExpenseID) {
 							Utils.loadPageWithAnimation("chargeTo", newExpenseID, function() {
@@ -148,7 +162,7 @@ var ExpenseType = (function() {
 							});
 						});	
 					}	 
-				});				
+				});	
 			});
 		}
 	};

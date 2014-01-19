@@ -29,17 +29,20 @@ var ChargeTo = (function() {
 				//build combobox options
 				ChargeTo._buildComboboxOptions(DB.getChargeAccountCodes());
 				
-				// On Selection of trip, move to next screen
+				// Click handler for each client code
 				$('#selectCodeList').on('click', '.selectCode', function() {
 					console.log("button pressed.");
 					var selectedCode = $(this).attr("data-code");
 					DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], selectedCode, 
 							expense["receipt"], expense["tripID"], function () {
-						console.log("test all good");
-						Utils.loadPageWithAnimation("selectTrip", expense["expenseID"], function() {
-							Utils.saveCurrentPageObject(ChargeTo);
-							SelectTrip.init(expense["expenseID"]);
-						});
+						if (Utils.getPreviousPage() == "editExpense") {
+							Utils.goBackWithAnimation();								
+						} else {
+							Utils.loadPageWithAnimation("selectTrip", expense["expenseID"], function() {
+								Utils.saveCurrentPageObject(ChargeTo);
+								SelectTrip.init(expense["expenseID"]);
+							});
+						}
 					});
 				});	
 
@@ -57,7 +60,6 @@ var ChargeTo = (function() {
 				});
 				$('.finishLater').on('click',function() {
 					// Add function for requirement of the Finish this later button
-	
 					Utils.loadPageWithAnimation('mainPage', expenseID, function() {
 						Utils.displayExpenseCreatedAlert(false);
 						Utils.saveCurrentPageObject(ChargeTo);
@@ -165,35 +167,33 @@ var ChargeTo = (function() {
 		 * @param data the returned data from the DB
 		 */
 		_buildCodeList : function(data) {
-			
-			
+
 			//build list divider
 			$('<li>', {"data-role":"list-divider", text: "Charge To:"}).appendTo("#selectCodeList");
 			
 			//populate rest of list
 			
 			for (var i=0; i<data.length; i++){
+				var chargeToLI = null;
+				
 				//Populate Client Code list
-				var chargeToLI = $('<li>', {"class" : "selectCode", "data-code" : data[i].accountProjectCode});
+				if (Utils.getPreviousPage() == "editExpense") {
+					chargeToLI = $('<li>', {"class" : "selectCode ui-icon-hide", "data-code" : data[i].accountProjectCode});
+				} else {
+					chargeToLI = $('<li>', {"class" : "selectCode", "data-code" : data[i].accountProjectCode});
+				}
 //				$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectName + " " + "(" + data[i].accountProjectCode + ")"}).appendTo(chargeToLI);
 //				chargeToLI.appendTo('#selectCodeList');
 				
 				if (data[i].accountProjectCode == "Default Accounting"){
 					console.log("checking defaccount");
 					$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectCode}).appendTo(chargeToLI);
-				
-
 				}else{
 					$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectName + " " + "(" + data[i].accountProjectCode + ")"}).appendTo(chargeToLI);
-					
 				}
 				
 				chargeToLI.appendTo('#selectCodeList');
-				
-				}
-			
-		
-	
+			}
 			
 			// Refresh the list view
 			$('#selectCodeList').listview('refresh');
@@ -205,7 +205,6 @@ var ChargeTo = (function() {
 		 */
 		_removeCodeList : function() {
 			$('#selectCodeList').empty();
-		
 		},
 		
 		/**

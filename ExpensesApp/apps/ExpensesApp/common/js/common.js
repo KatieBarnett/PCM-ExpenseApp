@@ -170,6 +170,14 @@ var Utils = (function() {
 		},
 		
 		/**
+		 * Gets the name of the previous page from the list
+		 * @return  The name of the previous page
+		 */
+		getPreviousPage : function() {
+			return pageHistory[pageHistory.length - 2];
+		},
+		
+		/**
 		 * Function that will get the full image (if it is not the no image image)
 		 * @param ref, the URI of the image
 		 * @param page, the page that is calling the full image

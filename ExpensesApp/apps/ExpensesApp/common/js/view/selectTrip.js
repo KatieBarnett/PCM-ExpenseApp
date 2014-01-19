@@ -40,11 +40,15 @@ var SelectTrip = (function() {
 						DB.getExpense(expenseID, function(expense){
 							DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
 									expense["receipt"], selectedTrip, function () {
-								Utils.loadPage("mainPage", function() {
-									Utils.displayExpenseCreatedAlert(true);
-									Utils.saveCurrentPageObject(SelectTrip);
-									MainPage.init();
-								});
+								if (Utils.getPreviousPage() == "editExpense") {
+									Utils.goBackWithAnimation();
+								} else {
+									Utils.loadPage("mainPage", function() {
+										Utils.displayExpenseCreatedAlert(true);
+										Utils.saveCurrentPageObject(SelectTrip);
+										MainPage.init();
+									});									
+								}
 							});
 						});
 					});
@@ -52,8 +56,7 @@ var SelectTrip = (function() {
 
 				// Navigation buttons functionality
 				$('.back').on('click', function() {
-					Utils.goBackWithAnimation(function() {
-					});
+					Utils.goBackWithAnimation();
 				});
 
 				// Handler for when the new trip button is clicked
@@ -136,8 +139,12 @@ var SelectTrip = (function() {
 				tripLI = document.createElement("li");
 
 				tripAnchor = document.createElement("a");
-				tripAnchor.appendChild(document.createTextNode(data[i]["tripName"]));
-				tripLI.setAttribute("class", "tripSelected");
+				tripAnchor.appendChild(document.createTextNode(data[i]["tripName"]));				
+				if (Utils.getPreviousPage() == "editExpense") {
+					tripLI.setAttribute("class", "tripSelected ui-icon-hide");
+				} else {
+					tripLI.setAttribute("class", "tripSelected");
+				}
 				tripLI.setAttribute("data-trip", data[i]["tripID"]);
 				tripLI.appendChild(tripAnchor);
 				tripDates = document.createElement("p");
