@@ -1,5 +1,6 @@
 /**
  * JS Module containing the client side DB
+ * @author Le Nguyen
  */
 var DB = (function() {
 	
