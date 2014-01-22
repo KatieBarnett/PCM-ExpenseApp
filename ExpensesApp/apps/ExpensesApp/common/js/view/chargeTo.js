@@ -76,7 +76,7 @@ var ChargeTo = (function() {
 					});
 				});
 				
-				Utils.confirmModalHandler(expenseID["seq"]);
+				Utils.confirmModalHandler(expenseID);
 				
 				// trigger add client code modal
 				$('.btnShowModal').on('click', function() {

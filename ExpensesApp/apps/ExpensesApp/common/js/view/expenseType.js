@@ -104,7 +104,7 @@ var ExpenseType = (function() {
 				});
 				
 				// Attach modal handler to the screen
-				Utils.confirmModalHandler();
+				Utils.confirmModalHandler(expenseID);
 				
 				$('.finishLater').on('click',function() {
 					// Reset the current image URI
