@@ -178,6 +178,14 @@ var Utils = (function() {
 		},
 		
 		/**
+		 * Gets the page navigation history
+		 * @return  An array of previously visited page names
+		 */
+		getPageHistory : function() {
+			return pageHistory;
+		},
+		
+		/**
 		 * Function that will get the full image (if it is not the no image image)
 		 * @param ref, the URI of the image
 		 * @param page, the page that is calling the full image

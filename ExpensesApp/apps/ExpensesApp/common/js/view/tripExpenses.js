@@ -4,12 +4,12 @@
  */
 
 var TripExpenses = (function() {
-	var fromHistoryPage = null;
+	var fromHistoryPage = false;
 	return {
 		// Constants used in the function
 		EMAIL_SENT : 2,
 		
-		init : function(selectedTrip, fromHistory) {
+		init : function(selectedTrip) {
 			console.log("TripExpenses :: init");
 			
 			var emailAttachments = new Array();
@@ -17,8 +17,10 @@ var TripExpenses = (function() {
 			var headingPublished = false;
 
 			// Set if the page originally came from the history page or not
-			if (typeof fromHistory != 'undefined') {
-				fromHistoryPage = fromHistory;
+			if ($.inArray('history', Utils.getPageHistory()) < 0) {
+				fromHistoryPage = false;
+			} else {
+				fromHistoryPage = true;
 			}
 			
 			// Get the selected trip from the DB with the details
@@ -366,7 +368,6 @@ var TripExpenses = (function() {
 					 * To use the email composer plugin, the following arguments are as follows:
 					 * showEmailComposerWithCallback(callback, subject, body, to, cc, bcc, boolean HTML, attachments)
 					 */
-
 					if (sendEmail) {
 						window.plugins.emailComposer.showEmailComposerWithCallback(
 								onComplete,

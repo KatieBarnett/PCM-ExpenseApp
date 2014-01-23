@@ -50,7 +50,7 @@ var History = (function() {
 					Utils.loadPageWithAnimation("tripExpenses", null, function() {
 						Utils.saveCurrentPageObject(History);						
 						// Pass selected 
-						TripExpenses.init(selectedTrip, true);
+						TripExpenses.init(selectedTrip);
 					});
 				});	
 			});
