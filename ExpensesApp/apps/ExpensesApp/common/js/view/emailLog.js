@@ -16,8 +16,8 @@ var EmailLog = (function() {
 				for(var i=0; i<data.length; i++){
 					// Populate email history list as a inner list for each email & date pair
 					// TODO: uncomment inner list creation and fix css so it displays correctly 
-					//var emailLI = document.createElement("li");
-					//var emailLI_UL = document.createElement("ul");
+					var emailLI = document.createElement("li");
+					var emailLI_UL = document.createElement("ul");
 					var emailLI_UL_LI1 = document.createElement("li");
 					emailLI_UL_LI1.appendChild(document.createTextNode("Email: " + " " + data[i].email));
 					emailULLI.appendChild(emailLI_UL_LI1.appendChild); // Change to emailULLI.appendChild
