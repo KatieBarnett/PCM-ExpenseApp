@@ -112,7 +112,7 @@ var ExpenseType = (function() {
 					
 					// If expense does exist, then update the expense, otherwise create a new one.
 					if (expenseObject) {
-						DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectCode"], 
+						DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectID"], 
 								expenseObject["receipt"], expenseObject["tripID"], function () {
 							Utils.loadPage("mainPage", function() {
 								Utils.displayExpenseCreatedAlert(false);
@@ -141,12 +141,12 @@ var ExpenseType = (function() {
 					// If expense does exist, then update the expense, otherwise create a new one.
 					if (expenseObject) {
 						if (Utils.getPreviousPage() == "editExpense") {
-							DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectCode"], 
+							DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectID"], 
 												expenseObject["receipt"], expenseObject["tripID"], function() {
 								Utils.goBackWithAnimation();
 							});
 						} else {
-							DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectCode"], 
+							DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectID"], 
 												expenseObject["receipt"], expenseObject["tripID"], function() {
 								Utils.loadPageWithAnimation("chargeTo", expenseObject["expenseID"], function() {
 									Utils.saveCurrentPageObject(ExpenseType);

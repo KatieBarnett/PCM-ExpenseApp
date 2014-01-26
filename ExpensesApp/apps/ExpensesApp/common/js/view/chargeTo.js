@@ -32,8 +32,8 @@ var ChargeTo = (function() {
 				// Click handler for each client code
 				$('#selectCodeList').on('click', '.selectCode', function() {
 					console.log("button pressed.");
-					var selectedCode = $(this).attr("data-code");
-					DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], selectedCode, 
+					var selectedCodeID = $(this).attr("data-code");
+					DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], selectedCodeID, 
 							expense["receipt"], expense["tripID"], function () {
 						if (Utils.getPreviousPage() == "editExpense") {
 							Utils.goBackWithAnimation();								
@@ -113,11 +113,23 @@ var ChargeTo = (function() {
 					event.preventDefault();
 					console.log("add button clicked");
 					
-					// If all fields are populated, add the client code
-					if ($('#accDescription').val().length >= 1 && !$('#combobox option:first').is(":selected") && $('#accID').val().length >= 1) {
+					// If at least the description is populated, add the client code
+					if ($('#accDescription').val().length >= 1) {
 						var apName = $('#accDescription').val();
-						var	apCode = $('#accID').val();
-						var chargeCode = $('#combobox').val();
+						
+						var apCode;
+						if ($('#accID').val().length >= 1) {
+							apCode = $('#accID').val();
+						} else {
+							apCode = null;
+						}
+						
+						var chargeCode;
+						if ($('#combobox option:first').is(":selected")) {
+							chargeCode = null;
+						} else {
+							chargeCode = $('#combobox').val();
+						}
 							
 						var callback = function(newCodeID) {
 							// Clear the list so the list can be repopulated on screen
@@ -139,23 +151,11 @@ var ChargeTo = (function() {
 						DB.addClientCode(apCode, apName, chargeCode, callback);		
 						
 					} else {
-						// Validate data and show/hide errors
+						// Validate data
 						if ($('#accDescription').val().length == 0) {
 							$('#descriptionErrorMsg').removeClass('hidden');
 						} else {
 							$('#descriptionErrorMsg').addClass('hidden');
-						}
-						
-						if ($('#combobox option:first').is(":selected")) {
-							$('#chargeCodeErrorMsg').removeClass('hidden');
-						} else {
-							$('#chargeCodeErrorMsg').addClass('hidden');
-						}
-						
-						if ($('#accID').val().length == 0) {
-							$('#accountProjectErrorMsg').removeClass('hidden');
-						} else {
-							$('#accountProjectErrorMsg').addClass('hidden');
 						}
 					}
 				});
@@ -178,18 +178,20 @@ var ChargeTo = (function() {
 				
 				//Populate Client Code list
 				if (Utils.getPreviousPage() == "editExpense") {
-					chargeToLI = $('<li>', {"class" : "selectCode ui-icon-hide", "data-code" : data[i].accountProjectCode});
+					chargeToLI = $('<li>', {"class" : "selectCode ui-icon-hide", "data-code" : data[i].accountProjectID});
 				} else {
-					chargeToLI = $('<li>', {"class" : "selectCode", "data-code" : data[i].accountProjectCode});
+					chargeToLI = $('<li>', {"class" : "selectCode", "data-code" : data[i].accountProjectID});
 				}
 //				$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectName + " " + "(" + data[i].accountProjectCode + ")"}).appendTo(chargeToLI);
 //				chargeToLI.appendTo('#selectCodeList');
 				
 				if (data[i].accountProjectCode == "Default Accounting"){
 					console.log("checking defaccount");
-					$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectCode}).appendTo(chargeToLI);
-				}else{
-					$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectName + " " + "(" + data[i].accountProjectCode + ")"}).appendTo(chargeToLI);
+					$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectCode }).appendTo(chargeToLI);
+				} else if (data[i].accountProjectCode != null) {
+					$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectName + " (" + data[i].accountProjectCode + ")"}).appendTo(chargeToLI);
+				} else {
+					$('<a>', { "data-icon" : "arrow-r", text : data[i].accountProjectName }).appendTo(chargeToLI);
 				}
 				
 				chargeToLI.appendTo('#selectCodeList');

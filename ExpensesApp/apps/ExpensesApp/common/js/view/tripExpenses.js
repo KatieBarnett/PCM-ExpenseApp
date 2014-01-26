@@ -60,8 +60,11 @@ var TripExpenses = (function() {
 								expenseAnchor.appendChild(document.createTextNode(data[j]["accountProjectCode"]));
 							} else {
 								expenseAnchor.appendChild(document.createTextNode(data[j]["accountProjectName"]));
-								expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
-							}	
+								
+								if (data[j]["accountProjectCode"] != null) {
+									expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
+								} 
+							}
 							receiptThumbnail = document.createElement("img");
 							if (data[j]["receipt"] == "undefined"){
 								receiptThumbnail.setAttribute("src", "images//no-receipt.gif");
