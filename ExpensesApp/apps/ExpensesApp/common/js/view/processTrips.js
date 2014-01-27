@@ -65,14 +65,14 @@ var ProcessTrips = (function() {
 						// Otherwise complete the expense details
 						// Get the expense entry from the DB from the selected item
 						DB.getExpense(expenseID, function(singleExpense) {
-							console.log(singleExpense.expenseTypeID);
+							console.log(singleExpense);
 							if (singleExpense.expenseTypeID == "null") {
 								// Move the user to the beginning of the process flow
 								Utils.loadPageWithAnimation("expenseType", null, function() {
 									Utils.saveCurrentPageObject(ProcessTrips);
 									ExpenseType.init(expenseID);
 								});
-							} else if (singleExpense.accountProjectCode == "null") {
+							} else if (singleExpense.accountProjectID == "null") {
 								// Move the user to select the charge to code
 								Utils.loadPageWithAnimation("chargeTo", null, function() {
 									Utils.saveCurrentPageObject(ProcessTrips);

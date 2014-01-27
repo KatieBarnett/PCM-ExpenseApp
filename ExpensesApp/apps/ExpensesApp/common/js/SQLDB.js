@@ -378,7 +378,7 @@ var DB = (function() {
 		 */
 		getUnassociatedExpenses : function(callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT e.expenseID, e.expenseTypeID, a.accountProjectCode, a.accountProjectName, e.receipt ' +
+				var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectID, a.accountProjectCode, a.accountProjectName, e.receipt ' +
 								'FROM Expenses AS e ' + 
 								'LEFT JOIN AccountProjects AS a ' + 
 								'ON e.accountProjectID = a.accountProjectID ' + 
@@ -388,7 +388,7 @@ var DB = (function() {
 					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
 						var singleUnassociatedExpense = {};
-						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "accountProjectName", "receipt"], function(index, value) {
+						$.each(["expenseID", "expenseTypeID", "accountProjectID", "accountProjectCode", "accountProjectName", "receipt"], function(index, value) {
 							singleUnassociatedExpense[value] = row[value];
 						});
 						unassociatedExpensesList.push(singleUnassociatedExpense);

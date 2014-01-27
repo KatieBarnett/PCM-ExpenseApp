@@ -62,7 +62,7 @@ var TripExpenses = (function() {
 								expenseAnchor.appendChild(document.createTextNode(data[j]["accountProjectName"]));
 								
 								if (data[j]["accountProjectCode"] != null) {
-									expenseAnchor.appendChild(document.createTextNode("(" + data[j]["accountProjectCode"]+ ")" ));
+									expenseAnchor.appendChild(document.createTextNode(" (" + data[j]["accountProjectCode"]+ ")" ));
 								} 
 							}
 							receiptThumbnail = document.createElement("img");
@@ -407,6 +407,7 @@ var TripExpenses = (function() {
 			// Find the processed date of the trip and print it to screen
 			DB.getProcessedDate(selectedTrip, function(trip) {
 				$('#processedDate').html("Originally submitted: " + trip.originalProcessDate);
+				$('#processedDate').css('display', 'block');
 			});
 			
 			// Attach handler for when email log is clicked

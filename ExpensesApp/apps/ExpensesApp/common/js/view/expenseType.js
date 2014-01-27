@@ -140,20 +140,17 @@ var ExpenseType = (function() {
 					var selectedType = $(this).attr("data-expense");
 					// If expense does exist, then update the expense, otherwise create a new one.
 					if (expenseObject) {
-						if (Utils.getPreviousPage() == "editExpense") {
-							DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectID"], 
-												expenseObject["receipt"], expenseObject["tripID"], function() {
+						DB.updateExpense(expenseObject["expenseID"], selectedType, expenseObject["accountProjectID"], 
+											expenseObject["receipt"], expenseObject["tripID"], function() {
+							if (Utils.getPreviousPage() == "editExpense") {
 								Utils.goBackWithAnimation();
-							});
-						} else {
-							DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectID"], 
-												expenseObject["receipt"], expenseObject["tripID"], function() {
+							} else {
 								Utils.loadPageWithAnimation("chargeTo", expenseObject["expenseID"], function() {
 									Utils.saveCurrentPageObject(ExpenseType);
 									ChargeTo.init(expenseObject["expenseID"]);
 								});
-							});
-						}
+							}
+						});
 					} else {
 						DB.addExpense(selectedType, null, thumbNailURI, null, function(newExpenseID) {
 							Utils.loadPageWithAnimation("chargeTo", newExpenseID, function() {
