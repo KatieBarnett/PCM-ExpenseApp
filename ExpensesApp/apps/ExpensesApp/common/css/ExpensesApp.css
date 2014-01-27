@@ -235,9 +235,8 @@ ul#selectTripList {
 	margin-top:20px;
 }
 #descriptionErrorMsg, 
-#chargeCodeErrorMsg,
-#accountProjectErrorMsg,
-#editTripError {
+#editTripError,
+#emailError {
 	color:#FF0000;
 	width:195px;
 	margin-top:5px;
@@ -287,10 +286,27 @@ ul#selectTripList {
 	width: 91%;
 }*/
 
+#tripDetails {
+	font-size: 11pt;
+}
+#tripName {
+	font-size: 16pt;
+}
+#tripStartTitle {
+	padding-top: 10px;
+}
+#tripEndTitle {
+	margin-top: -17px;
+	margin-left: 150px;
+}
+#processedDate {
+	display: none;
+	font-weight: bold;
+	padding-top: 12px;
+}
 #recentEmailArea {
 	width: 100%;
 }
-
 #recentEmailArea .ui-listview {
 	margin: 0 -15px;
 }
@@ -303,4 +319,11 @@ ul#selectTripList {
 	color: #888;
 	text-shadow: 0;
  	background: none;
+}
+
+/** Trip lists **/
+#historyList p,
+#selectTripList p,
+#tripList p {
+	font-weight: normal;
 }
