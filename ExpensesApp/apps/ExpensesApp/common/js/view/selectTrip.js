@@ -38,7 +38,7 @@ var SelectTrip = (function() {
 					$('#selectTripList').on('click', '.tripSelected', function() {
 						var selectedTrip = $(this).attr("data-trip");
 						DB.getExpense(expenseID, function(expense){
-							DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectCode"], 
+							DB.updateExpense(expense["expenseID"], expense["expenseTypeID"], expense["accountProjectID"], 
 									expense["receipt"], selectedTrip, function () {
 								if (Utils.getPreviousPage() == "editExpense") {
 									Utils.goBackWithAnimation();

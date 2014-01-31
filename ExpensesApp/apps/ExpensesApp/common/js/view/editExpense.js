@@ -153,8 +153,10 @@ var EditExpense = (function() {
 		findChargeToString : function(accountCode, accountName) {
 			if (accountCode == DEFAULT_ACCOUNTING) {
 				return accountCode;
-			} else {
+			} else if (accountCode != null) {
 				return accountName + " (" + accountCode + ")";
+			} else {
+				return accountName;
 			}
 		}
 	};

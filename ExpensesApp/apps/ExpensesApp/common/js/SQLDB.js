@@ -65,7 +65,8 @@ var DB = (function() {
 									'chargeAccountID varchar(100) NOT NULL PRIMARY KEY' +
 									')');						
 				tx.executeSql('CREATE TABLE IF NOT EXISTS AccountProjects(' + 
-									'accountProjectCode varchar(20) NOT NULL PRIMARY KEY,' +
+									'accountProjectID integer PRIMARY KEY AUTOINCREMENT,' +
+									'accountProjectCode varchar(20),' +
 									'accountProjectName varchar(150),' +
 									'chargeAccountID varchar(100),' +
 									'FOREIGN KEY(chargeAccountID) REFERENCES ChargeAccounts(chargeAccountID)' +
@@ -87,9 +88,10 @@ var DB = (function() {
 				tx.executeSql('CREATE TABLE IF NOT EXISTS Expenses(' + 
 									'expenseID integer PRIMARY KEY AUTOINCREMENT,' + 
 									'expenseTypeID varchar(200),' +
-									'accountProjectCode varchar(20),' +
+									'accountProjectID integer,' +
 									'receipt varchar(200),' +
-									'tripID integer' +
+									'tripID integer,' +
+									'FOREIGN KEY(accountProjectID) REFERENCES AccountProjects(accountProjectID)' +
 									')');
 			}, errorCB, function() {
 				var isEmpty = false;
@@ -178,7 +180,7 @@ var DB = (function() {
 							tx.executeSql('INSERT INTO ChargeAccounts VALUES ("SAP WBSElement")');
 							
 							// Load data into AccountProjects table
-							tx.executeSql('INSERT INTO AccountProjects VALUES ("Default Accounting", null, null)');							
+							tx.executeSql('INSERT INTO AccountProjects VALUES (1, "Default Accounting", null, null)');							
 						}, errorCB);
 					}
 					buildLists(callbackFunction);	
@@ -211,7 +213,7 @@ var DB = (function() {
 		 */
 		getClientCodes : function(callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT accountProjectCode, accountProjectName, chargeAccountID FROM AccountProjects';
+				var query = 'SELECT accountProjectID, accountProjectCode, accountProjectName, chargeAccountID FROM AccountProjects';
 				tx.executeSql(query, [], function(tx, results) {
 					var accountsProjectsList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
@@ -219,7 +221,7 @@ var DB = (function() {
 						// Setup new object
 						var singleAccountProject = {};
 						// Map each value to the single trip
-						$.each(["accountProjectCode", "accountProjectName", "chargeAccountID"], function(index, value) {
+						$.each(["accountProjectID", "accountProjectCode", "accountProjectName", "chargeAccountID"], function(index, value) {
 							singleAccountProject[value] = row[value];
 						});
 						accountsProjectsList.push(singleAccountProject);
@@ -258,10 +260,10 @@ var DB = (function() {
 		},
 		
 		/**
-		 * Retrieves one entry from the DB with the specified trip ID.
-		 * @param selectedTrip, the trip ID that needs to be fetched.
+		 * Retrieves one entry from the DB with the specified trip ID
 		 * 
-		 * @return A single entry in the Trips table
+		 * @param   selectedTrip  The trip ID that needs to be fetched
+		 * @return                A single entry in the Trips table
 		 */
 		getTrip : function(selectedTripInput, callback) {
 			// Convert the input into an int if not already an int
@@ -376,17 +378,17 @@ var DB = (function() {
 		 */
 		getUnassociatedExpenses : function(callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectCode, a.accountProjectName, e.receipt ' +
+				var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectID, a.accountProjectCode, a.accountProjectName, e.receipt ' +
 								'FROM Expenses AS e ' + 
 								'LEFT JOIN AccountProjects AS a ' + 
-								'ON e.accountProjectCode = a.accountProjectCode ' + 
+								'ON e.accountProjectID = a.accountProjectID ' + 
 								'WHERE e.tripID IS NULL OR e.tripID="null"';
 				tx.executeSql(query, [], function(tx, results) {
 					var unassociatedExpensesList = new Array();
 					for (var i = 0; i < results.rows.length; i++) {
 						var row = results.rows.item(i);
 						var singleUnassociatedExpense = {};
-						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "accountProjectName", "receipt"], function(index, value) {
+						$.each(["expenseID", "expenseTypeID", "accountProjectID", "accountProjectCode", "accountProjectName", "receipt"], function(index, value) {
 							singleUnassociatedExpense[value] = row[value];
 						});
 						unassociatedExpensesList.push(singleUnassociatedExpense);
@@ -406,10 +408,10 @@ var DB = (function() {
 		 */
 		getTripExpenses : function(tid, callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectCode, a.accountProjectName, e.receipt ' + 
+				var query = 'SELECT e.expenseID, e.expenseTypeID, a.accountProjectCode, a.accountProjectName, e.receipt ' + 
 								'FROM Expenses AS e ' + 
 								'LEFT JOIN AccountProjects AS a ' +
-								'ON e.accountProjectCode = a.accountProjectCode ' + 
+								'ON e.accountProjectID = a.accountProjectID ' + 
 								'WHERE e.tripID = ' + tid;
 				tx.executeSql(query, [], function(tx, results) {
 					var tripExpensesList = new Array();
@@ -439,15 +441,15 @@ var DB = (function() {
 			var expenseID = eid && eid.seq ? eid.seq : eid;
 			if (expenseID) {
 				db.transaction(function(tx) {
-					var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectCode, a.accountProjectName, e.receipt, e.tripID ' +
+					var query = 'SELECT e.expenseID, e.expenseTypeID, e.accountProjectID, a.accountProjectCode, a.accountProjectName, e.receipt, e.tripID ' +
 								'FROM Expenses AS e ' + 
 								'LEFT JOIN AccountProjects AS a ' +
-								'ON e.accountProjectCode = a.accountProjectCode ' +
+								'ON e.accountProjectID = a.accountProjectID ' +
 								'WHERE expenseID = ' + expenseID;
 					tx.executeSql(query, [], function(tx, results) {
 						var row = results.rows.item(0);
 						var singleExpense = {};
-						$.each(["expenseID", "expenseTypeID", "accountProjectCode", "accountProjectName", "receipt", "tripID"], function(index, value) {
+						$.each(["expenseID", "expenseTypeID", "accountProjectID", "accountProjectCode", "accountProjectName", "receipt", "tripID"], function(index, value) {
 							singleExpense[value] = row[value];
 						});					
 						if (callback) {
@@ -514,16 +516,16 @@ var DB = (function() {
 		/**
 		 * Gets details of a client code
 		 * 
-		 * @param   apCode  Unique account/project ID
-		 * @return          A client code object
+		 * @param   apid  Unique account/project ID
+		 * @return        A client code object
 		 */
-		getClientCode : function(apCode, callback) {
+		getClientCode : function(apid, callback) {
 			db.transaction(function(tx) {
-				var query = 'SELECT accountProjectName, chargeAccountID FROM AccountProjects WHERE accountProjectCode = "' + apCode + '"';
+				var query = 'SELECT accountProjectCode, accountProjectName, chargeAccountID FROM AccountProjects WHERE accountProjectID = "' + apid + '"';
 				tx.executeSql(query, [], function(tx, results) {
 					var row = results.rows.item(0);
 					var singleClientCode = {};
-					$.each(["accountProjectName", "chargeAccountID"], function(index, value) {
+					$.each(["accountProjectCode", "accountProjectName", "chargeAccountID"], function(index, value) {
 						singleClientCode[value] = row[value];
 					});					
 					if (callback) {
@@ -542,7 +544,15 @@ var DB = (function() {
 		 */
 		addClientCode : function(apCode, apName, chargeCode, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO AccountProjects VALUES ("' + apCode + '", "' + apName + '", "' + chargeCode + '")');
+				if (apCode != null && chargeCode != null) {
+					tx.executeSql('INSERT INTO AccountProjects VALUES (null, "' + apCode + '", "' + apName + '", "' + chargeCode + '")');
+				} else if (apCode != null && chargeCode == null) {
+					tx.executeSql('INSERT INTO AccountProjects VALUES (null, "' + apCode + '", "' + apName + '", null)');
+				} else if (apCode == null && chargeCode != null) {
+					tx.executeSql('INSERT INTO AccountProjects VALUES (null, null, "' + apName + '", "' + chargeCode + '")');
+				} else if (apCode == null && chargeCode == null) {
+					tx.executeSql('INSERT INTO AccountProjects VALUES (null, null, "' + apName + '", null)');
+				}
 			}, errorCB, function() {
 				if (callback) {
 					callback(apCode);
@@ -554,13 +564,13 @@ var DB = (function() {
 		 * Adds an expense
 		 * 
 		 * @param  etid     Unique expense type ID
-		 * @param  apCode   Unique account/project ID
+		 * @param  apid     Unique account/project ID
 		 * @param  receipt  The image file path
 		 * @param  tid	    Unique trip ID
 		 */
-		addExpense : function(etid, apCode, receipt, tid, callback) {
+		addExpense : function(etid, apid, receipt, tid, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('INSERT INTO Expenses VALUES (null, "' + etid + '", "' + apCode + '", "' + receipt + '", ' + tid + ')');
+				tx.executeSql('INSERT INTO Expenses VALUES (null, "' + etid + '", "' + apid + '", "' + receipt + '", ' + tid + ')');
 				var query = 'SELECT seq FROM sqlite_sequence WHERE name="Expenses"';
 				tx.executeSql(query, [], function(tx, results) {
 					var row = results.rows.item(0);
@@ -604,13 +614,13 @@ var DB = (function() {
 		 * 
 		 * @param  eid      Unique expense ID
 		 * @param  etid	    Unique expense type ID
-		 * @param  apCode   Unique account/project ID
+		 * @param  apid     Unique account/project ID
 		 * @param  receipt  The image file path
 		 * @param  tid      Unique trip ID
 		 */
-		updateExpense : function(eid, etid, apCode, receipt, tid, callback) {
+		updateExpense : function(eid, etid, apid, receipt, tid, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectCode = "' + apCode + '", receipt = "' + receipt + '", tripID = "' + tid + '" WHERE expenseID = ' + eid);
+				tx.executeSql('UPDATE Expenses SET expenseTypeID = "' + etid + '", accountProjectID = "' + apid + '", receipt = "' + receipt + '", tripID = "' + tid + '" WHERE expenseID = ' + eid);
 			}, errorCB, function() {
 				if (callback) {
 					callback();
@@ -672,11 +682,11 @@ var DB = (function() {
 		/**
 		 * Deletes a client code
 		 * 
-		 * @param  apCode  Unique account/project ID
+		 * @param  apid  Unique account/project ID
 		 */
-		deleteClientCode : function(apCode, callback) {
+		deleteClientCode : function(apid, callback) {
 			db.transaction(function(tx) {
-				tx.executeSql('DELETE FROM AccountProjects WHERE accountProjectCode = "' + apCode + '"'); 
+				tx.executeSql('DELETE FROM AccountProjects WHERE accountProjectID = "' + apid + '"'); 
 			}, errorCB, function() {
 				if (callback) {
 					callback();

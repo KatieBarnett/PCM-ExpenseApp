@@ -7,10 +7,10 @@
 	</div>
 	
 	<div data-role="content" data-theme="d">
-		<!-- <p><img class="receiptThumb" src="images\receipt-placeholder.gif" alt="Receipt Thumbnail">What trip is this expense related to?</p> -->
 		<div id="tripDetails">
 			<h3 id="tripName"></h3>
-			<p id="tripStartTitle">Starts: <span id=tripStart></span></p><p id="tripEndTitle">Ends: <span id=tripEnd></span></p>
+			<div id="tripStartTitle">Starts: <span id="tripStart"></span></div>
+			<div id="tripEndTitle">Ends: <span id="tripEnd"></span></div>
 			<div id="processedDate"></div>
 		</div>		
 		
@@ -29,8 +29,8 @@
 		<div class="sendDetailsContainer">
 			<form id="emailForm">
 				<span>Where would you like to send this trip?</span>
-				<span class="hidden" id="emailError">Mandatory field missing!</span>
-				<input type="text" id="sendTripEmailAddress" required placeholder="Email address" />
+				<span class="hidden" id="emailError">Email address is a required field.</span>
+				<input type="text" id="sendTripEmailAddress" required placeholder="Email address *" />
 			</form>
 			<div id="recentEmailArea" class="hidden">
 				<ul data-role="listview" id="recentEmailList" class="ui-icon-nodisc" data-icon="false" data-theme="c">
