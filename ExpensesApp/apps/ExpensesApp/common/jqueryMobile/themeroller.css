@@ -910,33 +910,33 @@ h1 {
 /* G
 -----------------------------------------------------------------------------------------------------------*/
 .ui-bar-g {
-	border: 1px solid #00649d /*{g-bar-border}*/;
-	background: #00649d /*{g-bar-background-color}*/;
+	border: 1px solid #707070 /*{g-bar-border}*/;
+	background: #707070 /*{g-bar-background-color}*/;
 	color: #FFFFFF /*{g-bar-color}*/;
 	font-weight: bold;
 	text-shadow: 0 /*{g-bar-shadow-x}*/ 1px /*{g-bar-shadow-y}*/ 0 /*{g-bar-shadow-radius}*/ #2e2e2f /*{g-bar-shadow-color}*/;
-	background-image: -webkit-gradient(linear, left top, left bottom, from( #00649d /*{g-bar-background-start}*/), to( #00649d /*{g-bar-background-end}*/)); /* Saf4+, Chrome */
-	background-image: -webkit-linear-gradient( #00649d /*{g-bar-background-start}*/, #00649d /*{g-bar-background-end}*/); /* Chrome 10+, Saf5.1+ */
-	background-image:    -moz-linear-gradient( #00649d /*{g-bar-background-start}*/, #00649d /*{g-bar-background-end}*/); /* FF3.6 */
-	background-image:     -ms-linear-gradient( #00649d /*{g-bar-background-start}*/, #00649d /*{g-bar-background-end}*/); /* IE10 */
-	background-image:      -o-linear-gradient( #00649d /*{g-bar-background-start}*/, #00649d /*{g-bar-background-end}*/); /* Opera 11.10+ */
-	background-image:         linear-gradient( #00649d /*{g-bar-background-start}*/, #00649d /*{g-bar-background-end}*/);
+	background-image: -webkit-gradient(linear, left top, left bottom, from( #707070 /*{g-bar-background-start}*/), to( #707070 /*{g-bar-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient( #707070 /*{g-bar-background-start}*/, #707070 /*{g-bar-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient( #707070 /*{g-bar-background-start}*/, #707070 /*{g-bar-background-end}*/); /* FF3.6 */
+	background-image:     -ms-linear-gradient( #707070 /*{g-bar-background-start}*/, #707070 /*{g-bar-background-end}*/); /* IE10 */
+	background-image:      -o-linear-gradient( #707070 /*{g-bar-background-start}*/, #707070 /*{g-bar-background-end}*/); /* Opera 11.10+ */
+	background-image:         linear-gradient( #707070 /*{g-bar-background-start}*/, #707070 /*{g-bar-background-end}*/);
 }
 .ui-bar-g .ui-link-inherit {
 	color: #FFFFFF /*{g-bar-color}*/;
 }
 .ui-bar-g a.ui-link {
-	color: #7cc4e7 /*{g-bar-link-color}*/;
+	color: #e6e6e6 /*{g-bar-link-color}*/;
 	font-weight: bold;
 }
 .ui-bar-g a.ui-link:visited {
-    color: #2489ce /*{g-bar-link-visited}*/;
+    color: #e6e6e6 /*{g-bar-link-visited}*/;
 }
 .ui-bar-g a.ui-link:hover {
-	color: #2489ce /*{g-bar-link-hover}*/;
+	color: #e6e6e6 /*{g-bar-link-hover}*/;
 }
 .ui-bar-g a.ui-link:active {
-	color: #2489ce /*{g-bar-link-active}*/;
+	color: #e6e6e6 /*{g-bar-link-active}*/;
 }
 .ui-bar-g,
 .ui-bar-g input,
@@ -969,30 +969,30 @@ h1 {
 	color: #333333 /*{g-body-color}*/;
 }
 .ui-body-g .ui-link {
-	color: #0082ef /*{g-body-link-color}*/;
+	color: #FFFFFF /*{g-body-link-color}*/;
 	font-weight: bold;
 }
 .ui-body-g .ui-link:visited {
-    color: #2489ce /*{g-body-link-visited}*/;
+    color: #FFFFFF /*{g-body-link-visited}*/;
 }
 .ui-body-g .ui-link:hover {
-	color: #2489ce /*{g-body-link-hover}*/;
+	color: #FFFFFF /*{g-body-link-hover}*/;
 }
 .ui-body-g .ui-link:active {
-	color: #2489ce /*{g-body-link-active}*/;
+	color: #FFFFFF /*{g-body-link-active}*/;
 }
 .ui-btn-up-g {
-	border: 1px solid #004266 /*{g-bup-border}*/;
-	background: #004266 /*{g-bup-background-color}*/;
+	border: 1px solid #707070 /*{g-bup-border}*/;
+	background: #707070 /*{g-bup-background-color}*/;
 	font-weight: normal;
 	color: #ffffff /*{g-bup-color}*/;
 	text-shadow: 0 /*{g-bup-shadow-x}*/ 0 /*{g-bup-shadow-y}*/ 0 /*{g-bup-shadow-radius}*/  /*{g-bup-shadow-color}*/;
-	background-image: -webkit-gradient(linear, left top, left bottom, from( #004266 /*{g-bup-background-start}*/), to( #004266 /*{g-bup-background-end}*/)); /* Saf4+, Chrome */
-	background-image: -webkit-linear-gradient( #004266 /*{g-bup-background-start}*/, #004266 /*{g-bup-background-end}*/); /* Chrome 10+, Saf5.1+ */
-	background-image:    -moz-linear-gradient( #004266 /*{g-bup-background-start}*/, #004266 /*{g-bup-background-end}*/); /* FF3.6 */
-	background-image:     -ms-linear-gradient( #004266 /*{g-bup-background-start}*/, #004266 /*{g-bup-background-end}*/); /* IE10 */
-	background-image:      -o-linear-gradient( #004266 /*{g-bup-background-start}*/, #004266 /*{g-bup-background-end}*/); /* Opera 11.10+ */
-	background-image:         linear-gradient( #004266 /*{g-bup-background-start}*/, #004266 /*{g-bup-background-end}*/);
+	background-image: -webkit-gradient(linear, left top, left bottom, from( #707070 /*{g-bup-background-start}*/), to( #707070 /*{g-bup-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient( #707070 /*{g-bup-background-start}*/, #707070 /*{g-bup-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient( #707070 /*{g-bup-background-start}*/, #707070 /*{g-bup-background-end}*/); /* FF3.6 */
+	background-image:     -ms-linear-gradient( #707070 /*{g-bup-background-start}*/, #707070 /*{g-bup-background-end}*/); /* IE10 */
+	background-image:      -o-linear-gradient( #707070 /*{g-bup-background-start}*/, #707070 /*{g-bup-background-end}*/); /* Opera 11.10+ */
+	background-image:         linear-gradient( #707070 /*{g-bup-background-start}*/, #707070 /*{g-bup-background-end}*/);
 }
 .ui-btn-up-g:visited,
 .ui-btn-up-g a.ui-link-inherit {
@@ -1011,12 +1011,12 @@ h1 {
 	background-image:      -o-linear-gradient( #004266 /*{g-bhover-background-start}*/, #004266 /*{g-bhover-background-end}*/); /* Opera 11.10+ */
 	background-image:         linear-gradient( #004266 /*{g-bhover-background-start}*/, #004266 /*{g-bhover-background-end}*/);
 }
-.ui-btn-hover-d:visited,
-.ui-btn-hover-d:hover,
-.ui-btn-hover-d a.ui-link-inherit {
+.ui-btn-hover-g:visited,
+.ui-btn-hover-g:hover,
+.ui-btn-hover-g a.ui-link-inherit {
 	color: #ffffff /*{d-bhover-color}*/;
 }
-.ui-btn-down-d {
+.ui-btn-down-g {
 	border: 1px solid #00a6a0 /*{d-bdown-border}*/;
 	background: #00649d /*{d-bdown-background-color}*/;
 	font-weight: bold;
@@ -1128,6 +1128,7 @@ a.ui-link-inherit {
 .ui-icon-nodisc .ui-icon-alt .ui-icon-searchfield:after {
 	background-color: transparent;
 }
+
 /* Icon sprite
 -----------------------------------------------------------------------------------------------------------*/
 /* plus minus */
