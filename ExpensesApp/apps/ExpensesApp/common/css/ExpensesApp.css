@@ -321,4 +321,7 @@ ul#selectTripList {
  	background: none;
 }
 
+#sendTripEmailAddress {
+	-webkit-user-modify: read-write-plaintext-only;
+}
 
