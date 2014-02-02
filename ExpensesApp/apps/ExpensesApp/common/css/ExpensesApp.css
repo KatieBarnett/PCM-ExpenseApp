@@ -321,7 +321,14 @@ ul#selectTripList {
  	background: none;
 }
 
+/** Trip lists **/
+#historyList p,
+#selectTripList p,
+#tripList p {
+	font-weight: normal;
+}
+
+/** Send trip **/
 #sendTripEmailAddress {
 	-webkit-user-modify: read-write-plaintext-only;
 }
-
