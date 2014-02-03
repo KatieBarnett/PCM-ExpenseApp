@@ -107,7 +107,8 @@ var ProcessTrips = (function() {
 						tripLI.appendChild(tripAnchor);
 						tripDates = document.createElement("p");
 						if (data[i]["startDate"]) {				
-							tripDates.appendChild(document.createTextNode(data[i]["startDate"]));						
+							var startDate = (data[i]["startDate"]).split("-");
+							tripDates.appendChild(document.createTextNode(startDate[2] + "-" + startDate[1] + "-" + startDate[0]));
 						}
 						if (data[i]["startDate"] && data[i]["endDate"]) {
 							tripDates.appendChild(document.createTextNode("/"));
@@ -115,7 +116,8 @@ var ProcessTrips = (function() {
 							tripDates.appendChild(document.createTextNode("No trip dates specified."));
 						}
 						if (data[i]["endDate"]) {
-							tripDates.appendChild(document.createTextNode(data[i]["endDate"]));
+							var endDate = (data[i]["endDate"]).split("-");
+							tripDates.appendChild(document.createTextNode(endDate[2] + "-" + endDate[1] + "-" + endDate[0]));
 						}
 						tripLI.appendChild(tripDates);
 						tripUL.appendChild(tripLI);

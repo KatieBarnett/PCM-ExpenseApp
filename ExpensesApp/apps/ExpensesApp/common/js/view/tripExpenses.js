@@ -262,13 +262,15 @@ var TripExpenses = (function() {
 				$('#tripName').html(tripName);
 			}
 			if (tripStart) {
-				$('#tripStart').html(tripStart);
+				var startDate = tripStart.split("-");
+				$('#tripStart').html(document.createTextNode(startDate[2] + "-" + startDate[1] + "-" + startDate[0]));
 				$('#tripStartTitle').css("display","block");
 			} else {
 				$('#tripStartTitle').css("display","none");
 			}
 			if (tripEnd) {
-				$('#tripEnd').html(tripEnd);
+				var endDate = tripEnd.split("-");
+				$('#tripEnd').html(document.createTextNode(endDate[2] + "-" + endDate[1] + "-" + endDate[0]));			
 				$('#tripEndTitle').css("display","block");
 			} else {
 				$('#tripEndTitle').css("display","none");
@@ -406,7 +408,8 @@ var TripExpenses = (function() {
 			
 			// Find the processed date of the trip and print it to screen
 			DB.getProcessedDate(selectedTrip, function(trip) {
-				$('#processedDate').html("Originally submitted: " + trip.originalProcessDate);
+				var processDate = (trip.originalProcessDate).split("-");
+				$('#processedDate').html("Originally submitted: " + processDate[2] + "-" + processDate[1] + "-" + processDate[0]);
 				$('#processedDate').css('display', 'block');
 			});
 			
