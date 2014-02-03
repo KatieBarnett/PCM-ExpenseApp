@@ -117,11 +117,18 @@ var SelectTrip = (function() {
 				
 				$('.finishLater').on('click',function() {
 					// Add function for requirement of the Finish this later button
-					Utils.loadPageWithAnimation('mainPage', expenseID, function() {
-						Utils.displayExpenseCreatedAlert(false);
-						Utils.saveCurrentPageObject(SelectTrip);
-						MainPage.init();
-					});
+					if (Utils.getPreviousPage() != "editExpense") {
+						Utils.loadPageWithAnimation('mainPage', expenseID, function() {
+							Utils.displayExpenseCreatedAlert(false);
+							Utils.saveCurrentPageObject(SelectTrip);
+							MainPage.init();
+						});							
+					} else if (Utils.getPreviousPage() == "editExpense") {
+						Utils.loadPageWithAnimation('mainPage', expenseID, function() {
+							Utils.saveCurrentPageObject(SelectTrip);
+							MainPage.init();
+						});
+					}
 				});
 				
 			});

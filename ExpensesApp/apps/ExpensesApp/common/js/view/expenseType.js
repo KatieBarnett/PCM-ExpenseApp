@@ -114,11 +114,18 @@ var ExpenseType = (function() {
 					if (expenseObject) {
 						DB.updateExpense(expenseObject["expenseID"], expenseObject["expenseTypeID"], expenseObject["accountProjectID"], 
 								expenseObject["receipt"], expenseObject["tripID"], function () {
-							Utils.loadPage("mainPage", function() {
-								Utils.displayExpenseCreatedAlert(false);
-								Utils.saveCurrentPageObject(ExpenseType);
-								MainPage.init();
-							});	
+							if (Utils.getPreviousPage() != "editExpense") {
+								Utils.loadPage("mainPage", function() {
+									Utils.displayExpenseCreatedAlert(false);
+									Utils.saveCurrentPageObject(ExpenseType);
+									MainPage.init();
+								});								
+							} else if (Utils.getPreviousPage() == "editExpense") {
+								Utils.loadPage("mainPage", function() {
+									Utils.saveCurrentPageObject(ExpenseType);
+									MainPage.init();
+								});
+							}
 						});
 					} else {
 						// Update the expense and then move to the main page
