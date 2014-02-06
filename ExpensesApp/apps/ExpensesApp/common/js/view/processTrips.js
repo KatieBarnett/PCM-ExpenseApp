@@ -40,8 +40,7 @@ var ProcessTrips = (function() {
 						unassociatedExpenseList.appendChild(expenseLI);
 					};					
 					$('#unassociatedExpenseList').listview('refresh');
-				} else {
-					$("#unassociatedExpenseList").addClass('hidden');					
+					$('#unassociatedExpenseList').removeClass('hidden');
 				}
 
 				// Move to next page after trip is selected, pass expenseTypeID
