@@ -18,10 +18,11 @@ var SelectTrip = (function() {
 				});
 
 				// Change the date selection depending on the platform
-				if (!Utils.isAndroid()) {
-					$("#startDate").attr("type", "date");
-					$("#endDate").attr("type", "date");
-				}
+				// Commenting this out until a placeholder has been decided on.
+//				if (!Utils.isAndroid()) {
+//					$("#startDate").attr("type", "date");
+//					$("#endDate").attr("type", "date");
+//				}
 				
 				DB.getUnprocessedTrips(function(data){
 
