@@ -407,6 +407,9 @@ var TripExpenses = (function() {
 			// Display the hidden email log button
 			$('#emailLogBtnArea').removeClass("hidden");
 			
+			// Hide the 'Edit Trip' button
+			$('#editTrip').parent().addClass('hidden');
+			
 			// Change the text in the send email button
 			$('#sendTripDetailsBtn').text("Resend Trip Details").button('refresh');
 			
