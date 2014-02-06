@@ -149,9 +149,8 @@ var TripExpenses = (function() {
 				}); 
 			} else {
 				
-				// Display the 'Delete Expense' button and the horizontal rule if the user did not come from the History page
+				// Display the 'Delete Expense' button if the user did not come from the History page
 				$('#deleteBtn').removeClass('hidden');
-				$('.horizontal-rule').removeClass('hidden');
 				
 				// Get the last email the user tried to send an email to and display it
 				DB.getLastEmail(function(emailAddress) {
