@@ -224,7 +224,7 @@ var ChargeTo = (function() {
 			console.log(data);
 			
 			// Create the default option
-			$('<option />', { text: 'To be charged to: *'} ).appendTo('#combobox');
+			$('<option />', { text: 'To be charged to: '} ).appendTo('#combobox');
 			
 			// Create the remaining options
 			for (var i in data) {
