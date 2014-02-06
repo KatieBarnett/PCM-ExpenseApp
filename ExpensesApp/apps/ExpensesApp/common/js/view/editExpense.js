@@ -108,6 +108,12 @@ var EditExpense = (function() {
 					EditExpense.deleteModalHandler(expenseID);
 				});
 			});
+			
+			// Display the 'Delete Expense' button and the horizontal rule if the user did not come from the History page
+			if ($.inArray('history', Utils.getPageHistory()) < 0) {
+				$('#deleteBtn').removeClass('hidden');
+				$('.horizontal-rule').removeClass('hidden');
+			}
 		},
 		
 		/**
