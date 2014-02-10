@@ -332,3 +332,45 @@ ul#selectTripList {
 #sendTripEmailAddress {
 	-webkit-user-modify: read-write-plaintext-only;
 }
+
+/** Email log **/
+#emailList {
+	box-shadow: none;
+	margin-top: 0;
+	margin-left: -15px;
+	margin-right: -15px;
+}
+#emailList li {
+	background: none;
+	border: none;
+	border-top: 2px solid #333;
+	color: #4b4b4b;
+	padding-left: 0;
+	padding-right: 0;
+}
+#emailList li.ui-btn-up-g {
+	background: none;
+}
+#emailList li:first-child {
+	border-top: none;
+	padding-top: 5px;
+}
+#emailList li div {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+#emailList li div:first-child {
+	padding-bottom: 10px;
+}
+#emailList li div:last-child {
+	padding-top: 10px;
+}
+#emailList li span.hr {
+	border-top: 1px solid #bbb;
+	display: block;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+#emailList li div span:last-child {
+	float: right;
+}

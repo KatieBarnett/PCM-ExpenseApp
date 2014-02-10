@@ -1,38 +1,53 @@
 /**
- * 
+ * This is the JavaScript controller for the Email Logs screen.
  */
-
 
 var EmailLog = (function() {
 	return {
 		init : function(tid) {
 			console.log("EmailLog :: init");
 			
-			var emailUL = document.getElementById("EmailList");
+			// Get a reference to the outer container
+			var logList = $("#emailList");
 
 			DB.getEmailLogs(tid, function(data){
 				
 				// Build email history 
 				for(var i=0; i<data.length; i++){
+					
 					// Populate email history list as a inner list for each email & date pair
-					// TODO: uncomment inner list creation and fix css so it displays correctly 
-					var emailLI = document.createElement("li");
-					var emailLI_UL = document.createElement("ul");
-					var emailLI_UL_LI1 = document.createElement("li");
-					emailLI_UL_LI1.appendChild(document.createTextNode("Email: " + " " + data[i].email));
-					emailULLI.appendChild(emailLI_UL_LI1.appendChild); // Change to emailULLI.appendChild
-					var emailLI_UL_LI2 = document.createElement("li");
-					emailLI_UL_LI2.appendChild(document.createTextNode("Date: " + " " + data[i].processDate));
-					emailULLI.appendChild(emailLI_UL_LI2); // Change to emailULLI.appendChild
-					emailLI.appendChild(emailLI_UL);
-					emailUL.appendChild(emailLI);
+					var logItem = $('<li />');
+					
+					// Setup the email field elements
+					var emailContainer = $('<div />');
+					var emailLabel = $('<span />', { 'class': 'bold', text: 'Email' });
+					var emailValue = $('<span />', { text: data[i].email });
+					emailLabel.appendTo(emailContainer);
+					emailValue.appendTo(emailContainer);
+					emailContainer.appendTo(logItem);
+					
+					// Setup the horizontal rule separator
+					var separator = $('<span />', { 'class': 'hr' });
+					separator.appendTo(logItem);
+					
+					// Setup the date field elements
+					var dateContainer = $('<div />');
+					var dateLabel = $('<span />', { 'class': 'bold', text: 'Date' });
+					
+					var processDate = (data[i].processDate).split('-');					
+					var dateValue = $('<span />', { text: processDate[2] + '-' + processDate[1] + '-' + processDate[0] });
+					dateLabel.appendTo(dateContainer);
+					dateValue.appendTo(dateContainer);
+					dateContainer.appendTo(logItem);
+					
+					// Add the log to the list of logs
+					logItem.appendTo(logList);
 				}
-				$('#EmailList').listview('refresh');
+				$('#emailList').listview('refresh');
 				
 			});
 			
-			
-			$('#cancel').on('click', function() {
+			$('#cancelBtn').on('click', function() {
 				Utils.goBackWithAnimation();
 			});
 		}
