@@ -12,10 +12,10 @@ var EmailLog = (function() {
 
 			DB.getEmailLogs(tid, function(data){
 				
-				// Build email history 
+				// Build email history as a list of email and date pairs
 				for(var i=0; i<data.length; i++){
 					
-					// Populate email history list as a inner list for each email & date pair
+					// Container for each log item
 					var logItem = $('<li />');
 					
 					// Setup the email field elements
@@ -33,7 +33,6 @@ var EmailLog = (function() {
 					// Setup the date field elements
 					var dateContainer = $('<div />');
 					var dateLabel = $('<span />', { 'class': 'bold', text: 'Date' });
-					
 					var processDate = (data[i].processDate).split('-');					
 					var dateValue = $('<span />', { text: processDate[2] + '-' + processDate[1] + '-' + processDate[0] });
 					dateLabel.appendTo(dateContainer);
