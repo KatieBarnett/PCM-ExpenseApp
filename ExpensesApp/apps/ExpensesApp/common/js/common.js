@@ -299,11 +299,7 @@ var Utils = (function() {
 			$('.cancelBtn').on('click', function() {
 				$('.confirm').css('display', 'block');	
 				$('.opacity').css('display', 'block');
-				if(Utils.isiOS7()){
-					$('.confirm').animate({bottom:'20px'}, 500);
-				} else{
-					$('.confirm').animate({bottom:'0px'}, 500);	
-				}
+				$('.confirm').animate({bottom:'0px'}, 500);	
 			});
 			
 			// Click handler for 'No' button
