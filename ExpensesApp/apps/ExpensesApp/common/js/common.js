@@ -53,7 +53,7 @@ var Utils = (function() {
 			var page = pageHistory[pageHistory.length-1];
 			console.log(expenseIDHistory);
 			if(currentPage == "mainPage") {
-				if (confirm("Are you sure to exit?")) {
+				if (confirm("Are you sure you want to exit?")) {
 					if(navigator.app) {
 						navigator.app.exitApp();
 						return false;
